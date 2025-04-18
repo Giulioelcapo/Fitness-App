@@ -2,9 +2,9 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Workout from "./Workout";
+import Workout from "./workout";
 import Mobility from "./mobility";
-import Strength from "./strength";
+import Strength from "./components/strength";
 import logo from './logo.png';  // Replace with the actual path to your logo image
 
 function App() {
