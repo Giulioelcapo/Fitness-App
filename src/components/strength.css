@@ -57,7 +57,7 @@ button:focus {
   margin: 0 auto;
   padding: 10px;
   font-size: 16px;
-  background-color: #2f323a; /* Sfondo chiaro per il select */
+  background-color: #0f0f0f; /* Sfondo chiaro per il select */
   color: #0d0d0d; /* Colore del testo scuro per il select */
   border-radius: 8px;
   border: 1px solid #ccc; /* Bordo chiaro per il select */
