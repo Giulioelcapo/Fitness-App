@@ -30,6 +30,12 @@ const monthlyFocus = [
   { month: "April", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
   { month: "May", focus: "Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
   { month: "June", focus: "Recovery", color: "#81C784", icon: <SelfImprovementIcon fontSize="large" /> },
+  { month: "July", focus: "Strength/Recovery", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "August", focus: "Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
+  { month: "September", focus: "Plyo", color: "#81C784", icon: <SelfImprovementIcon fontSize="large" /> },
+  { month: "October", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "November", focus: "Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
+  { month: "December", focus: "Recovery", color: "#81C784", icon: <SelfImprovementIcon fontSize="large" /> },
 ];
 
 const weeklyGoals = [
