@@ -61,6 +61,7 @@ function App() {
         <Route path="/workout" element={<Workout />} />
         <Route path="/mobility" element={<Mobility />} />
         <Route path="/strength" element={<Strength />} />
+        <Route path="*" element={<Dashboard />} />
       </Routes>
     </Router>
   );
