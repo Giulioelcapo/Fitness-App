@@ -14,6 +14,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SponsorBanner from "../components/SponsorBanner";
 
 const weeklyFocus = [
   { label: "MD+1", focus: "Mobility", color: "#4FC3F7", icon: <SelfImprovementIcon fontSize="large" /> },
@@ -22,7 +23,7 @@ const weeklyFocus = [
   { label: "MD-3", focus: "Tactical", color: "#81C784", icon: <SportsSoccerIcon fontSize="large" /> },
   { label: "MD-2", focus: "Activation", color: "#BA68C8", icon: <DirectionsRunIcon fontSize="large" /> },
   { label: "MD-1", focus: "Light Prep", color: "#FFF176", icon: <EventAvailableIcon fontSize="large" /> },
-  { label: "MD", focus: "Match", color: "#90A4AE", icon: <CalendarMonthIcon fontSize="large" /> },
+  { label: "MD", focus: "Match", color: "#90A4AE", icon: <SportsSoccerIcon fontSize="large" /> },
 ];
 
 const monthlyFocus = [
@@ -32,10 +33,9 @@ const monthlyFocus = [
 ];
 
 const weeklyGoals = [
-  "✔️ Migliorare la mobilità dell’anca",
-  "✔️ 10 salti esplosivi al giorno",
-  "✔️ Stretching dopo ogni allenamento",
-  "✔️ 2 sessioni di core stability",
+  "✔️ Improve hip mobility",
+  "✔️ Stretching after every workout",
+  "✔️ 2 core stability sessions",
 ];
 
 export default function Dashboard() {
@@ -123,6 +123,9 @@ export default function Dashboard() {
           </Grid>
         ))}
       </Grid>
-    </Box>
-  );
-}
+
+     {/* ✅ Banner Sponsor alla fine */}
+     <SponsorBanner />
+     </Box>
+   );
+ }

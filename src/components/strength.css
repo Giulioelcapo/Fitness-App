@@ -1,5 +1,3 @@
-
-
 /* -------------------- BODY & GENERAL -------------------- */
 body {
   font-family: 'Arial', sans-serif;
@@ -49,7 +47,7 @@ button:focus {
 .category-label {
   font-size: 14px;
   text-align: center;
-  color: #0e0e0e; /* Colore chiaro per il testo */
+  color: hsl(0, 0%, 4%); /* Colore chiaro per il testo */
 }
 
 .category-select {
@@ -58,7 +56,7 @@ button:focus {
   padding: 10px;
   font-size: 16px;
   background-color: #0f0f0f; /* Sfondo chiaro per il select */
-  color: #0d0d0d; /* Colore del testo scuro per il select */
+  color: #333; /* Colore del testo scuro per il select */
   border-radius: 8px;
   border: 1px solid #ccc; /* Bordo chiaro per il select */
   cursor: pointer;
@@ -212,7 +210,7 @@ table tr:hover {
   cursor: pointer;
 }
 /* -------------------- UTILITY CLASSES -------------------- */
-.bg-[#f9f9f9] {
+.bg-f9f9f9 {
   background-color: #f9f9f9; /* Sfondo chiaro per le classi */
 }
 .bg-gradient-to-r {
@@ -236,3 +234,4 @@ table tr:hover {
 .duration-300 {
   transition-duration: 0.3s;
 }
+
