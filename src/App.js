@@ -35,7 +35,7 @@ function App() {
           </IconButton>
           {/* LOGO */}
           <img src={logo} alt="Logo" style={{ height: "80px", marginLeft: "16px", marginRight: "16px" }} />
-          <h3 style={{ marginLeft: "16px" }}>Fitness App</h3>
+          <h3 style={{ marginLeft: "16px" }}>Fitness App AI</h3>
         </Toolbar>
       </AppBar>
 
