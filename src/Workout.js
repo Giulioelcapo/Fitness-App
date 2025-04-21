@@ -8,18 +8,18 @@ const Workout = () => {
 
   const workoutData = {
     "MD+1": [
-      { name: "Inverse row TRX", sets: 3, reps: 12, videoUrl:"https://www.youtube.com/watch?v=AdLD9OoWUD4", },
-      { name: "Two arms bench press", sets: 4, reps: 10, videoUrl:"https://www.youtube.com/watch?v=Ak0dUPdIHvg", },
-      { name: "Joystick parallell", sets: 3, reps: 12, videoUrl:"https://www.youtube.com/watch?v=x0nCQ9vFyRI", },
-      { name: "Chop half kneeling", sets: 4, reps: 10, videoUrl:"https://www.youtube.com/watch?v=jc83rck530A", },
-      { name: "Pallof press parallell position", sets: 3, reps: 8, videoUrl:"https://www.youtube.com/watch?v=W55Zfup5TBs", },
-      { name: "Plank Row", sets: 4, reps: 8, videoUrl:"https://www.youtube.com/watch?v=sTKNAVmjYOA", },
+      { name: "Inverse row TRX", sets: 3, reps: 12, videoUrl:"https://www.youtube.com/watch?v=AdLD9OoWUD4" },
+      { name: "Two arms bench press", sets: 4, reps: 10, videoUrl:"https://www.youtube.com/watch?v=Ak0dUPdIHvg" },
+      { name: "Joystick parallell", sets: 3, reps: 12, videoUrl:"https://www.youtube.com/watch?v=x0nCQ9vFyRI" },
+      { name: "Chop half kneeling", sets: 4, reps: 10, videoUrl:"https://www.youtube.com/watch?v=jc83rck530A" },
+      { name: "Pallof press parallell position", sets: 3, reps: 8, videoUrl:"https://www.youtube.com/watch?v=W55Zfup5TBs" },
+      { name: "Plank Row", sets: 4, reps: 8, videoUrl:"https://www.youtube.com/watch?v=sTKNAVmjYOA" },
     ],
     "MD-1": [
-      { name: "Jump rope", sets: 1, reps: "2 minute" },
-      { name: "Light jogging", sets: 1, reps: "5 minute" },
-      { name: "Push up box", sets: 3, reps: 10, "https://www.youtube.com/watch?v=3WHIh4dgYTQ" },
-      { name: "Shoulder press", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/shorts/paKCDdBriJw" },
+      { name: "Jump rope", sets: 1, reps: "2 minute", videoUrl:"" },
+      { name: "Light jogging", sets: 1, reps: "5 minute", videoUrl:"" },
+      { name: "Push up box", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=3WHIh4dgYTQ" },
+      { name: "Shoulder press", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/shorts/paKCDdBriJw"},
       { name: "Chins", sets: 1, reps: 3+3+3, videoUrl: "https://www.youtube.com/watch?v=fFBchpoJmDw&feature=youtu.be"},
       { name: "TRX inverse row", sets: 3, reps: 10, videoUrl:"https://www.youtube.com/watch?v=AdLD9OoWUD4" },
     ],
