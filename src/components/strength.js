@@ -30,12 +30,12 @@ const Strength = () => {
       { name: "Esercizio 8", sets: 4, reps: 10 },
     ],
     "Core": [
-      { name: "Roma Landing", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=oSYs2gCAPL8" },
-      { name: "Hip Thrust", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=z5QkVMvxRFY" },
-      { name: "Bosu landning", sets: 3, reps: 8, videoUrl: "https://youtu.be/Pk8RZGAl-8s" },
-      { name: "Alternating Bosu Jump", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=Pk8RZGAl-8s" },
-      { name: "Deep Squat Wagle", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=JMMKI6DWS0k" },
-      { name: "Hip Mobility", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=qqsvz6EuEYA" },
+      { name: "Dragonflag ecc only", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=QFAt1TLKl1w" },
+      { name: "Dead Bug alt lowering leg", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=UjYBUBv2MEA" },
+      { name: "Roll Out Ball", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=PQVE0wXBDME" },
+      { name: "Loaded Carry Walk", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=mGZc3RG1Tgo" },
+      { name: "Mini HandWalk", sets: 3, reps: "40 sec", videoUrl: "https://www.youtube.com/watch?v=MhUm-jkiYIc" },
+      { name: "Bodysaw Slider", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=gUSQRyUb-I4" },
     ],
   };
 

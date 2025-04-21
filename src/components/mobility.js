@@ -6,17 +6,31 @@ const Mobility = () => {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(null);
 
   const MobilityData = {
+    "Spine Mobility": [
+    { name: "T spine 1 ", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=R2SB0vW7wao" },
+    { name: "Spine mobility supine", sets: 3, reps: "10 per side", videoUrl: "https://www.youtube.com/watch?v=ase-YVjvtEs" },
+    { name: "T spine 1 ", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=R2SB0vW7wao" },
+    { name: "T spine 3", sets: 3, reps: "10 per side", videoUrl: "https://www.youtube.com/watch?v=0Qc16_BxPRE" },
+    { name: "T spine 4 ", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=6ZywY17X7po" },
+    { name: "Cat and cow", sets: 3, reps: "10 per side", videoUrl: "https://www.youtube.com/watch?v=WwotSjX7a5Q" },
+  ],
     "Hip Mobility": [
       { name: "Hip Flexor Stretch", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=qqsvz6EuEYA" },
-      { name: "Seated Hip Stretch", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=4TxmHqKHmWk" },
+      { name: "90/90 hip lyft", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=pAKQQvJdxvw" },
+      { name: "Pigeon trunk rotation", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=IHwxWxD4TnU" },
+      { name: "Deep squat", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=zYt8xp4upNo" },
+      { name: "Sitting hips opening", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=jr0mne3i_vk" },
+      { name: "Fire hyrdants", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=0A093HEDnKE" },
     ],
     "Knee Mobility": [
       { name: "Knee Circles", sets: 3, reps: "30 sec" },
       { name: "Lunge with Rotation", sets: 3, reps: "10 per side", videoUrl: "https://www.youtube.com/watch?v=9BoPnx9-MK0" },
     ],
     "Ankle Mobility": [
-      { name: "Ankle Circles", sets: 3, reps: "30 sec" },
-      { name: "Calf Stretch", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=Z7sZyyfJ9RY" },
+      { name: "Ankle Mobility 1", sets: 3, reps: "30 sec", videoUrl:"https://www.youtube.com/watch?v=4kJdHrOq-cE", },
+      { name: "Ankle Mobility 2", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=aqRtYSuriXg" },
+      { name: "Banded Ankle Mobility", sets: 3, reps: "30 sec", videoUrl:"https://www.youtube.com/watch?v=spJqYFi9W0E", },
+      { name: "Ankle MObility 4", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=tgr0rrNPqNY" },
     ],
   };
 

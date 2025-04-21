@@ -18,16 +18,19 @@ import SponsorBanner from "../components/SponsorBanner";
 
 const weeklyFocus = [
   { label: "MD+1", focus: "Mobility", color: "#4FC3F7", icon: <SelfImprovementIcon fontSize="large" /> },
-  { label: "MD+2", focus: "Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
-  { label: "MD+3", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
-  { label: "MD-3", focus: "Tactical", color: "#81C784", icon: <SportsSoccerIcon fontSize="large" /> },
-  { label: "MD-2", focus: "Activation", color: "#BA68C8", icon: <DirectionsRunIcon fontSize="large" /> },
+  { label: "MD+2", focus: "Strength & Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
+  { label: "MD+3", focus: "Strength ", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { label: "MD-3", focus: "Power", color: "#81C784", icon: <BoltIcon fontSize="large" /> },
+  { label: "MD-2", focus: "Speed", color: "#BA68C8", icon: <DirectionsRunIcon fontSize="large" /> },
   { label: "MD-1", focus: "Light Prep", color: "#FFF176", icon: <EventAvailableIcon fontSize="large" /> },
   { label: "MD", focus: "Match", color: "#90A4AE", icon: <SportsSoccerIcon fontSize="large" /> },
 ];
 
 const monthlyFocus = [
-  { month: "April", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "January", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "February", focus: "Strength ecc", color: "#FFD54F", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "Mars", focus: "Strength ecc", color: "#81C784", icon: <FitnessCenterIcon fontSize="large" /> },
+  { month: "April", focus: "Strength endurance", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
   { month: "May", focus: "Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
   { month: "June", focus: "Recovery", color: "#81C784", icon: <SelfImprovementIcon fontSize="large" /> },
   { month: "July", focus: "Strength/Recovery", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
