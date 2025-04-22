@@ -5,6 +5,14 @@ import './components/workout.css';
 const Workout = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(null); // Stato per il video selezionato
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&]+)/);
+    if (videoIdMatch && videoIdMatch[1]) {
+      return `https://www.youtube.com/embed/${videoIdMatch[1]}`;
+    }
+    return url;
+  };
 
   const workoutData = {
     "MD+1": [
@@ -49,7 +57,7 @@ const Workout = () => {
     <div className="workout-container">
       <Select onValueChange={handleCategoryChange}>
         <SelectTrigger>
-          <SelectValue placeholder="Seleziona Categoria" />
+          <SelectValue placeholder="Select Category" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="MD-1">MD-1</SelectItem>
@@ -102,7 +110,7 @@ const Workout = () => {
             <iframe
               width="100%"
               height="400"
-              src={selectedVideoUrl}
+              src={getEmbedUrl(selectedVideoUrl)}
               title="Workout Video"
               frameBorder="0"
               allowFullScreen

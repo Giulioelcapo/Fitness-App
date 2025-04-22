@@ -38,7 +38,7 @@ function App() {
           <h3 style={{ marginLeft: "16px" }}>Fitness App AI</h3>
         </Toolbar>
       </AppBar>
-
+      <h1 class="dashboard-title">Hello Team</h1>
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <List>
           {menuItems.map((item) => (
