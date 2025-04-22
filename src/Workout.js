@@ -31,9 +31,17 @@ const Workout = () => {
       { name: "Chins", sets: 1, reps: 3+3+3, videoUrl: "https://www.youtube.com/watch?v=fFBchpoJmDw&feature=youtu.be"},
       { name: "TRX inverse row", sets: 3, reps: 10, videoUrl:"https://www.youtube.com/watch?v=AdLD9OoWUD4" },
     ],
+    "MD+2": [
+      { name: "Roma Landing", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/embed/oSYs2gCAPL8" },
+      { name: "Hip Thrust", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=z5QkVMvxRFY" },
+      { name: "Bosu landning", sets: 3, reps: 8, videoUrl: "https://youtu.be/Pk8RZGAl-8s" },
+      { name: "Alternating Bosu Jump", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=Pk8RZGAl-8s" },
+      { name: "Deep Squat Wagle", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=JMMKI6DWS0k" },
+      { name: "Hip Mobility", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=qqsvz6EuEYA" },
+    ],
     "Strength Endurance": [
-      { name: "Esercizio 5", sets: 4, reps: 12 },
-      { name: "Esercizio 6", sets: 3, reps: 10 },
+      { name: "Esercizio 5", sets: 4, reps: 12, videoUrl:"" },
+      { name: "Esercizio 6", sets: 3, reps: 10, videoUrl:"" },
     ],
     "Speed Endurance": [
       { name: "Esercizio 7", sets: 3, reps: 15 },
@@ -46,6 +54,11 @@ const Workout = () => {
       { name: "Alternating Bosu Jump", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=Pk8RZGAl-8s" },
       { name: "Deep Squat Wagle", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=JMMKI6DWS0k" },
       { name: "Hip Mobility", sets: 3, reps: "30 sec", videoUrl: "https://www.youtube.com/watch?v=qqsvz6EuEYA" },
+    ],
+    "Landing": [
+      { name: "Landing one leg Bulgarian", sets: 3, reps: 10, videoUrl: "https://youtube.com/shorts/cbsAHFkCZa8" },
+      { name: "Landing one leg", sets: 3, reps: 10, videoUrl: "https://youtube.com/shorts/fWSfNDHlsZA" },
+      { name: "Landing one leg bosu", sets: 3, reps: 10, videoUrl: "https://youtu.be/Pk8RZGAl-8s" },
     ],
   };
 
@@ -65,6 +78,7 @@ const Workout = () => {
           <SelectItem value="MD+2">MD+2</SelectItem>
           <SelectItem value="Strength Endurance">Strength Endurance</SelectItem>
           <SelectItem value="Speed Endurance">Speed Endurance</SelectItem>
+          <SelectItem value="Landing">Landing</SelectItem>
         </SelectContent>
       </Select>
 
@@ -74,7 +88,7 @@ const Workout = () => {
           <table className="workout-table">
             <thead>
               <tr>
-                <th>Esercizio</th>
+                <th>Exercise</th>
                 <th>Set</th>
                 <th>Reps</th>
                 <th>Video</th>
@@ -89,7 +103,7 @@ const Workout = () => {
                   <td>
                     {exercise.videoUrl ? (
                       <button className="video-button" onClick={() => setSelectedVideoUrl(exercise.videoUrl)}>
-                        Guarda Video
+                        Watch Video
                       </button>
                     ) : (
                       "—"

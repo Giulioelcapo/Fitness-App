@@ -72,7 +72,7 @@ const Strength = () => {
             <table className="strength-table">
               <thead>
                 <tr>
-                  <th>Esercizio</th>
+                  <th>Exercise</th>
                   <th>Set</th>
                   <th>Reps</th>
                   <th>Video</th>
@@ -90,7 +90,7 @@ const Strength = () => {
                           className="video-button"
                           onClick={() => setSelectedVideoUrl(getEmbedUrl(exercise.videoUrl))}
                         >
-                          Guarda Video
+                          Watch Video
                         </button>
                       ) : (
                         "—"

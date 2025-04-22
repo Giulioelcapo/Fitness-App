@@ -63,7 +63,7 @@ const Mobility = () => {
             <table className="mobility-table">
               <thead>
                 <tr>
-                  <th>Esercizio</th>
+                  <th>Exercise</th>
                   <th>Set</th>
                   <th>Reps</th>
                   <th>Video</th>
@@ -81,7 +81,7 @@ const Mobility = () => {
                           className="video-button"
                           onClick={() => setSelectedVideoUrl(getEmbedUrl(exercise.videoUrl))}
                         >
-                          Guarda Video
+                          Watch Video
                         </button>
                       ) : (
                         "—"
