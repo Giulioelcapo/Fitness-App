@@ -14,6 +14,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { IoMdBody } from "react-icons/io";
 import SponsorBanner from "../components/SponsorBanner";
 
 const weeklyFocus = [

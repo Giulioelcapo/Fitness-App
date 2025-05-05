@@ -1,0 +1,15 @@
+.outlinedTitle {
+    font-size: 48px;
+    color: transparent;
+    -webkit-text-stroke: 2px white;
+    text-stroke: 2px white;
+    font-weight: bold;
+    margin-left: 16px;
+  }
+  @media (orientation: portrait) {
+    .outlinedTitle {
+        -webkit-text-stroke: 1px white;
+        text-stroke: 1px white;
+        margin-left: 8px;
+    }
+  }
