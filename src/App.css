@@ -113,3 +113,17 @@
     font-size: 1.8rem;  /* Riduci ulteriormente la dimensione del titolo */
   }
 }
+@media only screen 
+  and (max-width: 768px) 
+  and (-webkit-touch-callout: none) 
+  and (pointer: coarse) {
+  
+  .logo {
+    height: 3.5em;
+  }
+
+  .outlinedTitle {
+    font-size: 1.4rem;
+    margin-left: 4px;
+  }
+}
