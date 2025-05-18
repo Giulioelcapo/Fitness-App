@@ -127,3 +127,22 @@
     margin-left: 4px;
   }
 }
+@media screen and (orientation: portrait) {
+  .outlinedTitle {
+    font-size: 1.5rem;
+    margin-left: 4px;
+  }
+
+  .logo {
+    height: 3.5em; /* Riduce logo in verticale */
+  }
+
+  .card {
+    padding: 1em;
+  }
+
+  body {
+    font-size: 14px;
+  }
+}
+
