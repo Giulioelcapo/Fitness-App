@@ -13,3 +13,34 @@
         margin-left: 8px;
     }
   }
+.outlinedTitle {
+  font-size: 3rem;      /* dimensione standard desktop */
+  margin-left: 16px;
+  font-weight: bold;
+  color: #333;
+  /* altre proprietà base se vuoi */
+}
+
+/* Riduci la dimensione del titolo su schermi con larghezza max 768px */
+@media (max-width: 768px) {
+  .outlinedTitle {
+    font-size: 1.8rem !important;
+    margin-left: 8px !important;
+  }
+}
+
+/* Ulteriore riduzione per schermi molto piccoli (max 480px) */
+@media (max-width: 480px) {
+  .outlinedTitle {
+    font-size: 1.4rem !important;
+    margin-left: 4px !important;
+  }
+}
+
+/* Riduzione dimensione se orientamento è verticale (portrait) */
+@media (orientation: portrait) {
+  .outlinedTitle {
+    font-size: 1.6rem !important;
+    margin-left: 6px !important;
+  }
+}
