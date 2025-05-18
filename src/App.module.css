@@ -13,34 +13,60 @@
         margin-left: 8px;
     }
   }
-.outlinedTitle {
-  font-size: 3rem;      /* dimensione standard desktop */
-  margin-left: 16px;
-  font-weight: bold;
-  color: #333;
-  /* altre proprietà base se vuoi */
+/* Contenitore per logo + scritta, spostato verso sinistra */
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* allinea a sinistra */
+  margin-left: 16px; /* margine sinistro generale */
+  gap: 10px; /* spazio tra logo e scritta */
 }
 
-/* Riduci la dimensione del titolo su schermi con larghezza max 768px */
+/* Titolo con bordo bianco e sfondo trasparente */
+.outlinedTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  color: transparent; /* testo trasparente per mostrare solo bordo */
+  -webkit-text-stroke: 1.5px white; /* bordo bianco */
+  text-stroke: 1.5px white; /* bordo bianco */
+  background-color: transparent; /* sfondo trasparente */
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  /* se vuoi puoi aggiungere font-family */
+}
+
+/* Riduzione dimensione per tablet e simili */
 @media (max-width: 768px) {
+  .headerContainer {
+    margin-left: 8px;
+  }
   .outlinedTitle {
     font-size: 1.8rem !important;
-    margin-left: 8px !important;
+    -webkit-text-stroke-width: 1px !important;
   }
 }
 
-/* Ulteriore riduzione per schermi molto piccoli (max 480px) */
+/* Riduzione dimensione per smartphone */
 @media (max-width: 480px) {
+  .headerContainer {
+    margin-left: 4px;
+  }
   .outlinedTitle {
     font-size: 1.4rem !important;
-    margin-left: 4px !important;
+    -webkit-text-stroke-width: 0.8px !important;
   }
 }
 
-/* Riduzione dimensione se orientamento è verticale (portrait) */
+/* Orientamento verticale */
 @media (orientation: portrait) {
+  .headerContainer {
+    margin-left: 6px;
+  }
   .outlinedTitle {
     font-size: 1.6rem !important;
-    margin-left: 6px !important;
+    -webkit-text-stroke-width: 1px !important;
   }
 }
+
+  
