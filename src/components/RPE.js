@@ -32,7 +32,6 @@ const RPE = () => {
 
   // Calculate weekly load and ACWR
   const calculateWeeklyLoadAndACWR = async (playerName, todayLoad, todayDate) => {
-    // Fetch all workloads for player ordered by date descending
     const { data, error } = await supabase
       .from('workloads')
       .select('daily_load, date')
@@ -47,8 +46,6 @@ const RPE = () => {
     const parsedToday = new Date(todayDate);
     parsedToday.setHours(0, 0, 0, 0);
 
-    // Filtra dati in range [startDayAgo ... endDayAgo]
-    // startDayAgo >= endDayAgo, es: (6,0) -> ultimi 7 giorni compreso oggi
     const filterByRange = (startDayAgo, endDayAgo) =>
       data.filter(d => {
         const entryDate = new Date(d.date);
@@ -58,6 +55,7 @@ const RPE = () => {
 
     // Acute load = somma daily_load negli ultimi 7 giorni compreso oggi
     const acutePeriod = filterByRange(6, 0);
+
     // Verifica se nei dati c'è un record per oggi
     const hasTodayEntry = acutePeriod.some(d => {
       const entryDate = new Date(d.date);
@@ -65,14 +63,11 @@ const RPE = () => {
       return entryDate.getTime() === parsedToday.getTime();
     });
 
-    // Somma carico acute senza doppiare il giorno odierno
     let acuteLoad = acutePeriod.reduce((sum, d) => sum + d.daily_load, 0);
-    // Se NON c'è il carico odierno nel DB, aggiungilo manualmente
     if (!hasTodayEntry) {
       acuteLoad += todayLoad;
     }
 
-    // Chronic load = media dei carichi delle 4 settimane precedenti (7-34 giorni fa)
     const week1 = filterByRange(13, 7);
     const week2 = filterByRange(20, 14);
     const week3 = filterByRange(27, 21);
@@ -83,13 +78,11 @@ const RPE = () => {
       .reduce((a, b) => a + b, 0);
 
     const chronicLoad = chronicSum / 4;
-
     const ACWR = chronicLoad > 0 ? (acuteLoad / chronicLoad).toFixed(2) : null;
 
     return { weeklyLoad: acuteLoad, ACWR };
   };
 
-  // Save workload data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -100,7 +93,6 @@ const RPE = () => {
 
     const dailyLoad = parseInt(duration) * parseInt(rpe);
 
-    // Check if entry already exists for this player and date
     const { data: existingData, error: fetchError } = await supabase
       .from('workloads')
       .select('*')
@@ -118,10 +110,8 @@ const RPE = () => {
       return;
     }
 
-    // Calculate weekly load and ACWR includendo dati esistenti + carico odierno
     const { weeklyLoad, ACWR } = await calculateWeeklyLoadAndACWR(selectedPlayer, dailyLoad, date);
 
-    // Inserisci dati nella tabella workloads
     const { error } = await supabase.from('workloads').insert([
       {
         name: selectedPlayer,
@@ -139,7 +129,6 @@ const RPE = () => {
       setMessage('Error saving data.');
     } else {
       setMessage('Workload successfully saved!');
-      // reset form
       setSelectedPlayer('');
       setRPE(null);
       setDuration('');
@@ -150,7 +139,6 @@ const RPE = () => {
     <div style={{ maxWidth: 600, margin: '0 auto', padding: 20 }}>
       <h2>Player RPE & Workload Entry</h2>
       <form onSubmit={handleSubmit}>
-        {/* Player Selection */}
         <div style={{ marginBottom: 10 }}>
           <label>Player:</label><br />
           <select
@@ -165,7 +153,6 @@ const RPE = () => {
           </select>
         </div>
 
-        {/* Date Picker */}
         <div style={{ marginBottom: 10 }}>
           <label>Date:</label><br />
           <input
@@ -176,7 +163,6 @@ const RPE = () => {
           />
         </div>
 
-        {/* Duration Input */}
         <div style={{ marginBottom: 10 }}>
           <label>Duration (minutes):</label><br />
           <input
@@ -188,7 +174,6 @@ const RPE = () => {
           />
         </div>
 
-        {/* RPE Selection */}
         <div style={{ marginBottom: 10 }}>
           <label>RPE (Borg Scale 1–10):</label><br />
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
