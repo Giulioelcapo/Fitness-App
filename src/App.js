@@ -20,7 +20,7 @@ import logo from './logo.png';  // ✅ Tuo logo
 import BoltIcon from "@mui/icons-material/Bolt";
 import styles from './App.module.css';
 import './App.css'; // oppure il file dove c'è .outlined-title
-
+import RPE from './components/RPE.js';
 
 function PreventionIcon() {
   
@@ -40,6 +40,7 @@ function App() {
     { text: "Strength", path: "/strength", icon: < CiDumbbell /> },
     { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
     { text: "Prevention", path: "/prevention", icon: <BiBandAid /> },
+    { text: "RPE", path: "/RPE", icon: <BiBandAid /> },
   ];
 
   return (
@@ -79,6 +80,7 @@ function App() {
         <Route path="/strength" element={<Strength />} />
         <Route path="/Speed" element={<Speed />} />
         <Route path="/Prevention" element={<Prevention />} />
+        <Route path="/RPE" element={<RPE />} />
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </Router>

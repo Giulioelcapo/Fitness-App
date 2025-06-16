@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "./components/ui/select";
 import './components/workout.css';
-
+  const rangeDate = {
+    start: "2025-05-01",
+    end: "2025-05-22",
+  };
 const Workout = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(null); // Stato per il video selezionato
+  
   const getEmbedUrl = (url) => {
     if (!url) return null;
     const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&]+)/);
@@ -18,25 +22,31 @@ const Workout = () => {
     return '⭐'.repeat(difficulty);
   };
 
+ const rangeDate = {
+  start: "2025-05-01",
+  end: "2025-05-22",
+};
   const workoutData = {
 
-    "Preactivation":
+"Preactivation": 
  [
-      { name: "Adductor", sets: 3, reps: 12, difficulty: 2, videoUrl:"https://www.youtube.com/watch?v=0olaSVW6W7A" },
-      { name: "Hip", sets: 4, reps: 10, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=0olaSVW6W7A" },
-      { name: "Abductor", sets: 3, reps: 12, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=i1Je4LvX8_8" },
-      { name: "Hip-extension", sets: 4, reps: 10, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=U0XcNfEmtsk" },
-      { name: "Hip-crossover", sets: 3, reps: 8, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=QJb_Lqotinc" },
-      { name: "Hip external rotation", sets: 4, reps: 8, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=yCeJN0E3Ngk" },
-    ],
-    "MD+1": [
+    { name: "Adductor", sets: 3, reps: 12, difficulty: 2, videoUrl:"https://www.youtube.com/watch?v=0olaSVW6W7A" },
+    { name: "Hip", sets: 4, reps: 10, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=0olaSVW6W7A" },
+    { name: "Abductor", sets: 3, reps: 12, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=i1Je4LvX8_8" },
+    { name: "Hip-extension", sets: 4, reps: 10, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=U0XcNfEmtsk" },
+    { name: "Hip-crossover", sets: 3, reps: 8, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=QJb_Lqotinc" },
+    { name: "Hip external rotation", sets: 4, reps: 8, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=yCeJN0E3Ngk" }
+  ],
+    "MD+1": 
+    [
       { name: "Inverse row TRX", sets: 3, reps: 12, difficulty: 2, videoUrl:"https://www.youtube.com/watch?v=AdLD9OoWUD4" },
       { name: "Two arms bench press", sets: 4, reps: 10, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=Ak0dUPdIHvg" },
       { name: "Joystick parallell", sets: 3, reps: 12, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=x0nCQ9vFyRI" },
       { name: "Chop half kneeling", sets: 4, reps: 10, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=jc83rck530A" },
       { name: "Pallof press parallell position", sets: 3, reps: 8, difficulty:1, videoUrl:"https://www.youtube.com/watch?v=W55Zfup5TBs" },
       { name: "Plank Row", sets: 4, reps: 8, difficulty:2, videoUrl:"https://www.youtube.com/watch?v=sTKNAVmjYOA" },
-    ],
+    
+    ],  
     "MD-1": [
       { name: "Jump rope", sets: 1, reps: "2 minute", difficulty:2, videoUrl:"https://www.youtube.com/watch?v=ETMZMVTzdak" },
       { name: "Light jogging", sets: 1, reps: "5 minute", difficulty:1, videoUrl:"" },
@@ -71,15 +81,15 @@ const Workout = () => {
       { name: "Single leg squat and reach around the clock", sets: 3, reps: 12, difficulty:2, videoUrl:"https://youtube.com/shorts/fWSsDV_v1-M" },
       { name: "Stability ball Hamstring combo", sets: 3, reps: 12, difficulty:2, videoUrl:"https://youtube.com/shorts/5Bj6N5Hy9HM" },
     ],
-    "Plyo": [
+    "Plyo 2025-05-19 to 2025-06-15": [
       { name: "Clean", sets: 2, reps: 6, difficulty:2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
-      { name: "Sled", sets: 3, reps: 6, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=IDO9AL4QoEs" },
-      { name: "Swing KB", sets: 1, reps: 10, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=1cVT3ee9mgU" },
+      { name: "Sled", sets: 2, reps: 6, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=IDO9AL4QoEs" },
+      { name: "Swing KB", sets: 2, reps: 12, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=1cVT3ee9mgU" },
       { name: "Single Leg box Jump", sets: 2, reps: 5, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=mhoxSr6Z_LI" },
-      { name: "Half kneeling Chest Throw", sets: 3, reps: 12, difficulty:2, videoUrl: "https://www.youtube.com/shorts/HPFjGMPJCYE" },
-      { name: "Tall kneeling Chest Throw", sets: 3, reps: 12, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=BSycoVc-pfk" },
-      { name: "Bulgarian split squat jump", sets: 3, reps: 5, difficulty:2, videoUrl: "https://youtube.com/shorts/RcXL6qC7tX4" },
-      { name: "Trap Bar deadlift jump", sets: 3, reps: 5, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=-n2p5mQxYTw" },
+      { name: "Half kneeling Chest Throw", sets: 2, reps: 12, difficulty:2, videoUrl: "https://www.youtube.com/shorts/HPFjGMPJCYE" },
+      { name: "Tall kneeling Chest Throw", sets: 2, reps: 12, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=BSycoVc-pfk" },
+      { name: "Bulgarian split squat jump", sets: 2, reps: 8+8, difficulty:2, videoUrl: "https://youtube.com/shorts/RcXL6qC7tX4" },
+      { name: "Trap Bar deadlift jump", sets: 2, reps: 5, difficulty:2, videoUrl: "https://www.youtube.com/watch?v=-n2p5mQxYTw" },
     ],
       "Landing": [
       { name: "Landing one leg Bulgarian", sets: 3, reps: 10, difficulty:1, videoUrl: "https://youtube.com/shorts/cbsAHFkCZa8" },
@@ -118,7 +128,7 @@ const Workout = () => {
   { name: "Walking sideways lunges  with band", sets: 3, reps: 12, difficulty:2, videoUrl:"https://youtu.be/_r0y7eNBzBY" },
   { name: "Jumps with heading", sets: 3, reps: 15, difficulty: 1, videroUrl: "https://youtu.be/d2EF4IbWDKg" },
   { name: "Shoulder bump jumps", sets: 3, reps: 15, difficulty: 1, videroUrl: "https://youtu.be/fQ-JYhoU1a0" },
-  { name: "openhagen adduction", sets: 3, reps: 10, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=TDXueDsMJXs" },
+  { name: "Copenhagen adduction", sets: 3, reps: 10, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=TDXueDsMJXs" },
   { name: "Standing adduction with band", sets: 3, reps: 8, difficulty: 1, videoUrl: "https://aktiva.svenskfotboll.se/utbildning/tranarmaterial/digitala-bocker/knee-control/#/lessons/lX7TwVLkYE7dR6sL5m9neGYZoqHMlImC" },
   { name: "Nordic hamstring", sets: 3, reps: 8, difficulty: 1,  videoUrl: "https://youtu.be/fe73TlD5s48" },
   { name: "Standing hamstring curls", sets: 3, reps: 8, diffiuculty: 1, videoUrl: "https://youtu.be/7gq_xAu5ILo" },
@@ -148,7 +158,7 @@ const Workout = () => {
           <SelectItem value="MD-1">MD-1</SelectItem>
           <SelectItem value="MD+1">MD+1</SelectItem>
           <SelectItem value="MD+2">MD+2</SelectItem>
-          <SelectItem value="Plyo">Plyo</SelectItem>
+          <SelectItem value="Plyo 2025-05-19 to 2025-06-15">Plyo</SelectItem>
           <SelectItem value="Strength Endurance">Strength Endurance</SelectItem>
           <SelectItem value="Speed Endurance">Speed Endurance</SelectItem>
           <SelectItem value="Landing">Landing</SelectItem>

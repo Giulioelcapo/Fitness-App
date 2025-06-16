@@ -51,8 +51,7 @@ const Prevention = () => {
       { name: "Dead Bug alt lowering leg", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=UjYBUBv2MEA" },
       { name: "Roll Out Ball", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=PQVE0wXBDME" },
       { name: "Loaded Carry Walk", sets: 3, reps: 10, videoUrl: "https://www.youtube.com/watch?v=mGZc3RG1Tgo" },
-      { name: "Jumps with heading", sets: 3, reps: 15, difficulty: 1, videroUrl: "https://youtu.be/d2EF4IbWDKg" },
-      { name: "Shoulder bump jumps", sets: 3, reps: 15, difficulty: 1, videroUrl: "https://youtu.be/fQ-JYhoU1a0" },
+ 
     ],
     "Back chain": [
       { name: "Pelvic lifts with both feet on the ground", sets: 3, reps: 8, videoUrl: "https://www.youtube.com/watch?v=7or7JzdeOMA" },

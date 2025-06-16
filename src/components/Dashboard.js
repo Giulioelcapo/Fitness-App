@@ -5,6 +5,13 @@ import {
   Grid,
   Typography,
   Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
@@ -12,15 +19,13 @@ import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import BoltIcon from "@mui/icons-material/Bolt";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { IoMdBody } from "react-icons/io";
 import SponsorBanner from "../components/SponsorBanner";
 
 const weeklyFocus = [
   { label: "MD+1", focus: "Mobility", color: "#4FC3F7", icon: <SelfImprovementIcon fontSize="large" /> },
   { label: "MD+2", focus: "Strength & Plyo", color: "#FFD54F", icon: <BoltIcon fontSize="large" /> },
-  { label: "MD+3", focus: "Strength ", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
+  { label: "MD+3", focus: "Strength", color: "#E57373", icon: <FitnessCenterIcon fontSize="large" /> },
   { label: "MD-3", focus: "Power", color: "#81C784", icon: <BoltIcon fontSize="large" /> },
   { label: "MD-2", focus: "Speed", color: "#BA68C8", icon: <DirectionsRunIcon fontSize="large" /> },
   { label: "MD-1", focus: "Light Prep", color: "#FFF176", icon: <EventAvailableIcon fontSize="large" /> },
@@ -84,36 +89,65 @@ export default function Dashboard() {
         ))}
       </Grid>
 
-      {/* Weekly Focus */}
-      <Typography variant="h6" gutterBottom sx={{ marginTop: 5 }}>
-        🗓️ Weekly Schedule (Match Day Structure)
-      </Typography>
-      <Grid container spacing={2}>
-        {weeklyFocus.map((day) => (
-          <Grid item xs={12} sm={6} md={3} key={day.label}>
-            <Card
+{/* Weekly Focus - TABLE VERSION */}
+<Typography variant="h6" gutterBottom sx={{ marginTop: 5 }}>
+  🗓️ Weekly Schedule (Match Day Structure)
+</Typography>
+
+<TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+  <Table sx={{ tableLayout: "fixed", minWidth: 700 }}>
+    <TableHead>
+      <TableRow>
+        {weeklyFocus.map((day, index) => {
+          const modernColors = [
+            "#E3F2FD", // light blue
+          
+          ];
+          const cellColor = modernColors[index % modernColors.length];
+
+          return (
+            <TableCell
+              key={day.label}
+              align="center"
               sx={{
-                backgroundColor: day.color,
+                backgroundColor: cellColor,
+                fontWeight: "bold",
                 color: "#000",
-                borderRadius: 2,
-                boxShadow: 3,
+                fontSize: "1rem",
+                width: `${100 / weeklyFocus.length}%`
               }}
             >
-              <CardContent>
-                <Box display="flex" alignItems="center" gap={2}>
-                  {day.icon}
-                  <Box>
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {day.label}
-                    </Typography>
-                    <Typography variant="body1">{day.focus}</Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+              {day.label}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      <TableRow>
+        {weeklyFocus.map((day, index) => (
+          <TableCell
+            key={index}
+            align="center"
+            sx={{
+              color: "#000",
+              width: `${100 / weeklyFocus.length}%`,
+              padding: 2,
+              backgroundColor: "#fff" // no background color
+            }}
+          >
+            <Box display="flex" flexDirection="column" alignItems="center">
+              {day.icon}
+              <Typography variant="body2" fontWeight="bold">
+                {day.focus}
+              </Typography>
+            </Box>
+          </TableCell>
         ))}
-      </Grid>
+      </TableRow>
+    </TableBody>
+  </Table>
+</TableContainer>
 
       {/* Weekly Goals */}
       <Typography variant="h6" gutterBottom sx={{ marginTop: 5 }}>
@@ -134,8 +168,8 @@ export default function Dashboard() {
         ))}
       </Grid>
 
-     {/* ✅ Banner Sponsor alla fine */}
-     <SponsorBanner />
-     </Box>
-   );
- }
+      {/* ✅ Banner Sponsor alla fine */}
+      <SponsorBanner />
+    </Box>
+  );
+}
