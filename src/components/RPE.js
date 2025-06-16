@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 
@@ -7,6 +6,7 @@ const RPE = () => {
   const [dailyLoad, setDailyLoad] = useState('');
   const [message, setMessage] = useState('');
 
+  // Calcola weekly load (acute) e ACWR
   const calculateWeeklyLoadAndACWR = async (playerName, todayLoad, todayDate) => {
     const { data, error } = await supabase
       .from('workloads')
@@ -29,11 +29,11 @@ const RPE = () => {
       });
     };
 
-    // Acute load: last 7 days including today
+    // Acute load: somma ultimi 7 giorni inclusi oggi
     const week0 = filterByRange(6, 0);
     const acuteLoad = week0.reduce((sum, d) => sum + d.daily_load, 0) + todayLoad;
 
-    // Chronic load: 4 previous weeks (not including current)
+    // Chronic load: media delle 4 settimane precedenti (7-34 giorni fa)
     const week1 = filterByRange(13, 7);
     const week2 = filterByRange(20, 14);
     const week3 = filterByRange(27, 21);
@@ -43,7 +43,8 @@ const RPE = () => {
       .map(week => week.reduce((sum, d) => sum + d.daily_load, 0))
       .reduce((a, b) => a + b, 0)) / 4;
 
-    const acwr = acuteLoad > 0 ? (chronicLoad / acuteLoad).toFixed(2) : null;
+    // ACWR = acute load / chronic load
+    const acwr = chronicLoad > 0 ? (acuteLoad / chronicLoad).toFixed(2) : null;
 
     return { weeklyLoad: acuteLoad, acwr };
   };
@@ -58,6 +59,7 @@ const RPE = () => {
 
     const todayDate = new Date().toISOString().split('T')[0];
 
+    // Controllo se esiste già una voce per oggi
     const { data: existingData, error: fetchError } = await supabase
       .from('workloads')
       .select('*')
@@ -77,6 +79,7 @@ const RPE = () => {
 
     const { weeklyLoad, acwr } = await calculateWeeklyLoadAndACWR(playerName, parseInt(dailyLoad), todayDate);
 
+    // Inserisco i dati calcolati in supabase
     const { error } = await supabase.from('workloads').insert([
       {
         name: playerName,
@@ -117,6 +120,7 @@ const RPE = () => {
             value={dailyLoad}
             onChange={(e) => setDailyLoad(e.target.value)}
             required
+            min="0"
           />
         </div>
         <button type="submit">Save Workload</button>
@@ -127,3 +131,4 @@ const RPE = () => {
 };
 
 export default RPE;
+
