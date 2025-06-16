@@ -1,129 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://efzgpbneonewotqxozau.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmemdwYm5lb25ld290cXhvemF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTc5NDIsImV4cCI6MjA2MzY5Mzk0Mn0.nTGx7dLuieQqA_AKhlTncUtCPWA2I0tWq1qAJEmu8sg';
-const supabase = createClient(supabaseUrl, supabaseKey);
+import React, { useState } from 'react';
+import { supabase } from '../supabaseClient';
 
 const RPE = () => {
-  const [players, setPlayers] = useState([]);
-  const [selectedPlayer, setSelectedPlayer] = useState('');
-  const [rpe, setRpe] = useState(null);
-  const [duration, setDuration] = useState('');
-  const [date, setDate] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [dailyLoad, setDailyLoad] = useState('');
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    fetchPlayers();
-  }, []);
+  const calculateWeeklyLoadAndACWR = async (playerName, todayLoad, todayDate) => {
+    const { data, error } = await supabase
+      .from('workloads')
+      .select('daily_load, date')
+      .eq('name', playerName)
+      .order('date', { ascending: false });
 
-  const fetchPlayers = async () => {
-    const { data, error } = await supabase.from('Players').select('Name');
     if (error) {
-      console.error('Errore nel recupero giocatori:', error);
-    } else {
-      setPlayers(data.map(player => player.Name));
+      console.error('Error fetching workloads:', error);
+      return { weeklyLoad: todayLoad, acwr: null };
     }
+
+    const parsedToday = new Date(todayDate);
+    const daysAgo = (d) => new Date(parsedToday.getTime() - d * 24 * 60 * 60 * 1000);
+
+    const filterByRange = (startDay, endDay) => {
+      return data.filter(d => {
+        const date = new Date(d.date);
+        return date >= daysAgo(startDay) && date <= daysAgo(endDay);
+      });
+    };
+
+    // Acute load: last 7 days including today
+    const week0 = filterByRange(6, 0);
+    const acuteLoad = week0.reduce((sum, d) => sum + d.daily_load, 0) + todayLoad;
+
+    // Chronic load: 4 previous weeks (not including current)
+    const week1 = filterByRange(13, 7);
+    const week2 = filterByRange(20, 14);
+    const week3 = filterByRange(27, 21);
+    const week4 = filterByRange(34, 28);
+
+    const chronicLoad = ([week1, week2, week3, week4]
+      .map(week => week.reduce((sum, d) => sum + d.daily_load, 0))
+      .reduce((a, b) => a + b, 0)) / 4;
+
+    const acwr = acuteLoad > 0 ? (chronicLoad / acuteLoad).toFixed(2) : null;
+
+    return { weeklyLoad: acuteLoad, acwr };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedPlayer || !rpe || !duration || !date) return;
 
-    const daily_load = rpe * parseFloat(duration);
-    setLoading(true);
+    if (!playerName || !dailyLoad) {
+      setMessage('Please enter both player name and daily load.');
+      return;
+    }
+
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const { data: existingData, error: fetchError } = await supabase
+      .from('workloads')
+      .select('*')
+      .eq('name', playerName)
+      .eq('date', todayDate);
+
+    if (fetchError) {
+      console.error('Error checking existing entry:', fetchError);
+      setMessage('Error checking for existing entry.');
+      return;
+    }
+
+    if (existingData.length > 0) {
+      setMessage('Data for this player already exists for today.');
+      return;
+    }
+
+    const { weeklyLoad, acwr } = await calculateWeeklyLoadAndACWR(playerName, parseInt(dailyLoad), todayDate);
 
     const { error } = await supabase.from('workloads').insert([
       {
-        name: selectedPlayer,
-        RPE: rpe,
-        daily_load: daily_load,
-        date: date,
+        name: playerName,
+        daily_load: parseInt(dailyLoad),
+        date: todayDate,
+        weekly_load: weeklyLoad,
+        acwr: acwr,
       },
     ]);
 
-    setLoading(false);
-
     if (error) {
-      alert('Errore durante il salvataggio: ' + error.message);
+      console.error('Error inserting data:', error);
+      setMessage('Error saving data.');
     } else {
-      alert('Data saved successfully!');
-      setSelectedPlayer('');
-      setRpe(null);
-      setDuration('');
-      setDate('');
+      setMessage('Workload successfully saved!');
+      setPlayerName('');
+      setDailyLoad('');
     }
   };
 
-  const getColor = (value) => {
-    if (value <= 3) return '#00cc66'; // verde
-    if (value <= 6) return '#ffcc00'; // giallo
-    return '#ff3300'; // rosso
-  };
-
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-      <h2>Inserisci il tuo RPE</h2>
-
-      <label>Giocatore:</label><br />
-      <select value={selectedPlayer} onChange={e => setSelectedPlayer(e.target.value)} required>
-        <option value=''>-- Seleziona --</option>
-        {players.map((name, i) => (
-          <option key={i} value={name}>{name}</option>
-        ))}
-      </select>
-
-      <div style={{ marginTop: '20px' }}>
-        <label>Scala di Borg (RPE):</label><br />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {[...Array(10)].map((_, i) => {
-            const value = i + 1;
-            return (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setRpe(value)}
-                style={{
-                  backgroundColor: getColor(value),
-                  border: rpe === value ? '2px solid black' : '1px solid #ccc',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  width: '30px',
-                  cursor: 'pointer'
-                }}
-              >
-                {value}
-              </button>
-            );
-          })}
+    <div style={{ maxWidth: 500, margin: '0 auto', padding: 20 }}>
+      <h2>Player Workload Entry</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: 10 }}>
+          <label>Player Name:</label><br />
+          <input
+            type="text"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            required
+          />
         </div>
-      </div>
-
-      <div style={{ marginTop: '20px' }}>
-        <label>Durata (minuti):</label><br />
-        <input
-          type='number'
-          value={duration}
-          onChange={e => setDuration(e.target.value)}
-          min='1'
-          required
-        />
-      </div>
-
-      <div style={{ marginTop: '20px' }}>
-        <label>Data:</label><br />
-        <input
-          type='date'
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          required
-        />
-      </div>
-
-      <button type='submit' disabled={loading} style={{ marginTop: '20px' }}>
-        {loading ? 'Salvataggio in corso...' : 'Invia'}
-      </button>
-    </form>
+        <div style={{ marginBottom: 10 }}>
+          <label>Daily Load:</label><br />
+          <input
+            type="number"
+            value={dailyLoad}
+            onChange={(e) => setDailyLoad(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Save Workload</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
   );
 };
 

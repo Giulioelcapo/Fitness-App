@@ -49,10 +49,3 @@
     text-align: left;
   }
 }
-
-/* Orientamento verticale */
-@media (orientation: portrait) {
-  .headerContainer {
-    margin-left: 6px;
-  }
-}

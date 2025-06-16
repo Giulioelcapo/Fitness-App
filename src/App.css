@@ -113,35 +113,3 @@
     font-size: 1.8rem;  /* Riduci ulteriormente la dimensione del titolo */
   }
 }
-@media only screen 
-  and (max-width: 768px) 
-  and (-webkit-touch-callout: none) 
-  and (pointer: coarse) {
-  
-  .logo {
-    height: 3.5em;
-  }
-
-  .outlinedTitle {
-    font-size: 1.4rem;
-    margin-left: 4px;
-  }
-}
-@media screen and (orientation: portrait) {
-  .outlinedTitle {
-    font-size: 1.5rem;
-    margin-left: 4px;
-  }
-
-  .logo {
-    height: 3.5em; /* Riduce logo in verticale */
-  }
-
-  .card {
-    padding: 1em;
-  }
-
-  body {
-    font-size: 14px;
-  }
-
