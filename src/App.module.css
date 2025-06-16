@@ -26,6 +26,7 @@
   .headerContainer {
     margin-left: 8px;
   }
+<<<<<<< HEAD
   .outlinedTitle {
     font-size: 2rem !important;
     -webkit-text-stroke-width: 1px !important;
@@ -82,11 +83,45 @@
 }
 
 /* Tablet (≤ 768px) */
+=======
+  @media (orientation: portrait) {
+    .outlinedTitle {
+        -webkit-text-stroke: 1px white;
+        text-stroke: 1px white;
+        margin-left: 8px;
+    }
+  }
+/* Contenitore per logo + scritta, spostato verso sinistra */
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* allinea a sinistra */
+  margin-left: 16px; /* margine sinistro generale */
+  gap: 10px; /* spazio tra logo e scritta */
+}
+
+/* Titolo con bordo bianco e sfondo trasparente */
+.outlinedTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  color: transparent; /* testo trasparente per mostrare solo bordo */
+  -webkit-text-stroke: 1.5px white; /* bordo bianco */
+  text-stroke: 1.5px white; /* bordo bianco */
+  background-color: transparent; /* sfondo trasparente */
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  /* se vuoi puoi aggiungere font-family */
+}
+
+/* Riduzione dimensione per tablet e simili */
+>>>>>>> 4503bd76799bd06709ba35092b2b35b8ec0804ae
 @media (max-width: 768px) {
   .headerContainer {
     margin-left: 8px;
   }
   .outlinedTitle {
+<<<<<<< HEAD
     -webkit-text-stroke-width: 1px;
   }
 }
@@ -103,6 +138,21 @@
     -webkit-text-stroke-width: 0.8px;
     text-align: left;
     white-space: normal;
+=======
+    font-size: 1.8rem !important;
+    -webkit-text-stroke-width: 1px !important;
+  }
+}
+
+/* Riduzione dimensione per smartphone */
+@media (max-width: 480px) {
+  .headerContainer {
+    margin-left: 4px;
+  }
+  .outlinedTitle {
+    font-size: 1.4rem !important;
+    -webkit-text-stroke-width: 0.8px !important;
+>>>>>>> 4503bd76799bd06709ba35092b2b35b8ec0804ae
   }
 }
 
@@ -112,7 +162,16 @@
     margin-left: 6px;
   }
   .outlinedTitle {
+<<<<<<< HEAD
     font-size: 1.3rem;
     -webkit-text-stroke-width: 0.9px;
   }
 }
+=======
+    font-size: 1.6rem !important;
+    -webkit-text-stroke-width: 1px !important;
+  }
+}
+
+  
+>>>>>>> 4503bd76799bd06709ba35092b2b35b8ec0804ae
