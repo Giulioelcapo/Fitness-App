@@ -86,9 +86,5 @@ function App() {
     </Router>
   );
 }
+
 export default App;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> d710af0 (update)
