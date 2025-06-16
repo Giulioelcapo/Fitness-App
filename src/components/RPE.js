@@ -83,6 +83,7 @@ const RPE = () => {
     return { weeklyLoad: acuteLoad, ACWR };
   };
 
+  // Save workload data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -93,6 +94,7 @@ const RPE = () => {
 
     const dailyLoad = parseInt(duration) * parseInt(rpe);
 
+    // Check if entry already exists
     const { data: existingData, error: fetchError } = await supabase
       .from('workloads')
       .select('*')
@@ -139,6 +141,7 @@ const RPE = () => {
     <div style={{ maxWidth: 600, margin: '0 auto', padding: 20 }}>
       <h2>Player RPE & Workload Entry</h2>
       <form onSubmit={handleSubmit}>
+        {/* Player Selection */}
         <div style={{ marginBottom: 10 }}>
           <label>Player:</label><br />
           <select
@@ -153,6 +156,7 @@ const RPE = () => {
           </select>
         </div>
 
+        {/* Date Picker */}
         <div style={{ marginBottom: 10 }}>
           <label>Date:</label><br />
           <input
@@ -163,6 +167,7 @@ const RPE = () => {
           />
         </div>
 
+        {/* Duration Input */}
         <div style={{ marginBottom: 10 }}>
           <label>Duration (minutes):</label><br />
           <input
@@ -174,6 +179,7 @@ const RPE = () => {
           />
         </div>
 
+        {/* RPE Selection with Color Gradient */}
         <div style={{ marginBottom: 10 }}>
           <label>RPE (Borg Scale 1–10):</label><br />
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
