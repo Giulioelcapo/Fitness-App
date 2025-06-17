@@ -22,6 +22,10 @@ import styles from './App.module.css';
 import './App.css';
 import RPE from './components/RPE.js';
 import wellnessForm from './components/WellnessForm.js';
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import WhatshotIcon from '@mui/icons-material/Whatshot';
+
+
 
 function PreventionIcon() {
   return <IoShieldCheckmark size="80" color="green" />;
@@ -41,8 +45,11 @@ function App() {
     { text: "Strength", path: "/strength", icon: <CiDumbbell /> },
     { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
     { text: "Prevention", path: "/prevention", icon: <BiBandAid /> },
-    { text: "RPE", path: "/RPE", icon: <BiBandAid /> },
-     { text: "WellnessForm", path: "/WellnessForm", icon: <BiBandAid /> },
+   { text: "RPE", path: "/RPE", icon: <WhatshotIcon /> },
+
+    { text: "WellnessForm", path: "/WellnessForm", icon: <MonitorHeartIcon /> },
+
+
   ];
 
   return (
@@ -82,7 +89,10 @@ function App() {
         <Route path="/Speed" element={<Speed />} />
         <Route path="/Prevention" element={<Prevention />} />
         <Route path="/RPE" element={<RPE />} />
+        <Route path="/WellnessForm" element={<wellnessForm />} />
         <Route path="*" element={<Dashboard />} />
+       
+
       </Routes>
     </Router>
   );
