@@ -12,20 +12,21 @@ import Mobility from "./components/mobility";
 import Strength from "./components/strength";
 import Speed from "./components/Speed";
 import Prevention from "./components/Prevention";
-import Dashboard from "./components/Dashboard"; // ✅ Import del componente Dashboard
+import Dashboard from "./components/Dashboard";
 import { BiBandAid } from "react-icons/bi";
 import { CiDumbbell } from "react-icons/ci";
 import { BiSolidSpreadsheet } from "react-icons/bi";
-import logo from './logo.png';  // ✅ Tuo logo
+import logo from './logo.png';
 import BoltIcon from "@mui/icons-material/Bolt";
 import styles from './App.module.css';
-import './App.css'; // oppure il file dove c'è .outlined-title
+import './App.css';
 import RPE from './components/RPE.js';
+import wellnessForm from './components/WellnessForm.js';
 
 function PreventionIcon() {
-  
   return <IoShieldCheckmark size="80" color="green" />;
 }
+
 function App() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -37,10 +38,11 @@ function App() {
     { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
     { text: "Workout", path: "/workout", icon: <BiSolidSpreadsheet /> },
     { text: "Mobility", path: "/mobility", icon: <SelfImprovementIcon /> },
-    { text: "Strength", path: "/strength", icon: < CiDumbbell /> },
+    { text: "Strength", path: "/strength", icon: <CiDumbbell /> },
     { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
     { text: "Prevention", path: "/prevention", icon: <BiBandAid /> },
     { text: "RPE", path: "/RPE", icon: <BiBandAid /> },
+     { text: "WellnessForm", path: "/WellnessForm", icon: <BiBandAid /> },
   ];
 
   return (
@@ -50,12 +52,11 @@ function App() {
           <IconButton edge="start" color="inherit" onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
-          {/* LOGO */}
           <img src={logo} alt="Logo" style={{ height: "90px", marginLeft: "16px", marginRight: "16px" }} />
           <h1 className={styles.outlinedTitle}>Fitness App AI</h1>
         </Toolbar>
       </AppBar>
-      <h1 class="dashboard-title">Hello Team!</h1>
+      <h1 className="dashboard-title">Hello Team!</h1>
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <List>
           {menuItems.map((item) => (
@@ -74,7 +75,7 @@ function App() {
       </Drawer>
 
       <Routes>
-        <Route path="/" element={<Dashboard />} /> {/* ✅ Rotta aggiunta */}
+        <Route path="/" element={<Dashboard />} />
         <Route path="/workout" element={<Workout />} />
         <Route path="/mobility" element={<Mobility />} />
         <Route path="/strength" element={<Strength />} />
@@ -86,3 +87,5 @@ function App() {
     </Router>
   );
 }
+
+export default App;
