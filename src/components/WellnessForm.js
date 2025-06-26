@@ -12,13 +12,13 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { supabase } from '../supabaseClient'; // Assicurati che sia corretto
+import { supabase } from '../supabaseClient'; // Controlla il path
 
 const WellnessForm = () => {
   const [players, setPlayers] = useState([]);
   const [selectedPlayer, setSelectedPlayer] = useState('');
   const [formData, setFormData] = useState({
-    soreness_muscle: '',
+    soreness_load: '',
     soreness_joint: '',
     sleep_hours: '',
     stress: '',
@@ -27,16 +27,21 @@ const WellnessForm = () => {
   const [date, setDate] = useState(dayjs());
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  // Carica la lista dei giocatori da Supabase
   useEffect(() => {
     const fetchPlayers = async () => {
       const { data, error } = await supabase.from('Players').select('Name');
-      if (!error) setPlayers(data);
-      else console.error('Errore nel caricamento giocatori:', error);
+      if (error) {
+        console.error('Errore nel caricamento giocatori:', error);
+        alert('Errore nel caricamento giocatori');
+      } else {
+        setPlayers(data);
+      }
     };
-
     fetchPlayers();
   }, []);
 
+  // Gestione cambio input
   const handleChange = (field) => (event) => {
     setFormData((prev) => ({
       ...prev,
@@ -44,21 +49,40 @@ const WellnessForm = () => {
     }));
   };
 
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedPlayer || !date) return;
+    // Validazione base
+    if (!selectedPlayer) {
+      alert('Seleziona un giocatore');
+      return;
+    }
+    if (!date || !dayjs.isDayjs(date) || !date.isValid()) {
+      alert('Seleziona una data valida');
+      return;
+    }
 
+    // Inserimento dati su Supabase
     const { data, error } = await supabase.from('MonitoringData').insert([
       {
         name: selectedPlayer,
         date: date.format('YYYY-MM-DD'),
-        ...formData,
+        soreness_muscle: formData.soreness_load,
+        soreness_joint: formData.soreness_joint,
+        sleep_hours: formData.sleep_hours,
+        stress: formData.stress,
+        food_and_drink: formData.food_and_drink,
       },
     ]);
 
-    if (!error) {
+    console.log('Risultato insert:', data, error);
+
+    if (error) {
+      alert('Errore nel salvataggio: ' + error.message);
+    } else {
       setSnackbarOpen(true);
+      // Reset form
       setFormData({
         soreness_muscle: '',
         soreness_joint: '',
@@ -68,8 +92,6 @@ const WellnessForm = () => {
       });
       setSelectedPlayer('');
       setDate(dayjs());
-    } else {
-      console.error('Errore nel salvataggio:', error);
     }
   };
 
@@ -87,7 +109,7 @@ const WellnessForm = () => {
         }}
       >
         <Typography variant="h5" gutterBottom>
-          Inserimento Wellness Giornaliero
+          Daily Wellness Entry
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -99,7 +121,7 @@ const WellnessForm = () => {
             sx={{ mb: 2 }}
           >
             <MenuItem value="" disabled>
-              Seleziona Giocatore
+              Select Player
             </MenuItem>
             {players.map((p) => (
               <MenuItem key={p.Name} value={p.Name}>
@@ -109,22 +131,28 @@ const WellnessForm = () => {
           </Select>
 
           <DatePicker
-            label="Data"
+            label="Date"
             value={date}
-            onChange={(newValue) => setDate(newValue)}
+            onChange={(newValue) => {
+              if (newValue === null) {
+                setDate(dayjs());
+              } else {
+                setDate(newValue);
+              }
+            }}
             sx={{ mb: 2, width: '100%' }}
           />
 
           <TextField
-            label="Dolore Muscolare"
+            label="Muscle Soreness Load"
             fullWidth
             type="number"
             value={formData.soreness_muscle}
-            onChange={handleChange('soreness_muscle')}
+            onChange={handleChange('soreness_load')}
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Dolore Articolare"
+            label="Joint Soreness"
             fullWidth
             type="number"
             value={formData.soreness_joint}
@@ -132,7 +160,7 @@ const WellnessForm = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Ore di Sonno"
+            label="Sleep Hours"
             fullWidth
             type="number"
             value={formData.sleep_hours}
@@ -148,7 +176,7 @@ const WellnessForm = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Alimentazione / Idratazione"
+            label="Food and Drink"
             fullWidth
             type="number"
             value={formData.food_and_drink}
@@ -157,7 +185,7 @@ const WellnessForm = () => {
           />
 
           <Button variant="contained" color="primary" fullWidth type="submit">
-            Salva Dati
+            Save Data
           </Button>
         </form>
 
@@ -165,9 +193,14 @@ const WellnessForm = () => {
           open={snackbarOpen}
           autoHideDuration={3000}
           onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <Alert onClose={() => setSnackbarOpen(false)} severity="success">
-            Dati salvati con successo!
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            Saved successfully!
           </Alert>
         </Snackbar>
       </Box>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react";  
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -21,11 +21,9 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import styles from './App.module.css';
 import './App.css';
 import RPE from './components/RPE.js';
-import wellnessForm from './components/WellnessForm.js';
+import WellnessForm from './components/WellnessForm.js';  
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
-
-
 
 function PreventionIcon() {
   return <IoShieldCheckmark size="80" color="green" />;
@@ -43,13 +41,10 @@ function App() {
     { text: "Workout", path: "/workout", icon: <BiSolidSpreadsheet /> },
     { text: "Mobility", path: "/mobility", icon: <SelfImprovementIcon /> },
     { text: "Strength", path: "/strength", icon: <CiDumbbell /> },
-    { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
+    { text: "Speed", path: "/speed", icon: <BoltIcon /> },
     { text: "Prevention", path: "/prevention", icon: <BiBandAid /> },
-   { text: "RPE", path: "/RPE", icon: <WhatshotIcon /> },
-
-    { text: "WellnessForm", path: "/WellnessForm", icon: <MonitorHeartIcon /> },
-
-
+    { text: "RPE", path: "/rpe", icon: <WhatshotIcon /> },
+    { text: "WellnessForm", path: "/wellnessform", icon: <MonitorHeartIcon /> },
   ];
 
   return (
@@ -59,11 +54,13 @@ function App() {
           <IconButton edge="start" color="inherit" onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
-          <img src={logo} alt="Logo" style={{ height: "90px", marginLeft: "16px", marginRight: "16px" }} />
+          <img src={logo} alt="Logo" className={styles.logo} />
           <h1 className={styles.outlinedTitle}>Fitness App AI</h1>
         </Toolbar>
       </AppBar>
+
       <h1 className="dashboard-title">Hello Team!</h1>
+
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <List>
           {menuItems.map((item) => (
@@ -86,13 +83,11 @@ function App() {
         <Route path="/workout" element={<Workout />} />
         <Route path="/mobility" element={<Mobility />} />
         <Route path="/strength" element={<Strength />} />
-        <Route path="/Speed" element={<Speed />} />
-        <Route path="/Prevention" element={<Prevention />} />
-        <Route path="/RPE" element={<RPE />} />
-        <Route path="/WellnessForm" element={<wellnessForm />} />
+        <Route path="/speed" element={<Speed />} />
+        <Route path="/prevention" element={<Prevention />} />
+        <Route path="/rpe" element={<RPE />} />
+        <Route path="/wellnessform" element={<WellnessForm />} />
         <Route path="*" element={<Dashboard />} />
-       
-
       </Routes>
     </Router>
   );

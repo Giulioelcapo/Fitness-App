@@ -22,8 +22,17 @@ const RPE = () => {
     fetchPlayers();
   }, []);
 
-  // Compute weekly load and ACWR
+  // Helper to get date daysAgo from a base date
+  const daysAgo = (baseDate, days) => {
+    const d = new Date(baseDate);
+    d.setDate(d.getDate() - days);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  // Calculate weekly load and ACWR
   const calculateWeeklyLoadAndACWR = async (playerName, todayLoad, todayDate) => {
+    // Fetch all workloads for player ordered by date descending
     const { data, error } = await supabase
       .from('workloads')
       .select('daily_load, date')
@@ -36,30 +45,48 @@ const RPE = () => {
     }
 
     const parsedToday = new Date(todayDate);
-    const daysAgo = (d) => new Date(parsedToday.getTime() - d * 24 * 60 * 60 * 1000);
-    const filterByRange = (startDay, endDay) =>
+    parsedToday.setHours(0, 0, 0, 0);
+
+    // Filtra dati in range [startDayAgo ... endDayAgo]
+    // startDayAgo >= endDayAgo, es: (6,0) -> ultimi 7 giorni compreso oggi
+    const filterByRange = (startDayAgo, endDayAgo) =>
       data.filter(d => {
-        const date = new Date(d.date);
-        return date >= daysAgo(startDay) && date <= daysAgo(endDay);
+        const entryDate = new Date(d.date);
+        entryDate.setHours(0, 0, 0, 0);
+        return entryDate >= daysAgo(parsedToday, startDayAgo) && entryDate <= daysAgo(parsedToday, endDayAgo);
       });
 
-    // Acute Load = sum of the last 7 days including today
-    const week0 = filterByRange(6, 0);
-    const acuteLoad = week0.reduce((sum, d) => sum + d.daily_load, 0) + todayLoad;
+    // Acute load = somma daily_load negli ultimi 7 giorni compreso oggi
+    const acutePeriod = filterByRange(6, 0);
+    // Verifica se nei dati c'è un record per oggi
+    const hasTodayEntry = acutePeriod.some(d => {
+      const entryDate = new Date(d.date);
+      entryDate.setHours(0, 0, 0, 0);
+      return entryDate.getTime() === parsedToday.getTime();
+    });
 
-    // Chronic Load = average of 4 previous weeks (7-34 days ago)
+    // Somma carico acute senza doppiare il giorno odierno
+    let acuteLoad = acutePeriod.reduce((sum, d) => sum + d.daily_load, 0);
+    // Se NON c'è il carico odierno nel DB, aggiungilo manualmente
+    if (!hasTodayEntry) {
+      acuteLoad += todayLoad;
+    }
+
+    // Chronic load = media dei carichi delle 4 settimane precedenti (7-34 giorni fa)
     const week1 = filterByRange(13, 7);
     const week2 = filterByRange(20, 14);
     const week3 = filterByRange(27, 21);
     const week4 = filterByRange(34, 28);
 
-    const chronicLoad = ([week1, week2, week3, week4]
+    const chronicSum = [week1, week2, week3, week4]
       .map(week => week.reduce((sum, d) => sum + d.daily_load, 0))
-      .reduce((a, b) => a + b, 0)) / 4;
+      .reduce((a, b) => a + b, 0);
 
-    const acwr = chronicLoad > 0 ? (acuteLoad / chronicLoad).toFixed(2) : null;
+    const chronicLoad = chronicSum / 4;
 
-    return { weeklyLoad: acuteLoad, acwr };
+    const ACWR = chronicLoad > 0 ? (acuteLoad / chronicLoad).toFixed(2) : null;
+
+    return { weeklyLoad: acuteLoad, ACWR };
   };
 
   // Save workload data
@@ -73,7 +100,7 @@ const RPE = () => {
 
     const dailyLoad = parseInt(duration) * parseInt(rpe);
 
-    // Check if entry already exists
+    // Check if entry already exists for this player and date
     const { data: existingData, error: fetchError } = await supabase
       .from('workloads')
       .select('*')
@@ -91,8 +118,10 @@ const RPE = () => {
       return;
     }
 
-    const { weeklyLoad, acwr } = await calculateWeeklyLoadAndACWR(selectedPlayer, dailyLoad, date);
+    // Calculate weekly load and ACWR includendo dati esistenti + carico odierno
+    const { weeklyLoad, ACWR } = await calculateWeeklyLoadAndACWR(selectedPlayer, dailyLoad, date);
 
+    // Inserisci dati nella tabella workloads
     const { error } = await supabase.from('workloads').insert([
       {
         name: selectedPlayer,
@@ -100,7 +129,8 @@ const RPE = () => {
         duration: parseInt(duration),
         daily_load: dailyLoad,
         weekly_load: weeklyLoad,
-        acwr: acwr,
+        ACWR: ACWR,
+        rpe: parseInt(rpe),
       },
     ]);
 
@@ -109,6 +139,7 @@ const RPE = () => {
       setMessage('Error saving data.');
     } else {
       setMessage('Workload successfully saved!');
+      // reset form
       setSelectedPlayer('');
       setRPE(null);
       setDuration('');
@@ -157,7 +188,7 @@ const RPE = () => {
           />
         </div>
 
-        {/* RPE Selection with Color Gradient */}
+        {/* RPE Selection */}
         <div style={{ marginBottom: 10 }}>
           <label>RPE (Borg Scale 1–10):</label><br />
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
