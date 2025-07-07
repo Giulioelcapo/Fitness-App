@@ -1,19 +1,20 @@
-
 import React, { useEffect, useState } from "react";
 import {
+  Box,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
-  Typography,
-  Box,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  CircularProgress,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { supabase } from "../supabaseClient";
 import SponsorBanner from "../components/SponsorBanner";
@@ -37,14 +38,25 @@ const weeklyGoals = [
 export default function Dashboard() {
   const [upcomingSession, setUpcomingSession] = useState(null);
   const [monthlyFocus, setMonthlyFocus] = useState(null);
+  const [weeklyScheduleData, setWeeklyScheduleData] = useState([]);
   const [loadingSession, setLoadingSession] = useState(true);
   const [loadingMonthlyFocus, setLoadingMonthlyFocus] = useState(true);
-  const [weeklyScheduleData, setWeeklyScheduleData] = useState([]);
   const [loadingWeeklySchedule, setLoadingWeeklySchedule] = useState(true);
-  const columnsToShow = ["Pre-Activation", "MD", "MD+1", "MD+2", "MD+3", "MD-3", "MD-2", "MD-1", "MD"];
+  const columnsToShow = [
+    "Pre-Activation",
+    "MD",
+    "MD+1",
+    "MD+2",
+    "MD+3",
+    "MD-3",
+    "MD-2",
+    "MD-1",
+    "MD",
+  ];
 
-
-  const currentMonthName = new Date().toLocaleString("en-US", { month: "long" }); // es. July
+  const currentMonthName = new Date().toLocaleString("en-US", { month: "long" });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchUpcomingSession = async () => {
@@ -57,11 +69,7 @@ export default function Dashboard() {
         .limit(1)
         .single();
 
-      if (error) {
-        console.error("Error fetching upcoming session:", error);
-      } else {
-        setUpcomingSession(data);
-      }
+      if (!error) setUpcomingSession(data);
       setLoadingSession(false);
     };
 
@@ -72,10 +80,7 @@ export default function Dashboard() {
         .limit(1)
         .single();
 
-      if (error) {
-        console.error("Error fetching monthly focus:", error);
-        setMonthlyFocus(null);
-      } else {
+      if (!error) {
         const focusForCurrentMonth = data ? data[currentMonthName] : null;
         setMonthlyFocus(focusForCurrentMonth);
       }
@@ -83,16 +88,8 @@ export default function Dashboard() {
     };
 
     const fetchWeeklySchedule = async () => {
-      const { data, error } = await supabase
-        .from("weekly_schedule")
-        .select("*");
-
-      if (error) {
-        console.error("Error fetching weekly schedule:", error);
-        setWeeklyScheduleData([]);
-      } else {
-        setWeeklyScheduleData(data || []);
-      }
+      const { data, error } = await supabase.from("weekly_schedule").select("*");
+      if (!error) setWeeklyScheduleData(data || []);
       setLoadingWeeklySchedule(false);
     };
 
@@ -102,8 +99,9 @@ export default function Dashboard() {
   }, [currentMonthName]);
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ padding: isMobile ? 2 : 4 }}>
+      {/* Header */}
+      <Typography variant={isMobile ? "h5" : "h4"} gutterBottom>
         Dashboard
       </Typography>
 
@@ -116,7 +114,7 @@ export default function Dashboard() {
           backgroundColor: upcomingSession?.color || "#E0E0E0",
           borderRadius: 2,
           boxShadow: 3,
-          marginBottom: 4,
+          mb: 4,
         }}
       >
         <CardContent>
@@ -130,7 +128,7 @@ export default function Dashboard() {
               </Typography>
             </>
           ) : (
-            <Typography variant="body2">No upcoming session found.</Typography>
+            <Typography>No upcoming session found.</Typography>
           )}
         </CardContent>
       </Card>
@@ -142,14 +140,7 @@ export default function Dashboard() {
       {loadingMonthlyFocus ? (
         <CircularProgress />
       ) : monthlyFocus ? (
-        <Card
-          sx={{
-            backgroundColor: "#f5f5f5",
-            borderRadius: 2,
-            boxShadow: 3,
-            marginBottom: 4,
-          }}
-        >
+        <Card sx={{ backgroundColor: "#f5f5f5", borderRadius: 2, boxShadow: 3, mb: 4 }}>
           <CardContent>
             <Typography>{monthlyFocus}</Typography>
           </CardContent>
@@ -159,7 +150,7 @@ export default function Dashboard() {
       )}
 
       {/* Weekly Schedule */}
-      <Typography variant="h6" gutterBottom sx={{ marginTop: 5 }}>
+      <Typography variant="h6" gutterBottom sx={{ mt: 5 }}>
         Weekly Schedule
       </Typography>
 
@@ -168,62 +159,57 @@ export default function Dashboard() {
       ) : weeklyScheduleData.length === 0 ? (
         <Typography>No data found in Weekly Schedule.</Typography>
       ) : (
-        <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
-          <Table sx={{ tableLayout: "fixed" }}>
-            <TableHead>
-              <TableRow>
-                {columnsToShow.map((col) => (
-                  <TableCell
-                    key={col}
-                    align={col === "Pre-Activation" ? "left" : "center"}
-                    sx={{
-                      fontWeight: "bold",
-                      backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "#f5f5f5",
-                      minWidth: 100,
-                    }}
-                  >
-                    {col}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {weeklyScheduleData.map((row, idx) => (
-                <TableRow key={idx}>
+        <Box sx={{ overflowX: "auto" }}>
+          <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, minWidth: 650 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
                   {columnsToShow.map((col) => (
                     <TableCell
                       key={col}
                       align={col === "Pre-Activation" ? "left" : "center"}
                       sx={{
-                        backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "inherit",
-                        whiteSpace: "normal",
-                        wordBreak: "break-word",
+                        fontWeight: "bold",
+                        backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "#f5f5f5",
+                        minWidth: 120,
                       }}
                     >
-                      {row[col]}
+                      {col}
                     </TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {weeklyScheduleData.map((row, idx) => (
+                  <TableRow key={idx}>
+                    {columnsToShow.map((col) => (
+                      <TableCell
+                        key={col}
+                        align={col === "Pre-Activation" ? "left" : "center"}
+                        sx={{
+                          backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "inherit",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {row[col]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       )}
 
       {/* Weekly Goals */}
-      <Typography variant="h6" gutterBottom sx={{ marginTop: 5 }}>
+      <Typography variant="h6" gutterBottom sx={{ mt: 5 }}>
         Weekly Goals
       </Typography>
       <Grid container spacing={2}>
         {weeklyGoals.map((goal, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card
-              sx={{
-                borderRadius: 2,
-                boxShadow: 3,
-                backgroundColor: "#f0f4c3",
-              }}
-            >
+            <Card sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#f0f4c3" }}>
               <CardContent>
                 <Typography variant="body1">{goal}</Typography>
               </CardContent>
@@ -232,10 +218,11 @@ export default function Dashboard() {
         ))}
       </Grid>
 
-      {/* Sponsor */}
-      <Box sx={{ marginTop: 4 }}>
+      {/* Sponsor Banner */}
+      <Box sx={{ mt: 5 }}>
         <SponsorBanner />
       </Box>
     </Box>
   );
 }
+
