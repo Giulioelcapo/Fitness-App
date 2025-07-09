@@ -167,7 +167,7 @@ function Workoutentries() {
 
             {/* Button to show exercises */}
             {selectedWorkoutTypeId && (
-                <button onClick={fetchExercises}>Visualizza Esercizi</button>
+                <button onClick={fetchExercises}>View Exercises</button>
             )}
 
             <br /><br />
@@ -236,7 +236,7 @@ function Workoutentries() {
                     </table>
 
                     <br />
-                    <button onClick={handleSubmit}>Salva Workout</button>
+                    <button onClick={handleSubmit}>Save Workout</button>
                 </div>
             )}
         </div>
