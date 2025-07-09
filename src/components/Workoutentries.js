@@ -180,7 +180,7 @@ function Workoutentries() {
                     <table style={{ borderCollapse: "collapse", width: "100%" }}>
                         <thead>
                             <tr>
-                                <th style={thStyle}>Esercizio</th>
+                                <th style={thStyle}>Exercise</th>
                                 <th style={thStyle}>Sets</th>
                                 <th style={thStyle}>Reps</th>
                                 <th style={thStyle}>Weight (kg)</th>
