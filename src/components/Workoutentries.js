@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
@@ -15,7 +16,7 @@ function Workoutentries() {
     const thStyle = {
         border: "1px solid #ccc",
         padding: "8px",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#green",
         textAlign: "left"
     };
 
@@ -167,7 +168,7 @@ function Workoutentries() {
 
             {/* Button to show exercises */}
             {selectedWorkoutTypeId && (
-                <button onClick={fetchExercises}>View Exercises</button>
+                <button onClick={fetchExercises}>View exercises</button>
             )}
 
             <br /><br />
@@ -175,7 +176,7 @@ function Workoutentries() {
             {/* Exercise Table */}
             {showExercises && exercises.length > 0 && (
                 <div>
-                    <h3>Esercizi:</h3>
+                    <h3>Exercises:</h3>
                     <table style={{ borderCollapse: "collapse", width: "100%" }}>
                         <thead>
                             <tr>
