@@ -8,7 +8,7 @@ import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import { IoShieldCheckmark } from 'react-icons/io5';
 import { IoMdBody } from 'react-icons/io';
-import Workout from "./workout";
+import Workout from "./Workout";
 import Mobility from "./components/mobility";
 import Strength from "./components/strength";
 import Speed from "./components/Speed";

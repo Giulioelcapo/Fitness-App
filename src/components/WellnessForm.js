@@ -53,6 +53,12 @@ const WellnessForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Controllo orario attuale (opzionale)
+    const now = dayjs();
+    if (now.hour() >= 12) {
+      alert('You are late, remember to pay the fine');
+    }
+
     // Validazione base
     if (!selectedPlayer) {
       alert('Seleziona un giocatore');
@@ -84,7 +90,7 @@ const WellnessForm = () => {
       setSnackbarOpen(true);
       // Reset form
       setFormData({
-        soreness_muscle: '',
+        soreness_load: '',
         soreness_joint: '',
         sleep_hours: '',
         stress: '',
@@ -147,7 +153,7 @@ const WellnessForm = () => {
             label="Muscle Soreness Load"
             fullWidth
             type="number"
-            value={formData.soreness_muscle}
+            value={formData.soreness_load}
             onChange={handleChange('soreness_load')}
             sx={{ mb: 2 }}
           />
