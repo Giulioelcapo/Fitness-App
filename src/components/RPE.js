@@ -4,7 +4,7 @@ import { supabase } from '../supabaseClient';
 const RPE = () => {
   const [players, setPlayers] = useState([]);
   const [selectedPlayer, setSelectedPlayer] = useState('');
-  const [rpe, setRPE] = useState(null);
+  const [RPE, setRPE] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [message, setMessage] = useState('');
@@ -87,12 +87,12 @@ const RPE = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedPlayer || !rpe || !duration || !date) {
+    if (!selectedPlayer || !RPE || !duration || !date) {
       setMessage('Please fill in all fields.');
       return;
     }
 
-    const dailyLoad = parseInt(duration) * parseInt(rpe);
+    const dailyLoad = parseInt(duration) * parseInt(RPE);
 
     // Check if entry already exists
     const { data: existingData, error: fetchError } = await supabase
@@ -122,7 +122,7 @@ const RPE = () => {
         daily_load: dailyLoad,
         weekly_load: weeklyLoad,
         ACWR: ACWR,
-        rpe: parseInt(rpe),
+        RPE: parseInt(RPE),
       },
     ]);
 
@@ -194,7 +194,7 @@ const RPE = () => {
                   style={{
                     padding: '8px 14px',
                     backgroundColor: color,
-                    border: rpe === level ? '3px solid black' : '1px solid #ccc',
+                    border: RPE === level ? '3px solid black' : '1px solid #ccc',
                     borderRadius: '5px',
                     cursor: 'pointer',
                   }}
