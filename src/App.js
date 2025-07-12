@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
-import { IoShieldCheckmark } from 'react-icons/io5'; 
+import { IoShieldCheckmark } from 'react-icons/io5';
 import { IoMdBody } from 'react-icons/io';
 import Workout from "./workout";
 import Mobility from "./components/mobility";
@@ -21,9 +21,13 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import styles from './App.module.css';
 import './App.css'; // oppure il file dove c'è .outlined-title
 import RPE from './components/RPE.js';
+import Wellness from './components/WellnessForm';          // o ./components/Wellness.js, a seconda del percorso esatto
+import Workoutentries from './components/Workoutentries';
+import { BiBarChartAlt2 } from 'react-icons/bi'; // se scegli questa
+import { RiMentalHealthLine } from "react-icons/ri";
 
 function PreventionIcon() {
-  
+
   return <IoShieldCheckmark size="80" color="green" />;
 }
 function App() {
@@ -39,8 +43,11 @@ function App() {
     { text: "Mobility", path: "/mobility", icon: <SelfImprovementIcon /> },
     { text: "Strength", path: "/strength", icon: < CiDumbbell /> },
     { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
-    { text: "Prevention", path: "/prevention", icon: <BiBandAid /> },
+    { text: "Prevention", path: "/prevention", icon: <RiMentalHealthLine /> },
     { text: "RPE", path: "/RPE", icon: <BiBandAid /> },
+    { text: "Wellness", path: "/WellnessForm", icon: <RiMentalHealthLine /> },
+    { text: "Workout analysis", path: "/Workoutentries", icon: <BiBarChartAlt2 /> },
+
   ];
 
   return (
@@ -81,6 +88,8 @@ function App() {
         <Route path="/Speed" element={<Speed />} />
         <Route path="/Prevention" element={<Prevention />} />
         <Route path="/RPE" element={<RPE />} />
+        <Route path="/WellnessForm" element={<Wellness Form />} />
+        <Route path="/Workoutentries" element={<Workoutentries />} />
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </Router>
