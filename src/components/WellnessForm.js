@@ -54,7 +54,11 @@ const WellnessForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+<<<<<<< HEAD
     // Controllo orario attuale (opzionale)
+=======
+    // Controllo orario attuale
+>>>>>>> efad4fb (Aggiornato WellnessForm e aggiunto supabaseClient)
     const now = dayjs();
     if (now.hour() >= 12) {
       alert('You are late, remember to pay the fine');
