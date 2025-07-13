@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   Box,
@@ -13,7 +12,7 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { supabase } from '../supabaseClient'; // Controlla il path
+import { supabase } from '../supabaseClient';
 
 const WellnessForm = () => {
   const [players, setPlayers] = useState([]);
@@ -54,27 +53,21 @@ const WellnessForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-<<<<<<< HEAD
-    // Controllo orario attuale (opzionale)
-=======
-    // Controllo orario attuale
->>>>>>> efad4fb (Aggiornato WellnessForm e aggiunto supabaseClient)
     const now = dayjs();
     if (now.hour() >= 12) {
       alert('You are late, remember to pay the fine');
     }
 
-    // Validazione base
     if (!selectedPlayer) {
       alert('Seleziona un giocatore');
       return;
     }
+
     if (!date || !dayjs.isDayjs(date) || !date.isValid()) {
       alert('Seleziona una data valida');
       return;
     }
 
-    // Inserimento dati su Supabase
     const { data, error } = await supabase.from('MonitoringData').insert([
       {
         name: selectedPlayer,
@@ -93,7 +86,6 @@ const WellnessForm = () => {
       alert('Errore nel salvataggio: ' + error.message);
     } else {
       setSnackbarOpen(true);
-      // Reset form
       setFormData({
         soreness_load: '',
         soreness_joint: '',
@@ -144,13 +136,7 @@ const WellnessForm = () => {
           <DatePicker
             label="Date"
             value={date}
-            onChange={(newValue) => {
-              if (newValue === null) {
-                setDate(dayjs());
-              } else {
-                setDate(newValue);
-              }
-            }}
+            onChange={(newValue) => setDate(newValue || dayjs())}
             sx={{ mb: 2, width: '100%' }}
           />
 
