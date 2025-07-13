@@ -143,12 +143,12 @@ const Workout = () => {
       { name: "Single leg box jump", sets: 3, reps: 10, difficulty: 1, videoUrl: "" },
     ],
     "Strength-Speed": [
-      { name: "Clean", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
-      { name: "Front Squat", sets: 3, reps: 6, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
-      { name: "Box jump", sets: 3, reps: 6, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
-      { name: "Plyometric Push Ups", sets: 3, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
-      { name: "Plyometric Inverted Rowh", sets: 3, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
-      { name: "Single leg box jump (Landing with 2)", sets: 3, reps: 4, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
+      { name: "Clean", sets: 4, reps: 5, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
+      { name: "Front Squat", sets: 4, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
+      { name: "Box jump", sets: 4, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
+      { name: "Plyometric Push Ups", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
+      { name: "Plyometric Inverted Rowh", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
+      { name: "Single leg box jump (Landing with 2)", sets: 4, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
     ],
 
   };
@@ -174,6 +174,8 @@ const Workout = () => {
           <SelectItem value="Knee control Easy">Knee control Easy</SelectItem>
           <SelectItem value="Knee control Medium">Knee control Medium</SelectItem>
           <SelectItem value="Knee control Advanced">Knee controll Advanced</SelectItem>
+          <SelectItem value="GK">GK</SelectItem>
+          <SelectItem value="Strength-Speed">Strength-Speed</SelectItem>
         </SelectContent>
       </Select>
 
@@ -234,4 +236,3 @@ const Workout = () => {
 };
 
 export default Workout;
-
