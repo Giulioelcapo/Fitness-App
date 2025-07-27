@@ -144,23 +144,14 @@ const Workout = () => {
       { name: "Single leg box jump", sets: 3, reps: 10, difficulty: 1, videoUrl: "" },
     ],
     "Strength-Speed": [
-<<<<<<< HEAD
       { name: "Clean", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
-      { name: "Front Squat", sets: 3, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
-      { name: "Box jump", sets: 3, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
+      { name: "Front Squat", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
+      { name: "Box jump", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
       { name: "Plyometric Push Ups", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
       { name: "Plyometric Inverted Rowh", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
       { name: "Single leg box jump (Landing with 2)", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
       { name: "Nordic Hamstring", sets: 3, reps: 4, difficulty: 2, videoUrl: "" },
       { name: "Trap Bar RDL", sets: 3, reps: 5, difficulty: 2, videoUrl: "" },
-=======
-      { name: "Clean", sets: 4, reps: 5, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
-      { name: "Front Squat", sets: 4, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
-      { name: "Box jump", sets: 4, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
-      { name: "Plyometric Push Ups", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
-      { name: "Plyometric Inverted Rowh", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
-      { name: "Single leg box jump (Landing with 2)", sets: 4, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
->>>>>>> c33dc2c38632845e8bb3e783fec525ef4b023739
     ],
 
   };
@@ -248,3 +239,5 @@ const Workout = () => {
 };
 
 export default Workout;
+
+
