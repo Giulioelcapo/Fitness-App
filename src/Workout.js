@@ -40,12 +40,13 @@ const Workout = () => {
       ],
     "MD+1":
       [
-        { name: "Inverse row TRX", sets: 3, reps: 12, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=AdLD9OoWUD4" },
-        { name: "Two arms bench press", sets: 4, reps: 10, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=Ak0dUPdIHvg" },
-        { name: "Joystick parallell", sets: 3, reps: 12, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=x0nCQ9vFyRI" },
-        { name: "Chop half kneeling", sets: 4, reps: 10, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=jc83rck530A" },
-        { name: "Pallof press parallell position", sets: 3, reps: 8, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=W55Zfup5TBs" },
-        { name: "Plank Row", sets: 4, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=sTKNAVmjYOA" },
+        { name: "Bike warm-up", sets: 1, reps: 1, difficulty: 2, videoUrl: "" },
+        { name: "Single arm DB row", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=A3Nb-Sl4Ma0" },
+        { name: "Landmine press", sets: 4, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=6cSTRPhpubs" },
+        { name: "Glute Bridge push", sets: 4, reps: 6, difficulty: 1, videoUrl: "https://youtu.be/gF4_OlqSH4s" },
+        { name: "Hip Thrust", sets: 4, reps: 6, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=5S8SApGU_Lk" },
+        { name: "Banded rotation", sets: 4, reps: 8, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=5qTMvuj63qA" },
+        { name: "Hip mobility", sets: 4, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=FxEoorgo-x8" },
 
       ],
     "MD-1": [
@@ -143,12 +144,14 @@ const Workout = () => {
       { name: "Single leg box jump", sets: 3, reps: 10, difficulty: 1, videoUrl: "" },
     ],
     "Strength-Speed": [
-      { name: "Clean", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
-      { name: "Front Squat", sets: 3, reps: 6, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
-      { name: "Box jump", sets: 3, reps: 6, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
-      { name: "Plyometric Push Ups", sets: 3, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
-      { name: "Plyometric Inverted Rowh", sets: 3, reps: 8, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
-      { name: "Single leg box jump (Landing with 2)", sets: 3, reps: 4, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
+      { name: "Clean", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://youtube.com/shorts/0YvFiHRxDk0" },
+      { name: "Front Squat", sets: 3, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=uYumuL_G_V0" },
+      { name: "Box jump", sets: 3, reps: 5, difficulty: 1, videoUrl: "https://www.youtube.com/watch?v=NBY9-kTuHEk" },
+      { name: "Plyometric Push Ups", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=GNVQos5I0qk" },
+      { name: "Plyometric Inverted Rowh", sets: 3, reps: 6, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=XgaDWQB_B3g" },
+      { name: "Single leg box jump (Landing with 2)", sets: 3, reps: 5, difficulty: 2, videoUrl: "https://www.youtube.com/watch?v=w5PUa6QYpe0" },
+      { name: "Nordic Hamstring", sets: 3, reps: 4, difficulty: 2, videoUrl: "" },
+      { name: "Trap Bar RDL", sets: 3, reps: 5, difficulty: 2, videoUrl: "" },
     ],
 
   };
@@ -174,6 +177,8 @@ const Workout = () => {
           <SelectItem value="Knee control Easy">Knee control Easy</SelectItem>
           <SelectItem value="Knee control Medium">Knee control Medium</SelectItem>
           <SelectItem value="Knee control Advanced">Knee controll Advanced</SelectItem>
+          <SelectItem value="GK">GK</SelectItem>
+          <SelectItem value="Strength-Speed">Strength-Speed</SelectItem>
         </SelectContent>
       </Select>
 
