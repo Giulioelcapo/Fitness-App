@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Workout from "./components/Workout";
 import PreActivation from "./components/PreActivation";
@@ -24,7 +24,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Carica utente salvato (localStorage al posto di AsyncStorage)
+  // Carica utente salvato
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) setUser({ email: storedUser });
@@ -43,6 +43,9 @@ export default function App() {
           <Route path="/preactivation" element={<PreActivation />} />
           <Route path="/rpe" element={<RPE user={user} />} />
           <Route path="/wellness" element={<WellnessForm user={user} />} />
+
+          {/* Catch-all: se la rotta non esiste, torna a Dashboard */}
+          <Route path="/*" element={<Dashboard user={user} setUser={setUser} />} />
         </Routes>
       </Router>
 
