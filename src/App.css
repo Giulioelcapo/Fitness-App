@@ -1,73 +1,66 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Contenitore principale del Dashboard */
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  /* Puoi cambiare colore di sfondo */
+}
+
+/* Titolo sotto ogni bottone */
+.buttonLabel {
+  margin-top: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
   text-align: center;
 }
 
-/* Contenitore per logo e titolo */
-.header-container {
+/* Grid dei bottoni centrali */
+.buttonGrid {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 1rem;
+  gap: 80px;
+  /* Spazio tra i bottoni */
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
 }
 
-/* Logo */
-.logo {
-  width: 40px;         /* dimensione fissa più piccola */
-  max-width: 5%;       /* non supera mai il 5% della larghezza */
-  height: auto;
-  transition: filter 300ms;
+/* Bottone grande */
+.largeIconButton {
+  font-size: 80px;
+  transition: transform 0.2s, color 0.2s;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.largeIconButton:hover {
+  transform: scale(1.1);
+  color: #1976d2;
+  /* Cambia colore al passaggio del mouse */
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-/* Titolo */
-.outlinedTitle {
-  font-size: 2rem;      /* Ridotto da 3rem a 2rem */
-  font-weight: bold;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-}
-
-/* Media Queries per dispositivi con larghezza massima di 768px (tablet) */
+/* Responsive: Tablet (≤ 768px) */
 @media (max-width: 768px) {
-  .logo {
-    width: 35px;
+  .largeIconButton {
+    font-size: 60px;
   }
 
-  .outlinedTitle {
-    font-size: 1.5rem;
+  .buttonGrid {
+    gap: 60px;
   }
 }
 
-/* Media Queries per dispositivi con larghezza massima di 480px (smartphone) */
+/* Responsive: Smartphone (≤ 480px) */
 @media (max-width: 480px) {
-  .header-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 0.5rem;
+  .largeIconButton {
+    font-size: 50px;
   }
 
-  .logo {
-    width: 30px;
-  }
-
-  .outlinedTitle {
-    font-size: 1.2rem;
-    text-align: center;
+  .buttonGrid {
+    gap: 40px;
   }
 }

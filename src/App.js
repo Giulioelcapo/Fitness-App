@@ -1,99 +1,73 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
-import { IoShieldCheckmark } from 'react-icons/io5';
-import { IoMdBody } from 'react-icons/io';
-import Workout from "./Workout";
-import Mobility from "./components/mobility";
-import Strength from "./components/strength";
-import Speed from "./components/Speed";
-import Prevention from "./components/Prevention";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
-import { BiBandAid } from "react-icons/bi";
-import { CiDumbbell } from "react-icons/ci";
-import { BiSolidSpreadsheet } from "react-icons/bi";
-import logo from './logo.png';
-import BoltIcon from "@mui/icons-material/Bolt";
-import styles from './App.module.css';
-import './App.css';
-import RPE from './components/RPE.js';
-import Wellness from './components/WellnessForm';
-import Workoutentries from './components/Workoutentries';
-import { BiBarChartAlt2 } from 'react-icons/bi';
-import { RiMentalHealthLine } from "react-icons/ri";
+import Workout from "./components/Workout";
+import PreActivation from "./components/PreActivation";
+import RPE from "./components/RPE";
+import WellnessForm from "./components/WellnessForm";
+import Login from "./components/Login";
 
-function PreventionIcon() {
-  return <IoShieldCheckmark size="80" color="green" />;
-}
+import splashImg from "./assets/splash.png";
 
-function App() {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
+  const [fade, setFade] = useState(1);
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
-  };
+  // Effetto splash
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFade(0);
+      setTimeout(() => setShowSplash(false), 600); // durata fade
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const menuItems = [
-    { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
-    { text: "Workout", path: "/workout", icon: <BiSolidSpreadsheet /> },
-    { text: "Mobility", path: "/mobility", icon: <SelfImprovementIcon /> },
-    { text: "Strength", path: "/strength", icon: <CiDumbbell /> },
-    { text: "Speed", path: "/Speed", icon: <BoltIcon /> },
-    { text: "Prevention", path: "/prevention", icon: <RiMentalHealthLine /> },
-    { text: "RPE", path: "/RPE", icon: <BiBandAid /> },
-    { text: "Wellness", path: "/WellnessForm", icon: <RiMentalHealthLine /> },
-    { text: "Workout analysis", path: "/Workoutentries", icon: <BiBarChartAlt2 /> },
-  ];
+  // Carica utente salvato (localStorage al posto di AsyncStorage)
+  useEffect(() => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) setUser({ email: storedUser });
+    setLoading(false);
+  }, []);
+
+  if (loading) return null;
 
   return (
-    <Router>
-      <AppBar position="static" style={{ backgroundColor: '#1976d2' }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={toggleDrawer(true)}>
-            <MenuIcon />
-          </IconButton>
-          <img src={logo} alt="Logo" style={{ height: "90px", marginLeft: "16px", marginRight: "16px" }} />
-          <h1 className={styles.outlinedTitle}>Fitness App AI</h1>
-        </Toolbar>
-      </AppBar>
+    <div style={{ position: "relative", minHeight: "100vh" }}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/workout" element={<Workout />} />
+          <Route path="/preactivation" element={<PreActivation />} />
+          <Route path="/rpe" element={<RPE user={user} />} />
+          <Route path="/wellness" element={<WellnessForm user={user} />} />
+        </Routes>
+      </Router>
 
-      <h1 className="dashboard-title">Hello Team!</h1>
-
-      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <List>
-          {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              component={Link}
-              to={item.path}
-              onClick={toggleDrawer(false)}
-            >
-              {item.icon && <span style={{ marginRight: 8 }}>{item.icon}</span>}
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/workout" element={<Workout />} />
-        <Route path="/mobility" element={<Mobility />} />
-        <Route path="/strength" element={<Strength />} />
-        <Route path="/Speed" element={<Speed />} />
-        <Route path="/Prevention" element={<Prevention />} />
-        <Route path="/RPE" element={<RPE />} />
-        <Route path="/WellnessForm" element={<Wellness />} />
-        <Route path="/Workoutentries" element={<Workoutentries />} />
-        <Route path="*" element={<Dashboard />} />
-      </Routes>
-    </Router>
+      {/* Splash Screen */}
+      {showSplash && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "#fff",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+            opacity: fade,
+            transition: "opacity 0.6s ease",
+          }}
+        >
+          <img
+            src={splashImg}
+            alt="Splash"
+            style={{ width: "80%", height: "80%", objectFit: "contain" }}
+          />
+        </div>
+      )}
+    </div>
   );
 }
-
-export default App;

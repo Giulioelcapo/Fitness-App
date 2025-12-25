@@ -1,228 +1,143 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  CircularProgress,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { supabase } from "../supabaseClient";
-import SponsorBanner from "../components/SponsorBanner";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { FaDumbbell, FaSpa, FaRunning, FaClock, FaHome } from "react-icons/fa";
 
-const weeklyFocus = [
-  { label: "MD+1", focus: "Mobility", color: "#B2EBF2" },
-  { label: "MD+2", focus: "Strength & Plyo", color: "#FFF9C4" },
-  { label: "MD+3", focus: "Strength", color: "#FFCDD2" },
-  { label: "MD-3", focus: "Power", color: "#C8E6C9" },
-  { label: "MD-2", focus: "Speed", color: "#D1C4E9" },
-  { label: "MD-1", focus: "Light Prep", color: "#FFF8E1" },
-  { label: "MD", focus: "Match", color: "#CFD8DC" },
+// Slot sponsorizzazioni sicuri: solo spazi disponibili
+const sponsors = [
+  { id: 1, name: "Available Space" },
+  { id: 2, name: "Available Space" },
+  { id: 3, name: "Available Space" },
+  { id: 4, name: "Available Space" },
 ];
 
-const weeklyGoals = [
-  "Improve hip mobility",
-  "Stretch after every workout",
-  "2 core stability sessions",
-];
+export default function Dashboard({ user, setUser }) {
+  const navigate = useNavigate();
 
-export default function Dashboard() {
-  const [upcomingSession, setUpcomingSession] = useState(null);
-  const [monthlyFocus, setMonthlyFocus] = useState(null);
-  const [weeklyScheduleData, setWeeklyScheduleData] = useState([]);
-  const [loadingSession, setLoadingSession] = useState(true);
-  const [loadingMonthlyFocus, setLoadingMonthlyFocus] = useState(true);
-  const [loadingWeeklySchedule, setLoadingWeeklySchedule] = useState(true);
-  const columnsToShow = [
-    "Pre-Activation",
-    "MD",
-    "MD+1",
-    "MD+2",
-    "MD+3",
-    "MD-3",
-    "MD-2",
-    "MD-1",
-    "MD",
-  ];
+  const width = window.innerWidth;
+  const iconSize = width > 768 ? 120 : 80;
+  const rowMargin = width > 768 ? 50 : 30;
 
-  const currentMonthName = new Date().toLocaleString("en-US", { month: "long" });
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const handleRpePress = () => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    storedUser ? navigate("/rpe") : navigate("/login", { state: { nextScreen: "RPE" } });
+  };
 
-  useEffect(() => {
-    const fetchUpcomingSession = async () => {
-      const today = new Date().toISOString().split("T")[0];
-      const { data, error } = await supabase
-        .from("events")
-        .select("*")
-        .gt("date", today)
-        .order("date", { ascending: true })
-        .limit(1)
-        .single();
+  const handleWellnessPress = () => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    storedUser ? navigate("/wellness") : navigate("/login", { state: { nextScreen: "WellnessForm" } });
+  };
 
-      if (!error) setUpcomingSession(data);
-      setLoadingSession(false);
-    };
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    setUser(null);
+    alert("You have logged out");
+  };
 
-    const fetchMonthlyFocus = async () => {
-      const { data, error } = await supabase
-        .from("monthly Focus")
-        .select("*")
-        .limit(1)
-        .single();
+  const buttonStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    margin: "0 20px",
+    cursor: "pointer",
+  };
 
-      if (!error) {
-        const focusForCurrentMonth = data ? data[currentMonthName] : null;
-        setMonthlyFocus(focusForCurrentMonth);
-      }
-      setLoadingMonthlyFocus(false);
-    };
-
-    const fetchWeeklySchedule = async () => {
-      const { data, error } = await supabase.from("weekly_schedule").select("*");
-      if (!error) setWeeklyScheduleData(data || []);
-      setLoadingWeeklySchedule(false);
-    };
-
-    fetchUpcomingSession();
-    fetchMonthlyFocus();
-    fetchWeeklySchedule();
-  }, [currentMonthName]);
+  const labelStyle = { marginTop: 10, fontSize: 18, fontWeight: 600 };
+  const rowStyle = { display: "flex", justifyContent: "center", marginBottom: rowMargin };
+  const bottomTabStyle = {
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: 70,
+    backgroundColor: "#555",
+    position: "fixed",
+    bottom: 0,
+    width: "100%",
+    color: "#fff",
+  };
 
   return (
-    <Box sx={{ padding: isMobile ? 2 : 4 }}>
+    <div style={{ paddingBottom: 120 }}>
       {/* Header */}
-      <Typography variant={isMobile ? "h5" : "h4"} gutterBottom>
-        Dashboard
-      </Typography>
+      <div style={{ padding: 20 }}>
+        <img src="/assets/ai_logo.png" alt="Logo" style={{ width: 60, height: 60 }} />
+      </div>
 
-      {/* Upcoming Session */}
-      <Typography variant="h6" gutterBottom>
-        Upcoming Session
-      </Typography>
-      <Card
-        sx={{
-          backgroundColor: upcomingSession?.color || "#E0E0E0",
-          borderRadius: 2,
-          boxShadow: 3,
-          mb: 4,
-        }}
-      >
-        <CardContent>
-          {loadingSession ? (
-            <CircularProgress />
-          ) : upcomingSession ? (
-            <>
-              <Typography variant="h6">{upcomingSession.title}</Typography>
-              <Typography variant="body2">
-                {new Date(upcomingSession.date).toLocaleDateString()}
-              </Typography>
-            </>
-          ) : (
-            <Typography>No upcoming session found.</Typography>
-          )}
-        </CardContent>
-      </Card>
+      {/* Dashboard Buttons */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        {/* Row 1 */}
+        <div style={rowStyle}>
+          <div style={buttonStyle} onClick={handleRpePress}>
+            <FaDumbbell size={iconSize} color="#1976d2" />
+            <span style={labelStyle}>RPE</span>
+          </div>
+          <div style={buttonStyle} onClick={handleWellnessPress}>
+            <FaSpa size={iconSize} color="#1976d2" />
+            <span style={labelStyle}>Wellness</span>
+          </div>
+        </div>
 
-      {/* Monthly Focus */}
-      <Typography variant="h6" gutterBottom>
-        Monthly Focus - {currentMonthName}
-      </Typography>
-      {loadingMonthlyFocus ? (
-        <CircularProgress />
-      ) : monthlyFocus ? (
-        <Card sx={{ backgroundColor: "#f5f5f5", borderRadius: 2, boxShadow: 3, mb: 4 }}>
-          <CardContent>
-            <Typography>{monthlyFocus}</Typography>
-          </CardContent>
-        </Card>
-      ) : (
-        <Typography>No focus set for this month.</Typography>
-      )}
+        {/* Row 2 */}
+        <div style={rowStyle}>
+          <div style={buttonStyle} onClick={() => navigate("/preactivation")}>
+            <FaRunning size={iconSize} color="#1976d2" />
+            <span style={labelStyle}>Pre-Activation</span>
+          </div>
+          <div style={buttonStyle} onClick={() => navigate("/workout")}>
+            <FaClock size={iconSize} color="#1976d2" />
+            <span style={labelStyle}>Workout</span>
+          </div>
+        </div>
 
-      {/* Weekly Schedule */}
-      <Typography variant="h6" gutterBottom sx={{ mt: 5 }}>
-        Weekly Schedule
-      </Typography>
+        {/* Logout */}
+        {user && (
+          <div style={{ ...buttonStyle, marginTop: 20 }} onClick={handleLogout}>
+            <span style={{ color: "red", fontWeight: 700, fontSize: 18 }}>Logout</span>
+          </div>
+        )}
+      </div>
 
-      {loadingWeeklySchedule ? (
-        <CircularProgress />
-      ) : weeklyScheduleData.length === 0 ? (
-        <Typography>No data found in Weekly Schedule.</Typography>
-      ) : (
-        <Box sx={{ overflowX: "auto" }}>
-          <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, minWidth: 650 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {columnsToShow.map((col) => (
-                    <TableCell
-                      key={col}
-                      align={col === "Pre-Activation" ? "left" : "center"}
-                      sx={{
-                        fontWeight: "bold",
-                        backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "#f5f5f5",
-                        minWidth: 120,
-                      }}
-                    >
-                      {col}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {weeklyScheduleData.map((row, idx) => (
-                  <TableRow key={idx}>
-                    {columnsToShow.map((col) => (
-                      <TableCell
-                        key={col}
-                        align={col === "Pre-Activation" ? "left" : "center"}
-                        sx={{
-                          backgroundColor: col === "Pre-Activation" ? "#e0f7fa" : "inherit",
-                          wordBreak: "break-word",
-                        }}
-                      >
-                        {row[col]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )}
+      {/* Sponsors Banner */}
+      <div style={{ width: "100%", textAlign: "center", marginTop: 50 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 20 }}>Sponsorship Opportunities</h2>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20 }}>
+          {sponsors.map((slot) => (
+            <div
+              key={slot.id}
+              style={{
+                width: 300,
+                height: 100,
+                border: "2px dashed #bbb",
+                borderRadius: 12,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 16,
+                fontWeight: 600,
+                color: "#777",
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              {slot.name}
+            </div>
+          ))}
+        </div>
+      </div>
 
-      {/* Weekly Goals */}
-      <Typography variant="h6" gutterBottom sx={{ mt: 5 }}>
-        Weekly Goals
-      </Typography>
-      <Grid container spacing={2}>
-        {weeklyGoals.map((goal, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#f0f4c3" }}>
-              <CardContent>
-                <Typography variant="body1">{goal}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Sponsor Banner */}
-      <Box sx={{ mt: 5 }}>
-        <SponsorBanner />
-      </Box>
-    </Box>
+      {/* Bottom Tab */}
+      <div style={bottomTabStyle}>
+        <div onClick={() => navigate("/dashboard")}>
+          <FaHome size={26} />
+        </div>
+        <div onClick={() => navigate("/workout")}>
+          <FaClock size={26} />
+        </div>
+        <div onClick={() => navigate("/preactivation")}>
+          <FaRunning size={26} />
+        </div>
+        <div onClick={handleWellnessPress}>
+          <FaSpa size={26} />
+        </div>
+      </div>
+    </div>
   );
 }
-

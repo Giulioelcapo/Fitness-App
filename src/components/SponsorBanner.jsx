@@ -1,21 +1,48 @@
 import React from "react";
 
-const SponsorBanner = () => {
+const sponsorSlots = [
+  { id: 1 },
+  { id: 2 },
+  { id: 3 },
+  { id: 4 },
+];
+
+export default function SponsorBanner() {
   return (
-    <div className="w-full text-center my-10">
-      <a
-        href="https://link-dello-sponsor.com"
-        target="_blank"
-        rel="noopener noreferrer"
+    <div style={{ marginTop: 40, padding: 20, textAlign: "center" }}>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 20 }}>
+        Sponsorship Opportunities
+      </h2>
+
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: 20,
+        }}
       >
-        <img
-          src="https://via.placeholder.com/300x100?text=Il+Tuo+Sponsor+Qui"
-          alt="Sponsor"
-          className="mx-auto rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-        />
-      </a>
+        {sponsorSlots.map((slot) => (
+          <div
+            key={slot.id}
+            style={{
+              width: 260,
+              height: 100,
+              border: "2px dashed #bbb",
+              borderRadius: 12,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#777",
+              backgroundColor: "#f9f9f9",
+            }}
+          >
+            Available Sponsorship Space
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default SponsorBanner;
+}
