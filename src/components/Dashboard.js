@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaDumbbell, FaSpa, FaRunning, FaClock, FaHome } from "react-icons/fa";
 
@@ -10,21 +10,48 @@ const sponsors = [
   { id: 4, name: "Available Space" },
 ];
 
+// Componente AdSense
+const AdBanner = () => {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, []);
+
+  return (
+    <div style={{ textAlign: "center", margin: "20px 0" }}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-TUO_CLIENT_ID" // sostituire con il tuo ID
+        data-ad-slot="TUO_AD_SLOT" // sostituire con lo slot corretto
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
+  );
+};
+
 export default function Dashboard({ user, setUser }) {
   const navigate = useNavigate();
-
   const width = window.innerWidth;
   const iconSize = width > 768 ? 120 : 80;
   const rowMargin = width > 768 ? 50 : 30;
 
   const handleRpePress = () => {
     const storedUser = localStorage.getItem("loggedInUser");
-    storedUser ? navigate("/rpe") : navigate("/login", { state: { nextScreen: "RPE" } });
+    storedUser
+      ? navigate("/rpe")
+      : navigate("/login", { state: { nextScreen: "RPE" } });
   };
 
   const handleWellnessPress = () => {
     const storedUser = localStorage.getItem("loggedInUser");
-    storedUser ? navigate("/wellness") : navigate("/login", { state: { nextScreen: "WellnessForm" } });
+    storedUser
+      ? navigate("/wellness")
+      : navigate("/login", { state: { nextScreen: "WellnessForm" } });
   };
 
   const handleLogout = () => {
@@ -56,7 +83,7 @@ export default function Dashboard({ user, setUser }) {
   };
 
   return (
-    <div style={{ paddingBottom: 120 }}>
+    <div style={{ paddingBottom: 150 }}>
       {/* Header */}
       <div style={{ padding: 20 }}>
         <img src="/assets/ai_logo.png" alt="Logo" style={{ width: 60, height: 60 }} />
@@ -64,7 +91,6 @@ export default function Dashboard({ user, setUser }) {
 
       {/* Dashboard Buttons */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {/* Row 1 */}
         <div style={rowStyle}>
           <div style={buttonStyle} onClick={handleRpePress}>
             <FaDumbbell size={iconSize} color="#1976d2" />
@@ -76,7 +102,6 @@ export default function Dashboard({ user, setUser }) {
           </div>
         </div>
 
-        {/* Row 2 */}
         <div style={rowStyle}>
           <div style={buttonStyle} onClick={() => navigate("/preactivation")}>
             <FaRunning size={iconSize} color="#1976d2" />
@@ -88,13 +113,15 @@ export default function Dashboard({ user, setUser }) {
           </div>
         </div>
 
-        {/* Logout */}
         {user && (
           <div style={{ ...buttonStyle, marginTop: 20 }} onClick={handleLogout}>
             <span style={{ color: "red", fontWeight: 700, fontSize: 18 }}>Logout</span>
           </div>
         )}
       </div>
+
+      {/* Banner AdSense */}
+      <AdBanner />
 
       {/* Sponsors Banner */}
       <div style={{ width: "100%", textAlign: "center", marginTop: 50 }}>

@@ -1,96 +1,115 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // react-router
-import "./Login.css"; // opzionale, per separare gli stili
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const COMMON_PASSWORD = "EskilstunaUnited2026";
-const AUTHORIZED_EMAILS = [
+// Lista email autorizzate
+const allowedEmails = [
     "giulio_dambrosio@libero.it",
-    "maria@example.com",
-    "luca@example.com",
+    "player1@example.com",
+    "player2@example.com",
 ];
 
 export default function Login({ setUser }) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [stayLoggedIn, setStayLoggedIn] = useState(true);
-    const [showPassword, setShowPassword] = useState(false);
-
     const navigate = useNavigate();
     const location = useLocation();
-    const nextScreen = location.state?.nextScreen || "/dashboard";
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(true);
+
+    // Controlla se l'utente è già loggato
+    useEffect(() => {
+        const storedUser = localStorage.getItem("loggedInUser") || sessionStorage.getItem("loggedInUser");
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            setUser(user);
+            navigate("/"); // Dashboard è al path "/"
+        }
+    }, [setUser, navigate]);
 
     const handleLogin = () => {
-        const cleanEmail = email.toLowerCase().trim();
-
-        if (!email || !password) {
-            return alert("Errore: Inserisci email e password");
+        if (!allowedEmails.includes(email)) {
+            alert("Email non autorizzata");
+            return;
+        }
+        if (password !== "EskilstunaUnited2026") {
+            alert("Password errata");
+            return;
         }
 
-        if (!AUTHORIZED_EMAILS.includes(cleanEmail)) {
-            return alert("Accesso negato: Email non autorizzata");
+        const user = { email };
+        if (rememberMe) localStorage.setItem("loggedInUser", JSON.stringify(user));
+        else sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+
+        setUser(user);
+
+        // Redirect alla pagina desiderata dopo login
+        const nextScreen = location.state?.nextScreen || "/";
+        switch (nextScreen) {
+            case "RPE":
+                navigate("/rpe");
+                break;
+            case "WellnessForm":
+                navigate("/wellness");
+                break;
+            default:
+                navigate("/"); // Dashboard
         }
-
-        if (password !== COMMON_PASSWORD) {
-            return alert("Errore: Password errata");
-        }
-
-        if (stayLoggedIn) {
-            localStorage.setItem("loggedInUser", cleanEmail);
-        } else {
-            localStorage.removeItem("loggedInUser");
-        }
-
-        setUser({ email: cleanEmail });
-
-        // naviga alla schermata successiva
-        navigate(nextScreen, { replace: true });
     };
 
+    const handleBack = () => navigate("/"); // Vai alla Dashboard
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 20 }}>
-            <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 30 }}>Login</h1>
+        <div style={{ padding: 20, maxWidth: 400, margin: "0 auto" }}>
+            <h2 style={{ marginBottom: 20 }}>Login</h2>
 
             <input
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ padding: 12, borderRadius: 6, border: "1px solid #ccc", marginBottom: 15, width: "100%", maxWidth: 400 }}
+                style={{ padding: 10, marginBottom: 15, width: "100%", borderRadius: 6, border: "1px solid #ccc" }}
             />
 
-            <div style={{ display: "flex", alignItems: "center", marginBottom: 15, width: "100%", maxWidth: 400 }}>
+            <div style={{ position: "relative", marginBottom: 15 }}>
                 <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ flex: 1, padding: 12, borderRadius: 6, border: "1px solid #ccc" }}
+                    style={{ padding: 10, width: "100%", borderRadius: 6, border: "1px solid #ccc" }}
                 />
                 <button
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{ marginLeft: 10, color: "#1976d2", fontWeight: 600, border: "none", background: "transparent", cursor: "pointer" }}
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", fontWeight: 700, color: "#1976d2" }}
                 >
                     {showPassword ? "Hide" : "Show"}
                 </button>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, width: "100%", maxWidth: 400 }}>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={stayLoggedIn}
-                        onChange={(e) => setStayLoggedIn(e.target.checked)}
-                        style={{ marginRight: 8 }}
-                    />
-                    Rimani connesso
-                </label>
-            </div>
+            <label style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
+                <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    style={{ marginRight: 10 }}
+                />
+                Stay logged in
+            </label>
 
             <button
                 onClick={handleLogin}
-                style={{ backgroundColor: "#1976d2", padding: 15, borderRadius: 6, color: "#fff", fontWeight: 600, width: "100%", maxWidth: 400, cursor: "pointer" }}
+                style={{ padding: 14, width: "100%", backgroundColor: "#1976d2", color: "#fff", fontWeight: 700, borderRadius: 6, cursor: "pointer", marginBottom: 10 }}
             >
-                LOGIN
+                Login
+            </button>
+
+            <button
+                onClick={handleBack}
+                style={{ padding: 14, width: "100%", backgroundColor: "#ccc", color: "#000", fontWeight: 700, borderRadius: 6, cursor: "pointer" }}
+            >
+                Back to Dashboard
             </button>
         </div>
     );

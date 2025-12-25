@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Workout from "./components/Workout";
 import PreActivation from "./components/PreActivation";
@@ -19,7 +19,7 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setFade(0);
-      setTimeout(() => setShowSplash(false), 600); // durata fade
+      setTimeout(() => setShowSplash(false), 600);
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
@@ -27,7 +27,7 @@ export default function App() {
   // Carica utente salvato
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
-    if (storedUser) setUser({ email: storedUser });
+    if (storedUser) setUser(JSON.parse(storedUser));
     setLoading(false);
   }, []);
 
@@ -43,9 +43,6 @@ export default function App() {
           <Route path="/preactivation" element={<PreActivation />} />
           <Route path="/rpe" element={<RPE user={user} />} />
           <Route path="/wellness" element={<WellnessForm user={user} />} />
-
-          {/* Catch-all: se la rotta non esiste, torna a Dashboard */}
-          <Route path="/*" element={<Dashboard user={user} setUser={setUser} />} />
         </Routes>
       </Router>
 
