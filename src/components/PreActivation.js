@@ -4,7 +4,7 @@ import { GiSoccerField, GiHand } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 
 /* =========================
-   IMAGE IMPORTS (OBBLIGATORI)
+   IMAGES
 ========================= */
 import MDp1 from "../assets/MD+1.png";
 import MDp2 from "../assets/MD+2.png";
@@ -15,7 +15,7 @@ import MDm3 from "../assets/MD-3.png";
 import MDGK from "../assets/MD.png";
 
 /* =========================
-   TRAINING CONFIGURATION
+   TRAINING PLAN
 ========================= */
 const trainingPlan = {
     outfield: {
@@ -36,7 +36,6 @@ const trainingPlan = {
                         "Preventive strength",
                         "Light neuromuscular work",
                         "Rotational chain",
-                        "1–2 exercises per category",
                     ],
                 },
             ],
@@ -58,8 +57,6 @@ const trainingPlan = {
                         "Speed mechanics",
                         "Acceleration",
                         "Deceleration",
-                        "Recovery leg stiffness",
-                        "1–2 exercises per category",
                     ],
                 },
             ],
@@ -81,8 +78,6 @@ const trainingPlan = {
                         "Speed mechanics",
                         "Acceleration",
                         "Deceleration",
-                        "Recovery leg stiffness",
-                        "1–2 exercises per category",
                     ],
                 },
             ],
@@ -91,21 +86,11 @@ const trainingPlan = {
             meta: { objective: "Prepare without fatigue", intensity: "Low–Moderate", fatigue: "Minimal" },
             blocks: [
                 {
-                    title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground-based mobility",
-                        "4–5 total-body activation (5’)",
-                    ],
-                },
-                {
                     title: "MOVEMENT & PERFORMANCE",
                     items: [
                         "Running mechanics",
                         "Landing mechanics",
                         "Hip extensor activation",
-                        "Submaximal top-speed exposure",
-                        "1–2 exercises per category",
                     ],
                 },
             ],
@@ -118,7 +103,6 @@ const trainingPlan = {
                     items: [
                         "Power & reactivity",
                         "Sprint exposure",
-                        "Neuromuscular activation",
                     ],
                 },
             ],
@@ -126,14 +110,6 @@ const trainingPlan = {
         "MD-1": {
             meta: { objective: "Prime for match", intensity: "Low", fatigue: "None" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground mobility",
-                        "4–5 activation exercises (5’)",
-                    ],
-                },
                 {
                     title: "PRIMING",
                     items: [
@@ -150,18 +126,10 @@ const trainingPlan = {
             meta: { objective: "Technical & joint preparation", intensity: "Low–Moderate", fatigue: "Minimal" },
             blocks: [
                 {
-                    title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground mobility",
-                        "4–5 activation exercises (5’)",
-                    ],
-                },
-                {
                     title: "GOALKEEPER SPECIFIC",
                     items: [
                         "Shoulder prevention",
-                        "Footwork basic patterns",
+                        "Footwork",
                         "Hand–eye coordination",
                     ],
                 },
@@ -171,15 +139,15 @@ const trainingPlan = {
 };
 
 /* =========================
-   SESSION IMAGES (CHIAVI IDENTICHE)
+   SESSION IMAGES
 ========================= */
 const sessionImages = {
     "MD+1": MDp1,
     "MD+2": MDp2,
     "MD+3": MDp3,
-    "MD-3": MDm3,
-    "MD-2": MDm2,
     "MD-1": MDm1,
+    "MD-2": MDm2,
+    "MD-3": MDm3,
     "ROUTINES WEEK": MDGK,
 };
 
@@ -191,9 +159,12 @@ export default function PreActivation() {
     const [selectedSession, setSelectedSession] = useState(null);
     const [role, setRole] = useState(null);
 
-    const openModal = (session, selectedRole) => {
+    const sessionData = selectedSession && role ? trainingPlan[role][selectedSession] : null;
+    const isTablet = window.innerWidth >= 768;
+
+    const openModal = (session, role) => {
         setSelectedSession(session);
-        setRole(selectedRole);
+        setRole(role);
     };
 
     const closeModal = () => {
@@ -201,19 +172,14 @@ export default function PreActivation() {
         setRole(null);
     };
 
-    const sessionData =
-        selectedSession && role ? trainingPlan[role][selectedSession] : null;
-
-    const isTablet = window.innerWidth >= 768;
-
     return (
         <div style={{ paddingBottom: 90 }}>
             <h2 style={{ fontSize: isTablet ? 26 : 22, fontWeight: 700, marginBottom: 20 }}>
                 PRE-ACTIVATION ROUTINE
             </h2>
 
-            {/* OUTFIELD */}
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+            {/* OUTFIELD SESSIONS */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", marginBottom: 15 }}>
                 {Object.keys(trainingPlan.outfield).map((session) => (
                     <div
                         key={session}
@@ -232,13 +198,15 @@ export default function PreActivation() {
                         }}
                     >
                         <GiSoccerField size={isTablet ? 48 : 40} color="#1976d2" />
-                        <span style={{ marginTop: 8, fontWeight: 600 }}>{session}</span>
+                        <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>
+                            {session}
+                        </span>
                     </div>
                 ))}
             </div>
 
-            {/* GOALKEEPER */}
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            {/* GOALKEEPER SESSION */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 15 }}>
                 <div
                     onClick={() => openModal("ROUTINES WEEK", "goalkeeper")}
                     style={{
@@ -255,7 +223,9 @@ export default function PreActivation() {
                     }}
                 >
                     <GiHand size={isTablet ? 48 : 40} color="#1976d2" />
-                    <span style={{ marginTop: 8, fontWeight: 600 }}>GOALKEEPER</span>
+                    <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>
+                        GOALKEEPER
+                    </span>
                 </div>
             </div>
 
@@ -265,11 +235,15 @@ export default function PreActivation() {
                     onClick={closeModal}
                     style={{
                         position: "fixed",
-                        inset: 0,
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
                         backgroundColor: "rgba(0,0,0,0.4)",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        overflowY: "auto",
                     }}
                 >
                     <div
@@ -283,19 +257,46 @@ export default function PreActivation() {
                             overflowY: "auto",
                         }}
                     >
-                        <h3>{role.toUpperCase()} – {selectedSession}</h3>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                            <h3 style={{ fontSize: isTablet ? 20 : 18, fontWeight: 600 }}>
+                                {role.toUpperCase()} – {selectedSession}
+                            </h3>
+                            <button onClick={closeModal} style={{ cursor: "pointer", fontSize: 18 }}>X</button>
+                        </div>
 
-                        <img
-                            src={sessionImages[selectedSession]}
-                            alt={selectedSession}
-                            style={{ width: "100%", maxHeight: 240, objectFit: "contain", marginBottom: 15 }}
-                        />
+                        {/* IMAGE */}
+                        {sessionImages[selectedSession] && (
+                            <img
+                                src={sessionImages[selectedSession]}
+                                alt={selectedSession}
+                                style={{ width: "100%", height: isTablet ? 240 : 180, marginBottom: 15, objectFit: "contain" }}
+                            />
+                        )}
 
+                        {/* META DATA */}
+                        {sessionData.meta && (
+                            <div style={{
+                                backgroundColor: "#e6f0ff",
+                                padding: 15,
+                                borderRadius: 10,
+                                border: "1px solid #1976d2",
+                                marginBottom: 15,
+                                fontWeight: 600
+                            }}>
+                                <p>Objective: {sessionData.meta.objective}</p>
+                                <p>Intensity: {sessionData.meta.intensity}</p>
+                                <p>Fatigue: {sessionData.meta.fatigue}</p>
+                            </div>
+                        )}
+
+                        {/* BLOCKS */}
                         {sessionData.blocks.map((block, i) => (
-                            <div key={i}>
-                                <strong>{block.title}</strong>
+                            <div key={i} style={{ marginBottom: 15 }}>
+                                <p style={{ fontWeight: 700, marginBottom: 6, fontSize: 14, color: "#1976d2" }}>
+                                    {block.title}
+                                </p>
                                 {block.items.map((item, idx) => (
-                                    <p key={idx}>• {item}</p>
+                                    <p key={idx} style={{ fontSize: 15, marginBottom: 6 }}>• {item}</p>
                                 ))}
                             </div>
                         ))}
@@ -317,9 +318,18 @@ export default function PreActivation() {
                     color: "#fff",
                 }}
             >
-                {[FaHome, FaDumbbell, FaSpa, FaClock, FaUser].map((Icon, i) => (
-                    <button key={i} onClick={() => navigate("/")} style={{ background: "none", border: "none", color: "#fff", fontSize: 26 }}>
-                        <Icon />
+                {[{ icon: <FaHome />, screen: "/" },
+                { icon: <FaDumbbell />, screen: "/rpe" },
+                { icon: <FaSpa />, screen: "/wellness" },
+                { icon: <FaClock />, screen: "/workout" },
+                { icon: <FaUser />, screen: "/profile" },
+                ].map((tab, i) => (
+                    <button
+                        key={i}
+                        onClick={() => navigate(tab.screen)}
+                        style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", fontSize: 26 }}
+                    >
+                        {tab.icon}
                     </button>
                 ))}
             </div>
