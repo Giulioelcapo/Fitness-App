@@ -15,7 +15,7 @@ const AnalyticsTracker = () => {
 
   useEffect(() => {
     if (window.gtag) {
-      window.gtag("config", "G-XXXXXXXXXX", {
+      window.gtag("config", "G-T046TG6KCJ", {
         page_path: location.pathname,
       });
     }
