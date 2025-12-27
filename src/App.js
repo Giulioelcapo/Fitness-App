@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Workout from "./components/Workout";
 import PreActivation from "./components/PreActivation";
@@ -9,6 +9,22 @@ import Login from "./components/Login";
 
 import splashImg from "./assets/splash.png";
 
+// ---------------- GA4 Tracker per SPA ----------------
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag("config", "G-XXXXXXXXXX", {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
+
+  return null;
+};
+
+// ---------------- App principale ----------------
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +52,9 @@ export default function App() {
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
       <Router>
+        {/* Tracker GA4 */}
+        <AnalyticsTracker />
+
         <Routes>
           <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
           <Route path="/login" element={<Login setUser={setUser} />} />

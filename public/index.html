@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
+
   <!-- BASE för GitHub Pages: alla vägar pekar mot root -->
   <base href="/" />
 
@@ -13,10 +14,20 @@
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-  <!-- Google AdSense Auto Ads -->
+  <!-- 🔹 Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <!-- 🔹 Google AdSense Auto Ads -->
   <meta name="google-adsense-account" content="ca-pub-6747403673692656">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6747403673692656"
-    crossorigin="anonymous"></script>
+    crossorigin="anonymous">
+    </script>
 
   <title>Fitness AI</title>
 
