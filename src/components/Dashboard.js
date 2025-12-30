@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaDumbbell,
@@ -20,7 +20,7 @@ const sponsors = [
 
 // Componente AdSense
 const AdBanner = () => {
-  useEffect(() => {
+  React.useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
@@ -68,6 +68,11 @@ export default function Dashboard({ user, setUser }) {
     alert("You have logged out");
   };
 
+  // Scroll in cima alla pagina quando si clicca Home
+  const handleHomeClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const buttonStyle = {
     display: "flex",
     flexDirection: "column",
@@ -77,9 +82,7 @@ export default function Dashboard({ user, setUser }) {
   };
 
   const labelStyle = { marginTop: 10, fontSize: 18, fontWeight: 600 };
-
   const rowStyle = { display: "flex", justifyContent: "center", marginBottom: rowMargin };
-
   const bottomTabStyle = {
     display: "flex",
     justifyContent: "space-around",
@@ -100,16 +103,12 @@ export default function Dashboard({ user, setUser }) {
           padding: 20,
           display: "flex",
           justifyContent: "center",
-          alignItems: "center", // allinea verticalmente logo e patch
-          gap: 10, // spazio tra logo e patch
+          alignItems: "center",
+          gap: 10,
         }}
       >
         {/* Club Logo */}
-        <img
-          src={clubLogo}
-          alt="Club Logo"
-          style={{ width: 130, height: 70 }}
-        />
+        <img src={clubLogo} alt="Club Logo" style={{ width: 130, height: 70 }} />
 
         {/* Champions Patch */}
         <div
@@ -140,7 +139,6 @@ export default function Dashboard({ user, setUser }) {
             <FaDumbbell size={iconSize} color="#1976d2" />
             <span style={labelStyle}>RPE</span>
           </div>
-
           <div style={buttonStyle} onClick={handleWellnessPress}>
             <FaSpa size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Wellness</span>
@@ -152,7 +150,6 @@ export default function Dashboard({ user, setUser }) {
             <FaRunning size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Pre-Activation</span>
           </div>
-
           <div style={buttonStyle} onClick={() => navigate("/workout")}>
             <FaClock size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Workout</span>
@@ -174,15 +171,7 @@ export default function Dashboard({ user, setUser }) {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 20 }}>
           Sponsorship Opportunities
         </h2>
-
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: 20,
-          }}
-        >
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20 }}>
           {sponsors.map((slot) => (
             <div
               key={slot.id}
@@ -208,7 +197,7 @@ export default function Dashboard({ user, setUser }) {
 
       {/* Bottom Tab */}
       <div style={bottomTabStyle}>
-        <div onClick={() => navigate("/dashboard")}>
+        <div onClick={handleHomeClick}>
           <FaHome size={26} />
         </div>
         <div onClick={() => navigate("/workout")}>
