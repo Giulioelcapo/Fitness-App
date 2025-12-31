@@ -302,7 +302,7 @@ export default function PreActivation() {
                 { icon: <FaDumbbell />, screen: "/rpe" },
                 { icon: <FaSpa />, screen: "/wellness" },
                 { icon: <FaClock />, screen: "/workout" },
-                { icon: <FaUser />, screen: "/profile" },
+
                 ].map((tab, i) => (
                     <button
                         key={i}

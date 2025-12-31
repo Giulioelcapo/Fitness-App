@@ -321,12 +321,7 @@ export default function Workout() {
                         style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
                     >
                         <FaRunning />
-                    </button>
-                    <button
-                        onClick={() => navigate("/profile")}
-                        style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
-                    >
-                        <FaUser />
+
                     </button>
                 </div>
             )}

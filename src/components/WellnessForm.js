@@ -186,7 +186,7 @@ export default function WellnessForm() {
           { icon: <FaClock />, screen: "/rpe" },
           { icon: <FaRunning />, screen: "/preactivation" },
           { icon: <FaSpa />, screen: "/workout" },
-          { icon: <FaUser />, screen: "/profile" },
+
         ].map((tab, i) => (
           <button
             key={i}
