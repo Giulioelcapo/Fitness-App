@@ -24,19 +24,11 @@ const trainingPlan = {
             blocks: [
                 {
                     title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground-based mobility",
-                        "4–5 total-body activation (5’)",
-                    ],
+                    items: ["Foam roll – major areas (5’)", "Ground-based mobility (5')", "4–5 total-body activation (5’)"],
                 },
                 {
                     title: "NEUROMUSCULAR",
-                    items: [
-                        "Preventive strength",
-                        "Light neuromuscular work",
-                        "Rotational chain",
-                    ],
+                    items: ["Preventive strength", "Light neuromuscular work", "Rotational chain", "Select 1–2 exercises from each category"],
                 },
             ],
         },
@@ -45,19 +37,11 @@ const trainingPlan = {
             blocks: [
                 {
                     title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground mobility",
-                        "4–5 activation exercises (5’)",
-                    ],
+                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
                 },
                 {
                     title: "MOVEMENT",
-                    items: [
-                        "Speed mechanics",
-                        "Acceleration",
-                        "Deceleration",
-                    ],
+                    items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"],
                 },
             ],
         },
@@ -66,19 +50,11 @@ const trainingPlan = {
             blocks: [
                 {
                     title: "PREPARATION",
-                    items: [
-                        "Foam roll – major areas (5’)",
-                        "Ground mobility",
-                        "4–5 activation exercises (5’)",
-                    ],
+                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
                 },
                 {
                     title: "MOVEMENT",
-                    items: [
-                        "Speed mechanics",
-                        "Acceleration",
-                        "Deceleration",
-                    ],
+                    items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"],
                 },
             ],
         },
@@ -86,12 +62,12 @@ const trainingPlan = {
             meta: { objective: "Prepare without fatigue", intensity: "Low–Moderate", fatigue: "Minimal" },
             blocks: [
                 {
-                    title: "MOVEMENT & PERFORMANCE",
-                    items: [
-                        "Running mechanics",
-                        "Landing mechanics",
-                        "Hip extensor activation",
-                    ],
+                    title: "PREPARATION",
+                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
+                },
+                {
+                    title: "MOVEMENT",
+                    items: ["Running mechanics", "Landing mechanics", "Hip extensor activation", "Select 1–2 exercises from each category"],
                 },
             ],
         },
@@ -99,11 +75,12 @@ const trainingPlan = {
             meta: { objective: "Neuromuscular readiness", intensity: "Moderate", fatigue: "Controlled" },
             blocks: [
                 {
-                    title: "PERFORMANCE",
-                    items: [
-                        "Power & reactivity",
-                        "Sprint exposure",
-                    ],
+                    title: "PREPARATION",
+                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
+                },
+                {
+                    title: "MOVEMENT",
+                    items: ["Power & reactivity", "Sprint exposure"],
                 },
             ],
         },
@@ -111,12 +88,12 @@ const trainingPlan = {
             meta: { objective: "Prime for match", intensity: "Low", fatigue: "None" },
             blocks: [
                 {
-                    title: "PRIMING",
-                    items: [
-                        "Short activation",
-                        "Reaction & coordination",
-                        "Low-volume sprints",
-                    ],
+                    title: "PREPARATION",
+                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
+                },
+                {
+                    title: "MOVEMENT",
+                    items: ["Short activation", "Reaction & coordination", "Low-volume sprints", "Select 1–2 exercises from each category"],
                 },
             ],
         },
@@ -127,11 +104,7 @@ const trainingPlan = {
             blocks: [
                 {
                     title: "GOALKEEPER SPECIFIC",
-                    items: [
-                        "Shoulder prevention",
-                        "Footwork",
-                        "Hand–eye coordination",
-                    ],
+                    items: ["Shoulder prevention", "Footwork", "Hand–eye coordination"],
                 },
             ],
         },
@@ -235,26 +208,26 @@ export default function PreActivation() {
                     onClick={closeModal}
                     style={{
                         position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
+                        inset: 0,
                         backgroundColor: "rgba(0,0,0,0.4)",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
                         overflowY: "auto",
+                        padding: "20px 0",
+                        zIndex: 9999,
                     }}
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
                         style={{
                             width: isTablet ? "70%" : "92%",
-                            maxHeight: "85%",
+                            maxHeight: "85vh",
                             backgroundColor: "#fff",
                             borderRadius: 16,
                             padding: 20,
                             overflowY: "auto",
+                            WebkitOverflowScrolling: "touch",
                         }}
                     >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
@@ -269,20 +242,27 @@ export default function PreActivation() {
                             <img
                                 src={sessionImages[selectedSession]}
                                 alt={selectedSession}
-                                style={{ width: "100%", height: isTablet ? 240 : 180, marginBottom: 15, objectFit: "contain" }}
+                                style={{
+                                    width: "100%",
+                                    maxHeight: isTablet ? 260 : 180,
+                                    marginBottom: 15,
+                                    objectFit: "contain",
+                                }}
                             />
                         )}
 
                         {/* META DATA */}
                         {sessionData.meta && (
-                            <div style={{
-                                backgroundColor: "#e6f0ff",
-                                padding: 15,
-                                borderRadius: 10,
-                                border: "1px solid #1976d2",
-                                marginBottom: 15,
-                                fontWeight: 600
-                            }}>
+                            <div
+                                style={{
+                                    backgroundColor: "#e6f0ff",
+                                    padding: 15,
+                                    borderRadius: 10,
+                                    border: "1px solid #1976d2",
+                                    marginBottom: 15,
+                                    fontWeight: 600,
+                                }}
+                            >
                                 <p>Objective: {sessionData.meta.objective}</p>
                                 <p>Intensity: {sessionData.meta.intensity}</p>
                                 <p>Fatigue: {sessionData.meta.fatigue}</p>
