@@ -64,3 +64,90 @@
     gap: 40px;
   }
 }
+
+/* Container principale */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, #e2e8f0, #f8fafc);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+}
+
+.app-logo {
+  height: clamp(120px, 18vw, 220px);
+  width: auto;
+  max-width: 200%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Splash */
+.splash-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f5f9;
+  z-index: 9999;
+}
+
+/* Palla rimbalzo */
+.splash-ball {
+  width: 540px;
+  /* diametro palla circa 4-5 cm */
+  height: 5140px;
+  object-fit: contain;
+  animation: bounce-long 3s cubic-bezier(.28, .84, .42, 1) forwards;
+  z-index: 1;
+}
+
+/* Splash sopra la palla */
+.splash-overlay {
+  width: 520px;
+  height: 520px;
+  object-fit: contain;
+  position: absolute;
+  top: calc(50% - 110px);
+  left: 52.5%;
+  /* centrata rispetto alla palla */
+
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* Rimbalzo multiplo realistico */
+@keyframes bounce-long {
+  0% {
+    transform: translateY(-400px);
+  }
+
+  40% {
+    transform: translateY(30px);
+  }
+
+  55% {
+    transform: translateY(-20px);
+  }
+
+  70% {
+    transform: translateY(15px);
+  }
+
+  85% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

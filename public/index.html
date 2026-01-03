@@ -14,21 +14,6 @@
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-  <!-- 🔹 Google Analytics GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
-
-  <!-- 🔹 Google AdSense Auto Ads -->
-  <meta name="google-adsense-account" content="ca-pub-6747403673692656">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6747403673692656"
-    crossorigin="anonymous">
-    </script>
-
   <title>Fitness AI</title>
 
   <style>
@@ -53,32 +38,15 @@
       height: 48px;
       width: auto;
     }
-
-    .appTitle {
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .appTitle span.ai {
-      font-size: 22px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #14b8a6, #2dd4bf);
-      color: #042f2e;
-    }
   </style>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
 
+  <!-- Header solo con immagine loggan -->
   <header class="headerContainer">
-    <img src="assets/loggan.png" alt="Fitness AI Logo" />
+    <img src="assets/loggan.png" alt="" />
   </header>
 
   <div id="root"></div>
