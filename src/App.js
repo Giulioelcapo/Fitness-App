@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { HashRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+
 import Dashboard from "./components/Dashboard";
 import Workout from "./components/Workout";
 import PreActivation from "./components/PreActivation";
@@ -7,6 +8,7 @@ import RPE from "./components/RPE";
 import WellnessForm from "./components/WellnessForm";
 import Login from "./components/Login";
 
+import loggan from "./assets/loggan.png";
 import splashImg from "./assets/splash.png";
 
 // ---------------- GA4 Tracker per SPA ----------------
@@ -37,13 +39,16 @@ export default function App() {
       setFade(0);
       setTimeout(() => setShowSplash(false), 600);
     }, 1500);
+
     return () => clearTimeout(timer);
   }, []);
 
   // Carica utente salvato
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
     setLoading(false);
   }, []);
 
@@ -52,8 +57,35 @@ export default function App() {
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
       <Router>
-        {/* Tracker GA4 */}
+        {/* GA4 Tracker */}
         <AnalyticsTracker />
+
+        {/* Header con logo ingrandibile */}
+        <header
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "20px 16px",
+            background: "linear-gradient(135deg, #e2e8f0, #f8fafc)",
+            boxShadow: "0 4px 16px rgba(15, 23, 42, 0.12)",
+          }}
+        >
+          <img
+            src={loggan}
+            alt="Logo"
+            style={{
+              height: "clamp(80px, 12vw, 180px)", // Altezza flessibile tra mobile e desktop
+              width: "auto",
+              maxWidth: "100%",
+              cursor: "pointer",
+              transition: "transform 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+        </header>
+
 
         <Routes>
           <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
@@ -83,7 +115,11 @@ export default function App() {
           <img
             src={splashImg}
             alt="Splash"
-            style={{ width: "80%", height: "80%", objectFit: "contain" }}
+            style={{
+              width: "80%",
+              height: "80%",
+              objectFit: "contain",
+            }}
           />
         </div>
       )}
