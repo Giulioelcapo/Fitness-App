@@ -89,7 +89,7 @@
   transition: transform 0.3s ease;
 }
 
-/* Splash */
+/* Splash container */
 .splash-container {
   position: fixed;
   inset: 0;
@@ -104,9 +104,9 @@
 /* Palla rimbalzo responsiva */
 .splash-ball {
   width: clamp(100px, 15vw, 540px);
-  /* ridotto da 20vw a 15vw per mobile */
+  /* scala da mobile a desktop */
   max-width: 200px;
-  /* dimensione massima su mobile */
+  /* dimensione massima mobile */
   height: auto;
   object-fit: contain;
   animation: bounce-long 3s cubic-bezier(.28, .84, .42, 1) forwards;
@@ -116,37 +116,57 @@
 /* Splash sopra la palla */
 .splash-overlay {
   width: clamp(120px, 20vw, 520px);
+  /* scala con lo schermo */
   max-width: 220px;
   /* dimensione massima su mobile */
   height: auto;
   object-fit: contain;
   position: absolute;
-  top: 50%;
+  top: 30%;
+  /* leggermente più in alto rispetto alla palla */
   left: 52.5%;
   transform: translate(-50%, -50%);
   z-index: 2;
+}
+
+/* Rimbalzo multiplo realistico */
+@keyframes bounce-long {
+  0% {
+    transform: translateY(-500px);
+    /* partenza dall’alto */
+  }
+
+  40% {
+    transform: translateY(20px);
+    /* primo impatto */
+  }
+
+  55% {
+    transform: translateY(-15px);
+    /* rimbalzo verso l’alto */
+  }
+
+  70% {
+    transform: translateY(10px);
+    /* rimbalzo più piccolo */
+  }
+
+  85% {
+    transform: translateY(-5px);
+    /* rimbalzo finale */
+  }
+
+  100% {
+    transform: translateY(60px);
+    /* palla ferma più in basso */
+  }
 }
 
 /* Media query per cellulari piccoli */
 @media (max-width: 480px) {
   .splash-ball {
     width: 120px;
-    /* diametro palla ridotto */
-  }
-
-  .splash-overlay {
-    width: 150px;
-    /* proporzionata alla palla */
-    left: 55%;
-    /* spostata leggermente a destra */
-  }
-}
-
-/* Media query per cellulari molto piccoli */
-@media (max-width: 480px) {
-  .splash-ball {
-    width: 120px;
-    /* dimensione minima leggibile */
+    /* palla più piccola */
   }
 
   .splash-overlay {
