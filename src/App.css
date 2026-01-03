@@ -109,7 +109,7 @@
   /* dimensione massima mobile */
   height: auto;
   object-fit: contain;
-  animation: bounce-long 3s cubic-bezier(.28, .84, .42, 1) forwards;
+  animation: bounce-long 2s cubic-bezier(.28, .84, .42, 1) forwards;
   z-index: 1;
 }
 
@@ -117,14 +117,14 @@
 .splash-overlay {
   width: clamp(120px, 20vw, 520px);
   /* scala con lo schermo */
-  max-width: 220px;
+  max-width: 520px;
   /* dimensione massima su mobile */
   height: auto;
   object-fit: contain;
   position: absolute;
-  top: 30%;
+  top: 52%;
   /* leggermente più in alto rispetto alla palla */
-  left: 52.5%;
+  left: 51%;
   transform: translate(-50%, -50%);
   z-index: 2;
 }
