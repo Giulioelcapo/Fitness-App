@@ -12,7 +12,7 @@ import loggan from "./assets/loggan.png";
 import palla from "./assets/palla.png";
 import splashImg from "./assets/splash.png";
 
-import "./App.css"; // CSS separato
+import "./App.css";
 
 // ---------------- GA4 Tracker per SPA ----------------
 const AnalyticsTracker = () => {
@@ -35,9 +35,10 @@ export default function App() {
 
   // Effetto splash
   useEffect(() => {
-    // Mostra immagine splash sopra la palla dopo rimbalzo
+    // Dopo il rimbalzo della palla, mostra lo splash sopra
     const timer = setTimeout(() => {
       setShowSplashImage(true);
+      // Dopo un po’, fade out
       setTimeout(() => {
         setFade(0);
         setTimeout(() => setShowSplash(false), 600);

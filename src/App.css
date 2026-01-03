@@ -85,7 +85,6 @@
 .app-logo {
   height: clamp(120px, 18vw, 220px);
   width: auto;
-  max-width: 200%;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -99,13 +98,15 @@
   align-items: center;
   background-color: #f1f5f9;
   z-index: 9999;
+  flex-direction: column;
 }
 
-/* Palla rimbalzo */
+/* Palla rimbalzo responsiva */
 .splash-ball {
-  width: 540px;
-  /* diametro palla circa 4-5 cm */
-  height: 5140px;
+  width: clamp(100px, 20vw, 540px);
+  /* scala con larghezza schermo */
+  height: auto;
+  /* mantiene proporzioni */
   object-fit: contain;
   animation: bounce-long 3s cubic-bezier(.28, .84, .42, 1) forwards;
   z-index: 1;
@@ -113,14 +114,15 @@
 
 /* Splash sopra la palla */
 .splash-overlay {
-  width: 520px;
-  height: 520px;
+  width: clamp(120px, 25vw, 520px);
+  /* scala con schermo */
+  height: auto;
+  /* mantiene proporzioni */
   object-fit: contain;
   position: absolute;
-  top: calc(50% - 110px);
+  top: 50%;
   left: 52.5%;
-  /* centrata rispetto alla palla */
-
+  /* leggermente a destra */
   transform: translate(-50%, -50%);
   z-index: 2;
 }
@@ -149,5 +151,20 @@
 
   100% {
     transform: translateY(0);
+  }
+}
+
+/* Media query per cellulari molto piccoli */
+@media (max-width: 480px) {
+  .splash-ball {
+    width: 120px;
+    /* dimensione minima leggibile */
+  }
+
+  .splash-overlay {
+    width: 150px;
+    /* proporzionata alla palla */
+    left: 55%;
+    /* spostata leggermente a destra */
   }
 }
