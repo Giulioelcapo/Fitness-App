@@ -103,10 +103,11 @@
 
 /* Palla rimbalzo responsiva */
 .splash-ball {
-  width: clamp(100px, 20vw, 540px);
-  /* scala con larghezza schermo */
+  width: clamp(100px, 15vw, 540px);
+  /* ridotto da 20vw a 15vw per mobile */
+  max-width: 200px;
+  /* dimensione massima su mobile */
   height: auto;
-  /* mantiene proporzioni */
   object-fit: contain;
   animation: bounce-long 3s cubic-bezier(.28, .84, .42, 1) forwards;
   z-index: 1;
@@ -114,43 +115,30 @@
 
 /* Splash sopra la palla */
 .splash-overlay {
-  width: clamp(120px, 25vw, 520px);
-  /* scala con schermo */
+  width: clamp(120px, 20vw, 520px);
+  max-width: 220px;
+  /* dimensione massima su mobile */
   height: auto;
-  /* mantiene proporzioni */
   object-fit: contain;
   position: absolute;
   top: 50%;
   left: 52.5%;
-  /* leggermente a destra */
   transform: translate(-50%, -50%);
   z-index: 2;
 }
 
-/* Rimbalzo multiplo realistico */
-@keyframes bounce-long {
-  0% {
-    transform: translateY(-400px);
+/* Media query per cellulari piccoli */
+@media (max-width: 480px) {
+  .splash-ball {
+    width: 120px;
+    /* diametro palla ridotto */
   }
 
-  40% {
-    transform: translateY(30px);
-  }
-
-  55% {
-    transform: translateY(-20px);
-  }
-
-  70% {
-    transform: translateY(15px);
-  }
-
-  85% {
-    transform: translateY(-5px);
-  }
-
-  100% {
-    transform: translateY(0);
+  .splash-overlay {
+    width: 150px;
+    /* proporzionata alla palla */
+    left: 55%;
+    /* spostata leggermente a destra */
   }
 }
 
