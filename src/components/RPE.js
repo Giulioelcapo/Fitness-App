@@ -82,6 +82,7 @@ export default function RPE() {
       setSelectedPlayer("");
       setDuration("");
       setRpe(null);
+      setActiveRpeInfo(null); // chiudi tooltip dopo save
     }
   };
 
@@ -172,13 +173,14 @@ export default function RPE() {
           >
             {[...Array(10)].map((_, i) => {
               const level = i + 1;
+              const isActive = activeRpeInfo === level;
               return (
                 <div
                   key={level}
                   onClick={() => setRpe(level)}
                   onMouseEnter={isDesktop ? () => setActiveRpeInfo(level) : undefined}
                   onMouseLeave={isDesktop ? () => setActiveRpeInfo(null) : undefined}
-                  onTouchStart={() => setActiveRpeInfo(level)}
+                  onTouchStart={() => setActiveRpeInfo(isActive ? null : level)}
                   style={{
                     height: 52,
                     borderRadius: 12,
@@ -189,12 +191,13 @@ export default function RPE() {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    position: "relative"
+                    position: "relative",
+                    cursor: "pointer"
                   }}
                 >
                   {level}
 
-                  {activeRpeInfo === level && (
+                  {isActive && (
                     <div
                       style={{
                         position: "absolute",
