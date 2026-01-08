@@ -128,7 +128,7 @@ export default function Dashboard({ user, setUser }) {
           }}
         >
           <FaStar size={12} color="#C9A227" />
-          <span>Champions of Last Season</span>
+          <span>Champions of Last Season– Elitettan 2025</span>
         </div>
       </div>
 
