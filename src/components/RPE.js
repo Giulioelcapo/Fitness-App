@@ -129,6 +129,9 @@ export default function RPE() {
                     borderRadius: 6,
                     border: "none",
                     cursor: "pointer",
+                    background: "#fff",
+                    color: "#1976d2",
+                    fontWeight: 600,
                   }}
                 >
                   Change
@@ -219,17 +222,24 @@ export default function RPE() {
                         bottom: "120%",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        background: "#fff",
+                        background: "#f9f9f9",
                         border: "1px solid #1976d2",
                         padding: 10,
                         borderRadius: 8,
                         width: 230,
                         fontSize: 13,
+                        color: "#000",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                         zIndex: 10,
                       }}
                     >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
                         <span>{rpeDescriptions[level]}</span>
                         <FaTimes
                           onClick={() => setActiveRpeInfo(null)}
