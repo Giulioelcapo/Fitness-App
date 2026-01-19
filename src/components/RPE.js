@@ -243,7 +243,7 @@ export default function RPE() {
                         <span>{rpeDescriptions[level]}</span>
                         <FaTimes
                           onClick={(e) => {
-                            e.stopPropagation(); // impedisce di cliccare anche il livello
+                            e.stopPropagation(); // ✅ Stop propagation
                             setActiveRpeInfo(null);
                           }}
                           style={{ cursor: "pointer", color: "#1976d2" }}
