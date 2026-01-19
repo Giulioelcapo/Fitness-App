@@ -3,6 +3,7 @@ import {
   HashRouter as Router,
   Routes,
   Route,
+  Navigate,
   useLocation,
 } from "react-router-dom";
 
@@ -65,26 +66,22 @@ export default function App() {
             src={loggan}
             alt="Logo"
             className="app-logo"
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "scale(1.15)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "scale(1)")
-            }
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.15)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
         </header>
 
-        {/* ROUTES – LOGIN DISATTIVATO */}
+        {/* ROUTES */}
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          {/* Redirect default / to /dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/* PLAYERS FLOW */}
           <Route path="/players" element={<Players />} />
           <Route path="/players/:number" element={<PlayerAccess />} />
-          <Route
-            path="/player/:number/dashboard"
-            element={<PlayerDashboard />}
-          />
+          <Route path="/player/:number/dashboard" element={<PlayerDashboard />} />
 
           {/* DAILY INPUT */}
           <Route path="/rpe" element={<RPE />} />
@@ -93,6 +90,9 @@ export default function App() {
           {/* TRAINING */}
           <Route path="/workout" element={<Workout />} />
           <Route path="/preactivation" element={<PreActivation />} />
+
+          {/* Catch-all route */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
 
@@ -100,9 +100,7 @@ export default function App() {
       {showSplash && (
         <div className="splash-container" style={{ opacity: fade }}>
           <img src={palla} alt="Palla" className="splash-ball" />
-          {showSplashImage && (
-            <img src={splashImg} alt="Splash" className="splash-overlay" />
-          )}
+          {showSplashImage && <img src={splashImg} alt="Splash" className="splash-overlay" />}
         </div>
       )}
     </div>
