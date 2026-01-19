@@ -242,7 +242,10 @@ export default function RPE() {
                       >
                         <span>{rpeDescriptions[level]}</span>
                         <FaTimes
-                          onClick={() => setActiveRpeInfo(null)}
+                          onClick={(e) => {
+                            e.stopPropagation(); // impedisce di cliccare anche il livello
+                            setActiveRpeInfo(null);
+                          }}
                           style={{ cursor: "pointer", color: "#1976d2" }}
                         />
                       </div>
@@ -272,7 +275,9 @@ export default function RPE() {
         </button>
 
         {message && (
-          <p style={{ marginTop: 20, fontWeight: 600, color: "green" }}>{message}</p>
+          <p style={{ marginTop: 20, fontWeight: 600, color: "green" }}>
+            {message}
+          </p>
         )}
       </div>
 
