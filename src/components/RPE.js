@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaClock, FaRunning, FaSpa } from "react-icons/fa";
+import { FaHome, FaClock, FaRunning, FaSpa, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
@@ -44,9 +44,11 @@ export default function RPE() {
 
   /* LOAD PLAYERS */
   useEffect(() => {
-    supabase.from("Players").select("Name").then(({ data }) => {
+    const fetchPlayers = async () => {
+      const { data } = await supabase.from("Players").select("Name");
       if (data) setPlayers(data.map((p) => p.Name).sort());
-    });
+    };
+    fetchPlayers();
   }, []);
 
   /* SAVE WORKLOAD */
@@ -104,8 +106,6 @@ export default function RPE() {
               maxHeight: 200,
               overflowY: "auto",
               padding: selectedPlayer ? 12 : 0,
-              display: selectedPlayer ? "flex" : "block",
-              justifyContent: selectedPlayer ? "center" : "flex-start",
             }}
           >
             {selectedPlayer ? (
@@ -117,7 +117,6 @@ export default function RPE() {
                   borderRadius: 10,
                   fontWeight: 700,
                   textAlign: "center",
-                  width: "100%",
                 }}
               >
                 {selectedPlayer}
@@ -193,10 +192,10 @@ export default function RPE() {
               return (
                 <div
                   key={level}
-                  onClick={() => setRpe(level)}
-                  onMouseEnter={isDesktop ? () => setActiveRpeInfo(level) : undefined}
-                  onMouseLeave={isDesktop ? () => setActiveRpeInfo(null) : undefined}
-                  onTouchStart={() => setActiveRpeInfo(isActive ? null : level)}
+                  onClick={() => {
+                    setRpe(level);
+                    setActiveRpeInfo(level);
+                  }}
                   style={{
                     height: 52,
                     borderRadius: 12,
@@ -230,7 +229,13 @@ export default function RPE() {
                         zIndex: 10,
                       }}
                     >
-                      {rpeDescriptions[level]}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span>{rpeDescriptions[level]}</span>
+                        <FaTimes
+                          onClick={() => setActiveRpeInfo(null)}
+                          style={{ cursor: "pointer", color: "#1976d2" }}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
