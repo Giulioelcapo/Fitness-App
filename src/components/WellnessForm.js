@@ -1,39 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaClock, FaRunning, FaSpa, FaUser } from "react-icons/fa";
+import { FaHome, FaClock, FaRunning, FaSpa } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
 export default function WellnessForm() {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
-  const [selectedPlayer, setSelectedPlayer] = useState("");
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-
   const [formData, setFormData] = useState({
     soreness_muscle: 5,
     soreness_joint: 5,
     sleep_hours: 8,
     stress: 5,
     food_and_drink: 5,
-    menstrual_cycle: "",
   });
 
-  const menstrualOptions = ["", "No", "Yes", "Ovulation Phase", "Luteal Phase"];
   const isTablet = window.innerWidth >= 768;
 
-  // Carica giocatori
+  /* ===============================
+     LOAD PLAYERS
+  =============================== */
   useEffect(() => {
     const fetchPlayers = async () => {
       const { data } = await supabase.from("Players").select("Name");
-      if (data) setPlayers(data.map((p) => p.Name).sort((a, b) => a.localeCompare(b)));
+      if (data) {
+        setPlayers(data.map((p) => p.Name).sort((a, b) => a.localeCompare(b)));
+      }
     };
     fetchPlayers();
   }, []);
 
+  /* ===============================
+     HANDLE FORM CHANGE
+  =============================== */
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  /* ===============================
+     SAVE WELLNESS
+  =============================== */
   const handleSubmit = async () => {
     if (!selectedPlayer) {
       alert("Please select a player");
@@ -43,14 +50,14 @@ export default function WellnessForm() {
     const { error } = await supabase.from("MonitoringData").insert([
       {
         name: selectedPlayer,
-        date: date,
+        date,
         ...formData,
       },
     ]);
 
     if (!error) {
       alert("Wellness data saved ✔");
-      setSelectedPlayer("");
+      setSelectedPlayer(null);
       setDate(new Date().toISOString().split("T")[0]);
       setFormData({
         soreness_muscle: 5,
@@ -58,7 +65,6 @@ export default function WellnessForm() {
         sleep_hours: 8,
         stress: 5,
         food_and_drink: 5,
-        menstrual_cycle: "",
       });
     } else {
       alert("Error saving data");
@@ -83,36 +89,83 @@ export default function WellnessForm() {
   );
 
   return (
-    <div style={{ padding: 20, paddingBottom: 100 }}>
-      <h2 style={{ fontSize: isTablet ? 26 : 22, fontWeight: 700, marginBottom: 20 }}>
+    <div style={{ padding: 20, paddingBottom: 120 }}>
+      <h2
+        style={{
+          fontSize: isTablet ? 26 : 22,
+          fontWeight: 700,
+          marginBottom: 20,
+        }}
+      >
         Daily Wellness Entry
       </h2>
 
-      {/* PLAYER */}
+      {/* PLAYER SELECTION */}
       <div style={{ marginBottom: 15 }}>
-        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>Select Player</label>
-        <div style={{ maxHeight: 150, overflowY: "auto", border: "1px solid #ccc", borderRadius: 6 }}>
-          {players.map((p) => (
+        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
+          Select Player
+        </label>
+        <div
+          style={{
+            maxHeight: 180,
+            overflowY: "auto",
+            border: "1px solid #ccc",
+            borderRadius: 6,
+            padding: selectedPlayer ? 12 : 0,
+            display: selectedPlayer ? "flex" : "block",
+            justifyContent: selectedPlayer ? "center" : "flex-start",
+          }}
+        >
+          {selectedPlayer ? (
             <div
-              key={p}
-              onClick={() => setSelectedPlayer(p)}
               style={{
-                padding: 10,
-                cursor: "pointer",
-                backgroundColor: selectedPlayer === p ? "#1976d2" : "transparent",
-                color: selectedPlayer === p ? "#fff" : "#000",
-                fontWeight: selectedPlayer === p ? 600 : 400,
+                padding: "14px 16px",
+                background: "#1976d2",
+                color: "#fff",
+                borderRadius: 10,
+                fontWeight: 700,
+                textAlign: "center",
+                width: "100%",
               }}
             >
-              {p}
+              {selectedPlayer}
+              <button
+                onClick={() => setSelectedPlayer(null)}
+                style={{
+                  marginLeft: 12,
+                  padding: "2px 8px",
+                  fontSize: 12,
+                  borderRadius: 6,
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Change
+              </button>
             </div>
-          ))}
+          ) : (
+            players.map((p) => (
+              <div
+                key={p}
+                onClick={() => setSelectedPlayer(p)}
+                style={{
+                  padding: 10,
+                  cursor: "pointer",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                {p}
+              </div>
+            ))
+          )}
         </div>
       </div>
 
       {/* DATE */}
       <div style={{ marginBottom: 15 }}>
-        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>Date</label>
+        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
+          Date
+        </label>
         <input
           type="date"
           value={date}
@@ -129,28 +182,7 @@ export default function WellnessForm() {
       {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
       {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
 
-      {/* MENSTRUAL */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>Menstrual Cycle</label>
-        <div style={{ maxHeight: 150, overflowY: "auto", border: "1px solid #ccc", borderRadius: 6 }}>
-          {menstrualOptions.map((o) => (
-            <div
-              key={o}
-              onClick={() => handleChange("menstrual_cycle", o)}
-              style={{
-                padding: 10,
-                cursor: "pointer",
-                backgroundColor: formData.menstrual_cycle === o ? "#1976d2" : "transparent",
-                color: formData.menstrual_cycle === o ? "#fff" : "#000",
-                fontWeight: formData.menstrual_cycle === o ? 600 : 400,
-              }}
-            >
-              {o || "Select"}
-            </div>
-          ))}
-        </div>
-      </div>
-
+      {/* SAVE BUTTON */}
       <button
         onClick={handleSubmit}
         style={{
@@ -167,7 +199,7 @@ export default function WellnessForm() {
         Save Wellness
       </button>
 
-      {/* BOTTOM NAV */}
+      {/* BOTTOM NAVIGATION */}
       <div
         style={{
           height: 70,
@@ -186,7 +218,6 @@ export default function WellnessForm() {
           { icon: <FaClock />, screen: "/rpe" },
           { icon: <FaRunning />, screen: "/preactivation" },
           { icon: <FaSpa />, screen: "/workout" },
-
         ].map((tab, i) => (
           <button
             key={i}

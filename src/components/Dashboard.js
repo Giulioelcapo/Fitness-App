@@ -7,10 +7,11 @@ import {
   FaClock,
   FaHome,
   FaStar,
+  FaUsers,
 } from "react-icons/fa";
 import clubLogo from "../assets/logo.png";
 
-// Slot sponsorizzazioni sicuri
+// Slot sponsorizzazioni
 const sponsors = [
   { id: 1, name: "Available Space" },
   { id: 2, name: "Available Space" },
@@ -18,7 +19,7 @@ const sponsors = [
   { id: 4, name: "Available Space" },
 ];
 
-// Componente AdSense
+// AdSense component
 const AdBanner = () => {
   React.useEffect(() => {
     try {
@@ -37,38 +38,18 @@ const AdBanner = () => {
         data-ad-slot="TUO_AD_SLOT"
         data-ad-format="auto"
         data-full-width-responsive="true"
-      ></ins>
+      />
     </div>
   );
 };
 
-export default function Dashboard({ user, setUser }) {
+export default function Dashboard() {
   const navigate = useNavigate();
   const width = window.innerWidth;
   const iconSize = width > 768 ? 120 : 80;
   const rowMargin = width > 768 ? 50 : 30;
 
-  const handleRpePress = () => {
-    const storedUser = localStorage.getItem("loggedInUser");
-    storedUser
-      ? navigate("/rpe")
-      : navigate("/login", { state: { nextScreen: "RPE" } });
-  };
-
-  const handleWellnessPress = () => {
-    const storedUser = localStorage.getItem("loggedInUser");
-    storedUser
-      ? navigate("/wellness")
-      : navigate("/login", { state: { nextScreen: "WellnessForm" } });
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("loggedInUser");
-    setUser(null);
-    alert("You have logged out");
-  };
-
-  // Scroll in cima alla pagina quando si clicca Home
+  // Scroll to top
   const handleHomeClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -82,7 +63,13 @@ export default function Dashboard({ user, setUser }) {
   };
 
   const labelStyle = { marginTop: 10, fontSize: 18, fontWeight: 600 };
-  const rowStyle = { display: "flex", justifyContent: "center", marginBottom: rowMargin };
+  const rowStyle = {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: rowMargin,
+    flexWrap: "wrap",
+  };
+
   const bottomTabStyle = {
     display: "flex",
     justifyContent: "space-around",
@@ -97,7 +84,7 @@ export default function Dashboard({ user, setUser }) {
 
   return (
     <div style={{ paddingBottom: 150 }}>
-      {/* Header */}
+      {/* HEADER */}
       <div
         style={{
           padding: 20,
@@ -105,12 +92,11 @@ export default function Dashboard({ user, setUser }) {
           justifyContent: "center",
           alignItems: "center",
           gap: 10,
+          flexWrap: "wrap",
         }}
       >
-        {/* Club Logo */}
         <img src={clubLogo} alt="Club Logo" style={{ width: 130, height: 70 }} />
 
-        {/* Champions Patch */}
         <div
           style={{
             display: "inline-flex",
@@ -128,18 +114,19 @@ export default function Dashboard({ user, setUser }) {
           }}
         >
           <FaStar size={12} color="#C9A227" />
-          <span>Champions of Last Season– Elitettan 2025</span>
+          <span>Champions of Last Season – Elitettan 2025</span>
         </div>
       </div>
 
-      {/* Dashboard Buttons */}
+      {/* DASHBOARD BUTTONS */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={rowStyle}>
-          <div style={buttonStyle} onClick={handleRpePress}>
+          <div style={buttonStyle} onClick={() => navigate("/rpe")}>
             <FaDumbbell size={iconSize} color="#1976d2" />
             <span style={labelStyle}>RPE</span>
           </div>
-          <div style={buttonStyle} onClick={handleWellnessPress}>
+
+          <div style={buttonStyle} onClick={() => navigate("/wellness")}>
             <FaSpa size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Wellness</span>
           </div>
@@ -150,28 +137,38 @@ export default function Dashboard({ user, setUser }) {
             <FaRunning size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Pre-Activation</span>
           </div>
+
           <div style={buttonStyle} onClick={() => navigate("/workout")}>
             <FaClock size={iconSize} color="#1976d2" />
             <span style={labelStyle}>Workout</span>
           </div>
         </div>
 
-        {user && (
-          <div style={{ ...buttonStyle, marginTop: 20 }} onClick={handleLogout}>
-            <span style={{ color: "red", fontWeight: 700, fontSize: 18 }}>Logout</span>
+        {/* NEW: PLAYERS */}
+        <div style={rowStyle}>
+          <div style={buttonStyle} onClick={() => navigate("/players")}>
+            <FaUsers size={iconSize} color="#1976d2" />
+            <span style={labelStyle}>Players</span>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Banner AdSense */}
+      {/* ADS */}
       <AdBanner />
 
-      {/* Sponsors Banner */}
+      {/* SPONSORS */}
       <div style={{ width: "100%", textAlign: "center", marginTop: 50 }}>
         <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 20 }}>
           Sponsorship Opportunities
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 20,
+          }}
+        >
           {sponsors.map((slot) => (
             <div
               key={slot.id}
@@ -195,7 +192,7 @@ export default function Dashboard({ user, setUser }) {
         </div>
       </div>
 
-      {/* Bottom Tab */}
+      {/* BOTTOM TAB */}
       <div style={bottomTabStyle}>
         <div onClick={handleHomeClick}>
           <FaHome size={26} />
@@ -206,7 +203,10 @@ export default function Dashboard({ user, setUser }) {
         <div onClick={() => navigate("/preactivation")}>
           <FaRunning size={26} />
         </div>
-        <div onClick={handleWellnessPress}>
+        <div onClick={() => navigate("/players")}>
+          <FaUsers size={26} />
+        </div>
+        <div onClick={() => navigate("/wellness")}>
           <FaSpa size={26} />
         </div>
       </div>
