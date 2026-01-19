@@ -42,6 +42,13 @@ export default function App() {
   const [showSplashImage, setShowSplashImage] = useState(false);
   const [fade, setFade] = useState(1);
 
+  // Forza hash iniziale su /dashboard se vuoto
+  useEffect(() => {
+    if (window.location.hash === "" || window.location.hash === "#") {
+      window.location.hash = "#/dashboard";
+    }
+  }, []);
+
   // Splash screen animation
   useEffect(() => {
     const timer = setTimeout(() => {
