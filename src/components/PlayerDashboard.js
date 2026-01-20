@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-    BarChart,
-    Bar,
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    CartesianGrid,
-    Legend,
+    BarChart, Bar, LineChart, Line, XAxis, YAxis,
+    Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from "recharts";
 import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
@@ -20,32 +12,39 @@ export default function PlayerDashboard() {
     const navigate = useNavigate();
 
     const [playerName, setPlayerName] = useState(null);
+    const [playerWorkoutTable, setPlayerWorkoutTable] = useState(null);
+    const [workoutDay, setWorkoutDay] = useState(1);
+    const [workoutData, setWorkoutData] = useState([]);
+
     const [rpeData, setRpeData] = useState([]);
     const [teamAvgRPE, setTeamAvgRPE] = useState([]);
     const [wellnessData, setWellnessData] = useState([]);
     const [teamAvgWellness, setTeamAvgWellness] = useState([]);
+
     const [tab, setTab] = useState("RPE");
     const [days, setDays] = useState(14);
     const [loading, setLoading] = useState(true);
 
-    /* ==========================
-       GET PLAYER NAME
-    ========================== */
+    /* ========================== GET PLAYER NAME & WORKOUT TABLE ========================== */
     useEffect(() => {
         const fetchPlayer = async () => {
             const { data, error } = await supabase
                 .from("Players")
-                .select("Name")
+                .select("Name, Workout")
                 .eq("Number", Number(number))
                 .single();
-            if (!error && data) setPlayerName(data.Name);
+
+            if (!error && data) {
+                setPlayerName(data.Name);
+                setPlayerWorkoutTable(data.Workout); // es. "workout1"
+            } else {
+                console.error("Errore fetching player info:", error);
+            }
         };
         fetchPlayer();
     }, [number]);
 
-    /* ==========================
-       FETCH RPE & WELLNESS
-    ========================== */
+    /* ========================== FETCH RPE & WELLNESS ========================== */
     useEffect(() => {
         if (!playerName) return;
 
@@ -88,9 +87,7 @@ export default function PlayerDashboard() {
             // --- PLAYER WELLNESS ---
             const { data: playerWellness } = await supabase
                 .from("MonitoringData")
-                .select(
-                    "date, stress, food_and_drink, sleep_hours, soreness_joint, soreness_muscle"
-                )
+                .select("date, stress, food_and_drink, sleep_hours, soreness_joint, soreness_muscle")
                 .eq("name", playerName)
                 .gte("date", fromDate.toISOString())
                 .order("date", { ascending: true });
@@ -129,6 +126,34 @@ export default function PlayerDashboard() {
         fetchData();
     }, [playerName, days]);
 
+    /* ========================== FETCH WORKOUT DATA ========================== */
+    useEffect(() => {
+        if (!playerWorkoutTable) return;
+
+        const fetchWorkout = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from(playerWorkoutTable) // es. workout1
+                    .select("exercise, reps, set, weight, codice") // A, B, C ...
+                    .eq("day", workoutDay)
+                    .order("codice", { ascending: true }); // ORDINAMENTO secondo codice
+
+                if (error) {
+                    console.error("Errore fetch workout:", error);
+                    setWorkoutData([]);
+                    return;
+                }
+
+                setWorkoutData(data || []);
+            } catch (err) {
+                console.error("Errore fetch workout:", err);
+                setWorkoutData([]);
+            }
+        };
+
+        fetchWorkout();
+    }, [playerWorkoutTable, workoutDay]);
+
     if (loading) return <div style={{ padding: 20 }}>Loading data...</div>;
 
     const hasRPEData = Array.isArray(rpeData) && rpeData.length > 0;
@@ -136,7 +161,6 @@ export default function PlayerDashboard() {
 
     return (
         <div style={{ padding: 20, paddingBottom: 120 }}>
-            {/* PLAYER NUMBER ONLY */}
             <h2>#{number}</h2>
 
             {/* TAB SELECTOR */}
@@ -180,85 +204,99 @@ export default function PlayerDashboard() {
 
             {/* ================= RPE TAB ================= */}
             {tab === "RPE" && hasRPEData && (
-                <>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={rpeData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="RPE" fill="#2196f3" name="Player RPE" />
-                            <Bar dataKey="daily_load" fill="#9c27b0" name="Daily Load" />
-                            <Bar dataKey="weekly_load" fill="#ff9800" name="Weekly Load" />
-                            <Bar dataKey="ACWR" fill="#4caf50" name="ACWR" />
-                        </BarChart>
-                    </ResponsiveContainer>
-
-                    <ResponsiveContainer width="100%" height={250}>
-                        <LineChart data={rpeData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="RPE" stroke="#2196f3" strokeWidth={3} name="Player RPE" />
-                            <Line type="monotone" dataKey="daily_load" stroke="#9c27b0" strokeWidth={3} name="Player Daily Load" />
-                            <Line type="monotone" dataKey="weekly_load" stroke="#ff9800" strokeWidth={3} name="Player Weekly Load" />
-                            <Line type="monotone" data={teamAvgRPE} dataKey="RPE" stroke="#555" strokeDasharray="5 5" name="Team RPE Avg" />
-                            <Line type="monotone" data={teamAvgRPE} dataKey="daily_load" stroke="#777" strokeDasharray="5 5" name="Team Daily Load Avg" />
-                            <Line type="monotone" data={teamAvgRPE} dataKey="weekly_load" stroke="#999" strokeDasharray="5 5" name="Team Weekly Load Avg" />
-                            <Line type="monotone" data={teamAvgRPE} dataKey="ACWR" stroke="#4caf50" strokeDasharray="5 5" name="Team ACWR Avg" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </>
+                <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={rpeData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="RPE" fill="#2196f3" name="Player RPE" />
+                        <Bar dataKey="daily_load" fill="#9c27b0" name="Daily Load" />
+                        <Bar dataKey="weekly_load" fill="#ff9800" name="Weekly Load" />
+                        <Bar dataKey="ACWR" fill="#4caf50" name="ACWR" />
+                    </BarChart>
+                </ResponsiveContainer>
             )}
-
             {!hasRPEData && tab === "RPE" && <p>No RPE data available</p>}
 
             {/* ================= WELLNESS TAB ================= */}
             {tab === "Wellness" && hasWellnessData && (
-                <>
-                    <ResponsiveContainer width="100%" height={350}>
-                        <BarChart data={wellnessData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="stress" fill="#f44336" name="Stress" />
-                            <Bar dataKey="food_and_drink" fill="#ff9800" name="Food & Drink" />
-                            <Bar dataKey="sleep_hours" fill="#4caf50" name="Sleep Hours" />
-                            <Bar dataKey="soreness_joint" fill="#2196f3" name="Joint Soreness" />
-                            <Bar dataKey="soreness_muscle" fill="#9c27b0" name="Muscle Soreness" />
-                        </BarChart>
-                    </ResponsiveContainer>
-
-                    <ResponsiveContainer width="100%" height={250}>
-                        <LineChart data={wellnessData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            {["stress", "food_and_drink", "sleep_hours", "soreness_joint", "soreness_muscle"].map((key, i) => (
-                                <Line key={i} type="monotone" dataKey={key} stroke="#2196f3" strokeWidth={3} name={`Player ${key}`} />
-                            ))}
-                            {["stress", "food_and_drink", "sleep_hours", "soreness_joint", "soreness_muscle"].map((key, i) => (
-                                <Line key={i + 5} type="monotone" data={teamAvgWellness} dataKey={key} stroke="#555" strokeDasharray="5 5" name={`Team ${key} Avg`} />
-                            ))}
-                        </LineChart>
-                    </ResponsiveContainer>
-                </>
+                <ResponsiveContainer width="100%" height={350}>
+                    <BarChart data={wellnessData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="stress" fill="#f44336" name="Stress" />
+                        <Bar dataKey="food_and_drink" fill="#ff9800" name="Food & Drink" />
+                        <Bar dataKey="sleep_hours" fill="#4caf50" name="Sleep Hours" />
+                        <Bar dataKey="soreness_joint" fill="#2196f3" name="Joint Soreness" />
+                        <Bar dataKey="soreness_muscle" fill="#9c27b0" name="Muscle Soreness" />
+                    </BarChart>
+                </ResponsiveContainer>
             )}
-
             {!hasWellnessData && tab === "Wellness" && <p>No Wellness data available</p>}
 
             {/* ================= WORKOUT TAB ================= */}
             {tab === "Workout" && (
-                <div style={{ padding: 20, borderRadius: 12, background: "#f4f6fa" }}>
-                    ✔ Pre-Activation<br />
-                    ✔ Strength
+                <div style={{ padding: 10 }}>
+                    {/* Switch Day */}
+                    <div style={{ marginBottom: 15 }}>
+                        <button
+                            onClick={() => setWorkoutDay(1)}
+                            style={{
+                                marginRight: 10,
+                                padding: "6px 12px",
+                                borderRadius: 8,
+                                border: "none",
+                                background: workoutDay === 1 ? "#1976d2" : "#bbb",
+                                color: "#fff",
+                            }}
+                        >
+                            Day 1
+                        </button>
+                        <button
+                            onClick={() => setWorkoutDay(2)}
+                            style={{
+                                padding: "6px 12px",
+                                borderRadius: 8,
+                                border: "none",
+                                background: workoutDay === 2 ? "#1976d2" : "#bbb",
+                                color: "#fff",
+                            }}
+                        >
+                            Day 2
+                        </button>
+                    </div>
+
+                    {/* Workout Cards */}
+                    {workoutData.length > 0 ? (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                            {workoutData.map((row, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        flex: "1 1 200px",
+                                        padding: 16,
+                                        borderRadius: 12,
+                                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                                        background: "#fff",
+                                    }}
+                                >
+                                    <h4 style={{ margin: "0 0 8px 0" }}>{row.exercise}</h4>
+                                    <p style={{ margin: "0" }}>Reps: {row.reps}</p>
+                                    <p style={{ margin: "0" }}>Set: {row.set}</p>
+                                    <p style={{ margin: "0" }}>Weight: {row.weight ?? "-"} kg</p>
+                                </div>
+                            ))}
+
+
+                        </div>
+                    ) : (
+                        <p>No workout data available</p>
+                    )}
                 </div>
             )}
 

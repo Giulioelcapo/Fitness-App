@@ -73,7 +73,9 @@ export default function App() {
             src={loggan}
             alt="Logo"
             className="app-logo"
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.15)")}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "scale(1.15)")
+            }
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
         </header>
@@ -83,6 +85,7 @@ export default function App() {
           {/* Redirect default / to /dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+          {/* DASHBOARD */}
           <Route path="/dashboard" element={<Dashboard />} />
 
           {/* PLAYERS FLOW */}
@@ -107,7 +110,9 @@ export default function App() {
       {showSplash && (
         <div className="splash-container" style={{ opacity: fade }}>
           <img src={palla} alt="Palla" className="splash-ball" />
-          {showSplashImage && <img src={splashImg} alt="Splash" className="splash-overlay" />}
+          {showSplashImage && (
+            <img src={splashImg} alt="Splash" className="splash-overlay" />
+          )}
         </div>
       )}
     </div>

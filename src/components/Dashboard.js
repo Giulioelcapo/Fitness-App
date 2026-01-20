@@ -120,6 +120,7 @@ export default function Dashboard() {
 
       {/* DASHBOARD BUTTONS */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        {/* Row 1 */}
         <div style={rowStyle}>
           <div style={buttonStyle} onClick={() => navigate("/rpe")}>
             <FaDumbbell size={iconSize} color="#1976d2" />
@@ -132,6 +133,7 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Row 2 */}
         <div style={rowStyle}>
           <div style={buttonStyle} onClick={() => navigate("/preactivation")}>
             <FaRunning size={iconSize} color="#1976d2" />
@@ -144,7 +146,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* NEW: PLAYERS */}
+        {/* Row 3: PLAYERS */}
         <div style={rowStyle}>
           <div style={buttonStyle} onClick={() => navigate("/players")}>
             <FaUsers size={iconSize} color="#1976d2" />

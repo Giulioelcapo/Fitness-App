@@ -1,63 +1,102 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
 
 export default function Players() {
     const navigate = useNavigate();
-    const players = Array.from({ length: 25 }, (_, i) => i + 1);
 
-    const width = window.innerWidth;
-    const isTablet = width >= 768;
-    const isDesktop = width >= 1024;
+    // 🔹 Lista di 35 giocatori con input codice
+    const [players, setPlayers] = useState(
+        Array.from({ length: 35 }, (_, i) => ({ number: i + 1, code: "" }))
+    );
 
-    const getColumns = () => {
-        if (isDesktop) return 10;
-        if (isTablet) return 5;
-        return 3;
+    // 🔐 Codici giocatori 1–35
+    const playerCodes = {
+        1: "AB", 2: "CD", 3: "EF", 4: "GH", 5: "IJ",
+        6: "KL", 7: "MN", 8: "OP", 9: "QR", 10: "ST",
+        11: "UV", 12: "WX", 13: "YZ", 14: "AA", 15: "BB",
+        16: "CC", 17: "DD", 18: "EE", 19: "FF", 20: "GG",
+        21: "HH", 22: "II", 23: "JJ", 24: "KK", 25: "LL",
+        26: "MM", 27: "NN", 28: "OO", 29: "PP", 30: "QQ",
+        31: "RR", 32: "SS", 33: "TT", 34: "UU", 35: "VV",
     };
-    const columns = getColumns();
+
+    // Aggiorna il codice inserito
+    const handleInputChange = (num, value) => {
+        setPlayers(prev =>
+            prev.map(p => p.number === num ? { ...p, code: value.toUpperCase() } : p)
+        );
+    };
+
+    // Controlla codice e naviga
+    const handleAccess = (num) => {
+        const player = players.find(p => p.number === num);
+        if (player.code === playerCodes[num]) {
+            navigate(`/player/${num}/dashboard`);
+        } else {
+            alert("Wrong code");
+        }
+    };
 
     return (
         <div style={{ padding: 20, paddingBottom: 120 }}>
             <h2 style={{ fontWeight: 700, marginBottom: 20 }}>Players</h2>
 
+            {/* Griglia giocatori */}
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: `repeat(${columns}, 1fr)`,
-                    gap: 15,
-                    maxWidth: 1100,
-                    margin: "0 auto",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                    gap: 12,
+                    maxHeight: "75vh",
+                    overflowY: "auto",
+                    paddingRight: 6,
                 }}
             >
-                {players.map((number) => (
+                {players.map(p => (
                     <div
-                        key={number}
-                        onClick={() => navigate(`/players/${number}`)}
+                        key={p.number}
                         style={{
-                            height: 90,
-                            borderRadius: 14,
+                            padding: 16,
+                            borderRadius: 12,
                             backgroundColor: "#1976d2",
                             color: "#fff",
-                            fontSize: 26,
-                            fontWeight: 700,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                            transition: "all 0.2s ease",
-                            boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "scale(1.06)";
-                            e.currentTarget.style.backgroundColor = "#125aa0";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "scale(1)";
-                            e.currentTarget.style.backgroundColor = "#1976d2";
+                            fontWeight: 600,
+                            textAlign: "center",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                         }}
                     >
-                        #{number}
+                        <h4>Player #{p.number}</h4>
+                        <input
+                            type="password"
+                            placeholder="Code"
+                            value={p.code}
+                            onChange={e => handleInputChange(p.number, e.target.value)}
+                            style={{
+                                marginTop: 8,
+                                padding: 8,
+                                width: "100%",
+                                borderRadius: 6,
+                                border: "1px solid #ccc",
+                                textTransform: "uppercase",
+                            }}
+                        />
+                        <button
+                            onClick={() => handleAccess(p.number)}
+                            style={{
+                                marginTop: 8,
+                                padding: 8,
+                                width: "100%",
+                                borderRadius: 6,
+                                border: "none",
+                                backgroundColor: "#ff9800",
+                                color: "#000",
+                                fontWeight: 600,
+                                cursor: "pointer",
+                            }}
+                        >
+                            Enter
+                        </button>
                     </div>
                 ))}
             </div>
@@ -76,22 +115,13 @@ export default function Players() {
                     color: "#fff",
                 }}
             >
-                {[{ icon: <FaHome />, screen: "/" },
-                { icon: <FaDumbbell />, screen: "/rpe" },
-                { icon: <FaSpa />, screen: "/wellness" },
-                { icon: <FaClock />, screen: "/workout" }].map((tab, i) => (
+                {[FaHome, FaDumbbell, FaSpa, FaClock].map((Icon, i) => (
                     <button
                         key={i}
-                        onClick={() => navigate(tab.screen)}
-                        style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "#fff",
-                            cursor: "pointer",
-                            fontSize: 26,
-                        }}
+                        onClick={() => navigate("/dashboard")}
+                        style={{ background: "none", border: "none", color: "#fff", fontSize: 26 }}
                     >
-                        {tab.icon}
+                        <Icon />
                     </button>
                 ))}
             </div>
