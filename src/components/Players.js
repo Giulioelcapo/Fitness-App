@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
+import loggan from "../assets/loggan.png";
 
 export default function Players() {
     const navigate = useNavigate();
+    const HEADER_HEIGHT = 130;
+    const BOTTOM_HEIGHT = 72;
 
-    // 🔹 Lista di 35 giocatori con input codice
     const [players, setPlayers] = useState(
         Array.from({ length: 35 }, (_, i) => ({ number: i + 1, code: "" }))
     );
 
-    // 🔐 Codici giocatori 1–35
     const playerCodes = {
         1: "AB", 2: "CD", 3: "EF", 4: "GH", 5: "IJ",
         6: "KL", 7: "MN", 8: "OP", 9: "QR", 10: "ST",
@@ -21,14 +22,12 @@ export default function Players() {
         31: "RR", 32: "SS", 33: "TT", 34: "UU", 35: "VV",
     };
 
-    // Aggiorna il codice inserito
     const handleInputChange = (num, value) => {
         setPlayers(prev =>
             prev.map(p => p.number === num ? { ...p, code: value.toUpperCase() } : p)
         );
     };
 
-    // Controlla codice e naviga
     const handleAccess = (num) => {
         const player = players.find(p => p.number === num);
         if (player.code === playerCodes[num]) {
@@ -39,31 +38,62 @@ export default function Players() {
     };
 
     return (
-        <div style={{ padding: 20, paddingBottom: 120 }}>
-            <h2 style={{ fontWeight: 700, marginBottom: 20 }}>Players</h2>
+        <div
+            style={{
+                minHeight: "100vh",
+                paddingTop: HEADER_HEIGHT,
+                paddingBottom: BOTTOM_HEIGHT + 20,
+                backgroundColor: "#f4f6f8",
+                paddingLeft: 20,
+                paddingRight: 20,
+            }}
+        >
+            {/* ========================= HEADER ========================= */}
+            <header
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: HEADER_HEIGHT,
+                    backgroundColor: "#000",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 32px",
+                    zIndex: 1000,
+                }}
+            >
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto" }} />
+            </header>
 
-            {/* Griglia giocatori */}
+            <h2 style={{ fontWeight: 700, marginBottom: 20, textAlign: "center" }}>
+                Select Player
+            </h2>
+
+            {/* ========================= GRID GIOCATORI ========================= */}
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: 12,
-                    maxHeight: "75vh",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+                    gap: 16,
+                    maxHeight: "70vh",
                     overflowY: "auto",
-                    paddingRight: 6,
                 }}
             >
                 {players.map(p => (
                     <div
                         key={p.number}
                         style={{
-                            padding: 16,
+                            padding: 20,
                             borderRadius: 12,
-                            backgroundColor: "#1976d2",
+                            backgroundColor: "#00A86B",
                             color: "#fff",
                             fontWeight: 600,
                             textAlign: "center",
                             boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
                         }}
                     >
                         <h4>Player #{p.number}</h4>
@@ -73,21 +103,25 @@ export default function Players() {
                             value={p.code}
                             onChange={e => handleInputChange(p.number, e.target.value)}
                             style={{
-                                marginTop: 8,
-                                padding: 8,
-                                width: "100%",
-                                borderRadius: 6,
+                                marginTop: 12,
+                                padding: 10,
+                                width: "80%",
+                                borderRadius: 8,
                                 border: "1px solid #ccc",
-                                textTransform: "uppercase",
+                                textAlign: "center",
+                                fontWeight: 600,
+                                fontSize: 14,
+                                backgroundColor: "#fff",
+                                color: "#000",
                             }}
                         />
                         <button
                             onClick={() => handleAccess(p.number)}
                             style={{
-                                marginTop: 8,
-                                padding: 8,
-                                width: "100%",
-                                borderRadius: 6,
+                                marginTop: 12,
+                                padding: 10,
+                                width: "80%",
+                                borderRadius: 8,
                                 border: "none",
                                 backgroundColor: "#ff9800",
                                 color: "#000",
@@ -101,18 +135,18 @@ export default function Players() {
                 ))}
             </div>
 
-            {/* Bottom Navigation */}
+            {/* ========================= BOTTOM NAV ========================= */}
             <div
                 style={{
-                    height: 70,
+                    height: BOTTOM_HEIGHT,
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    backgroundColor: "#555",
+                    backgroundColor: "#000000",
                     position: "fixed",
                     bottom: 0,
                     width: "100%",
-                    color: "#fff",
+                    zIndex: 1000,
                 }}
             >
                 {[FaHome, FaDumbbell, FaSpa, FaClock].map((Icon, i) => (

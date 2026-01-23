@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
+import loggan from "../assets/loggan.png";
 
 export default function Players() {
     const navigate = useNavigate();
+    const HEADER_HEIGHT = 130;
+    const BOTTOM_HEIGHT = 72;
 
-    // 🔹 Lista di 35 giocatori con input codice
     const [players, setPlayers] = useState(
         Array.from({ length: 35 }, (_, i) => ({ number: i + 1, code: "" }))
     );
 
-    // 🔐 Codici giocatori 1–35
     const playerCodes = {
         1: "AB", 2: "CD", 3: "EF", 4: "GH", 5: "IJ",
         6: "KL", 7: "MN", 8: "OP", 9: "QR", 10: "ST",
@@ -21,14 +22,12 @@ export default function Players() {
         31: "RR", 32: "SS", 33: "TT", 34: "UU", 35: "VV",
     };
 
-    // Aggiorna il codice inserito nel player
     const handleInputChange = (num, value) => {
         setPlayers((prev) =>
             prev.map((p) => (p.number === num ? { ...p, code: value.toUpperCase() } : p))
         );
     };
 
-    // Controlla il codice e naviga al dashboard
     const handleAccess = (num) => {
         const player = players.find((p) => p.number === num);
         if (player.code === playerCodes[num]) {
@@ -39,10 +38,29 @@ export default function Players() {
     };
 
     return (
-        <div style={{ padding: 20, paddingBottom: 120 }}>
+        <div style={{ minHeight: "100vh", paddingTop: HEADER_HEIGHT, paddingBottom: BOTTOM_HEIGHT + 20, background: "#f4f6f8" }}>
+
+            {/* ========================= HEADER ========================= */}
+            <header
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: HEADER_HEIGHT,
+                    backgroundColor: "#000",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 32px",
+                    zIndex: 1000,
+                }}
+            >
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto" }} />
+            </header>
+
             <h2 style={{ fontWeight: 700, marginBottom: 20 }}>Select Player</h2>
 
-            {/* Griglia giocatori scrollabile */}
+            {/* ========================= GRID GIOCATORI ========================= */}
             <div
                 style={{
                     display: "grid",
@@ -59,7 +77,7 @@ export default function Players() {
                         style={{
                             padding: 16,
                             borderRadius: 12,
-                            backgroundColor: "#1976d2",
+                            backgroundColor: "#00A86B",
                             color: "#fff",
                             fontWeight: 600,
                             textAlign: "center",
@@ -101,18 +119,18 @@ export default function Players() {
                 ))}
             </div>
 
-            {/* Bottom Navigation */}
+            {/* ========================= BOTTOM NAV ========================= */}
             <div
                 style={{
-                    height: 70,
+                    height: BOTTOM_HEIGHT,
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    backgroundColor: "#555",
+                    backgroundColor: "#000000",
                     position: "fixed",
                     bottom: 0,
                     width: "100%",
-                    color: "#fff",
+                    zIndex: 1000,
                 }}
             >
                 {[FaHome, FaDumbbell, FaSpa, FaClock].map((Icon, i) => (

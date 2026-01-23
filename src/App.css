@@ -1,29 +1,29 @@
 /* =========================
+   APP LAYOUT
+========================= */
+
+.app-container {
+  min-height: 100vh;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+/* =========================
    DASHBOARD
 ========================= */
 
-/* Contenitore principale del Dashboard */
 .dashboardContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 24px;
   min-height: 100vh;
   box-sizing: border-box;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 
-/* Titolo sotto ogni bottone */
-.buttonLabel {
-  margin-top: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-}
-
-/* Grid dei bottoni */
+/* Grid bottoni */
 .buttonGrid {
   display: flex;
   gap: 80px;
@@ -33,174 +33,173 @@
   margin-top: 40px;
 }
 
-/* Bottone grande con icona */
+/* Bottone icona */
 .largeIconButton {
   font-size: 80px;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 0.25s ease, color 0.25s ease;
+  cursor: pointer;
 }
 
 .largeIconButton:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
   color: #1976d2;
+}
+
+/* Testo sotto bottone */
+.buttonLabel {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
 }
 
 /* =========================
    RESPONSIVE DASHBOARD
 ========================= */
 
-/* Tablet */
 @media (max-width: 768px) {
   .largeIconButton {
     font-size: 60px;
   }
 
   .buttonGrid {
-    gap: 60px;
+    gap: 50px;
   }
 }
 
-/* Smartphone */
 @media (max-width: 480px) {
   .largeIconButton {
     font-size: 50px;
   }
 
   .buttonGrid {
-    gap: 40px;
+    gap: 35px;
   }
 }
 
 /* =========================
-   APP LAYOUT
-========================= */
-
-/* Container principale */
-.app-container {
-  position: relative;
-  min-height: 100vh;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.app-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /* Allineamento verticale */
-  justify-content: flex-start;
-  /* Logo a sinistra */
-  gap: 16px;
-  /* Spazio tra logo e eventuale scritta */
-  padding: 16px 20px;
-  background: linear-gradient(135deg, #e2e8f0, #f8fafc);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
-  flex-wrap: nowrap;
-}
-
-/* Logo */
-.app-logo {
-  height: 100px;
-  width: auto;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.app-logo:hover {
-  transform: scale(1.1);
-}
-
-/* =========================
-   RESPONSIVE HEADER
-========================= */
-
-/* Tablet */
-@media (max-width: 768px) {
-  .app-logo {
-    height: 60px;
-  }
-}
-
-/* Smartphone */
-@media (max-width: 480px) {
-  .app-logo {
-    height: 50px;
-  }
-
-  .app-header {
-    justify-content: center;
-    /* Centra logo su smartphone */
-  }
-}
-
-/* =========================
-   INTRO SPLASH TEXT
+   SPLASH SCREEN
 ========================= */
 
 .intro-screen {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f5f5f5;
+  inset: 0;
+  background-color: #000000;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   z-index: 9999;
+  padding: 20px;
 }
 
+/* Trophy */
+.intro-trophy {
+  font-size: 64px;
+  color: #c9a227;
+  margin-bottom: 20px;
+  animation: scaleFade 1s ease forwards;
+}
+
+/* Titolo */
 .intro-text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  /* Spazio tra trofeo e testo */
-  font-size: 2rem;
+  font-size: 26px;
   font-weight: 700;
-  color: #1976d2;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin-bottom: 6px;
   opacity: 0;
-  animation: fadeInOut 3s forwards;
+  animation: fadeIn 0.8s ease forwards 0.4s;
 }
 
-.intro-text svg {
-  color: #C9A227;
-  font-size: 2.5rem;
-  /* dimensione trofeo */
+/* Sottotitolo */
+.intro-subtext {
+  font-size: 18px;
+  color: #dddddd;
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards 0.6s;
 }
 
-/* Animazione fade in e out */
-@keyframes fadeInOut {
-  0% {
+/* Logo club */
+.intro-club-logo {
+  width: 160px;
+  max-width: 65%;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards 0.8s;
+}
+
+/* =========================
+   ANIMAZIONI
+========================= */
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
+    transform: translateY(10px);
   }
 
-  10% {
+  to {
     opacity: 1;
-  }
-
-  90% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
+    transform: translateY(0);
   }
 }
 
-/* Animazione scale del trofeo */
-@keyframes scaleUp {
-  0% {
-    transform: scale(0.8);
+@keyframes scaleFade {
+  from {
+    transform: scale(0.7);
     opacity: 0;
   }
 
-  100% {
+  to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* =========================
+   TOP BAR FIXED
+========================= */
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Logo a sinistra */
+.top-bar-logo {
+  height: 46px;
+  width: auto;
+}
+
+/* Spazio per non coprire il contenuto */
+.with-top-bar {
+  padding-top: 72px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-bar {
+    height: 64px;
+  }
+
+  .top-bar-logo {
+    height: 40px;
+  }
+
+  .with-top-bar {
+    padding-top: 64px;
   }
 }

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { FaHome, FaDumbbell, FaSpa, FaClock, FaUser } from "react-icons/fa";
-import { GiSoccerField, GiHand } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
+import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
+import { GiSoccerField, GiHand } from "react-icons/gi";
+import loggan from "../assets/loggan.png";
 
 /* =========================
    IMAGES
@@ -22,91 +23,52 @@ const trainingPlan = {
         "MD+1": {
             meta: { objective: "Recovery & reset", intensity: "Low", fatigue: "None" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground-based mobility (5')", "4–5 total-body activation (5’)"],
-                },
-                {
-                    title: "NEUROMUSCULAR",
-                    items: ["Preventive strength", "Light neuromuscular work", "Rotational chain", "Select 1–2 exercises from each category"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground-based mobility (5')", "4–5 total-body activation (5’)"] },
+                { title: "NEUROMUSCULAR", items: ["Preventive strength", "Light neuromuscular work", "Rotational chain", "Select 1–2 exercises from each category"] },
+            ]
         },
         "MD+2": {
             meta: { objective: "Reconditioning", intensity: "Moderate", fatigue: "Controlled" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
-                },
-                {
-                    title: "MOVEMENT",
-                    items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"] },
+                { title: "MOVEMENT", items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"] },
+            ]
         },
         "MD+3": {
             meta: { objective: "Load progression", intensity: "Moderate", fatigue: "Moderate" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
-                },
-                {
-                    title: "MOVEMENT",
-                    items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"] },
+                { title: "MOVEMENT", items: ["Speed mechanics", "Acceleration", "Deceleration", "Select 1–2 exercises from each category"] },
+            ]
         },
         "MD-3": {
             meta: { objective: "Prepare without fatigue", intensity: "Low–Moderate", fatigue: "Minimal" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
-                },
-                {
-                    title: "MOVEMENT",
-                    items: ["Running mechanics", "Landing mechanics", "Hip extensor activation", "Select 1–2 exercises from each category"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"] },
+                { title: "MOVEMENT", items: ["Running mechanics", "Landing mechanics", "Hip extensor activation", "Select 1–2 exercises from each category"] },
+            ]
         },
         "MD-2": {
             meta: { objective: "Neuromuscular readiness", intensity: "Moderate", fatigue: "Controlled" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
-                },
-                {
-                    title: "MOVEMENT",
-                    items: ["Power & reactivity", "Sprint exposure"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"] },
+                { title: "MOVEMENT", items: ["Power & reactivity", "Sprint exposure"] },
+            ]
         },
         "MD-1": {
             meta: { objective: "Prime for match", intensity: "Low", fatigue: "None" },
             blocks: [
-                {
-                    title: "PREPARATION",
-                    items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"],
-                },
-                {
-                    title: "MOVEMENT",
-                    items: ["Short activation", "Reaction & coordination", "Low-volume sprints", "Select 1–2 exercises from each category"],
-                },
-            ],
+                { title: "PREPARATION", items: ["Foam roll – major areas (5’)", "Ground mobility (5')", "4–5 activation exercises (5’)"] },
+                { title: "MOVEMENT", items: ["Short activation", "Reaction & coordination", "Low-volume sprints", "Select 1–2 exercises from each category"] },
+            ]
         },
     },
     goalkeeper: {
         "ROUTINES WEEK": {
             meta: { objective: "Technical & joint preparation", intensity: "Low–Moderate", fatigue: "Minimal" },
             blocks: [
-                {
-                    title: "GOALKEEPER SPECIFIC",
-                    items: ["Shoulder prevention", "Footwork", "Hand–eye coordination"],
-                },
-            ],
+                { title: "GOALKEEPER SPECIFIC", items: ["Shoulder prevention", "Footwork", "Hand–eye coordination"] },
+            ]
         },
     },
 };
@@ -131,27 +93,33 @@ export default function PreActivation() {
     const navigate = useNavigate();
     const [selectedSession, setSelectedSession] = useState(null);
     const [role, setRole] = useState(null);
+    const HEADER_HEIGHT = 130;
+    const BOTTOM_HEIGHT = 72;
 
-    const sessionData = selectedSession && role ? trainingPlan[role][selectedSession] : null;
     const isTablet = window.innerWidth >= 768;
+    const sessionData = selectedSession && role ? trainingPlan[role][selectedSession] : null;
 
     const openModal = (session, role) => {
         setSelectedSession(session);
         setRole(role);
     };
-
     const closeModal = () => {
         setSelectedSession(null);
         setRole(null);
     };
 
     return (
-        <div style={{ paddingBottom: 90 }}>
-            <h2 style={{ fontSize: isTablet ? 26 : 22, fontWeight: 700, marginBottom: 20 }}>
+        <div style={{ minHeight: "100vh", paddingTop: HEADER_HEIGHT, paddingBottom: BOTTOM_HEIGHT + 20, backgroundColor: "#f4f6f8", paddingLeft: 20, paddingRight: 20 }}>
+            {/* ================= HEADER ================= */}
+            <header style={{ position: "fixed", top: 0, left: 0, width: "100%", height: HEADER_HEIGHT, backgroundColor: "#000", display: "flex", alignItems: "center", padding: "0 32px", zIndex: 1000 }}>
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto" }} />
+            </header>
+
+            <h2 style={{ fontSize: isTablet ? 26 : 22, fontWeight: 700, marginBottom: 20, textAlign: "center", color: "#00A86B" }}>
                 PRE-ACTIVATION ROUTINE
             </h2>
 
-            {/* OUTFIELD SESSIONS */}
+            {/* ================= OUTFIELD SESSIONS ================= */}
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", marginBottom: 15 }}>
                 {Object.keys(trainingPlan.outfield).map((session) => (
                     <div
@@ -159,8 +127,8 @@ export default function PreActivation() {
                         onClick={() => openModal(session, "outfield")}
                         style={{
                             width: isTablet ? 150 : 120,
-                            height: isTablet ? 150 : 120,
-                            backgroundColor: "#f7f7f7",
+                            height: isTablet ? 150 : 150,
+                            backgroundColor: "#00A86B",
                             margin: 10,
                             borderRadius: 14,
                             display: "flex",
@@ -168,24 +136,27 @@ export default function PreActivation() {
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
+                            color: "#fff",
+                            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                            transition: "transform 0.2s",
                         }}
+                        onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                        onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
                     >
-                        <GiSoccerField size={isTablet ? 48 : 40} color="#1976d2" />
-                        <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>
-                            {session}
-                        </span>
+                        <GiSoccerField size={isTablet ? 48 : 40} />
+                        <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>{session}</span>
                     </div>
                 ))}
             </div>
 
-            {/* GOALKEEPER SESSION */}
+            {/* ================= GOALKEEPER SESSION ================= */}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 15 }}>
                 <div
                     onClick={() => openModal("ROUTINES WEEK", "goalkeeper")}
                     style={{
                         width: isTablet ? 150 : 120,
-                        height: isTablet ? 150 : 120,
-                        backgroundColor: "#eef1f5",
+                        height: isTablet ? 150 : 150,
+                        backgroundColor: "#00A86B",
                         margin: 10,
                         borderRadius: 14,
                         display: "flex",
@@ -193,16 +164,19 @@ export default function PreActivation() {
                         alignItems: "center",
                         justifyContent: "center",
                         cursor: "pointer",
+                        color: "#fff",
+                        boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                        transition: "transform 0.2s",
                     }}
+                    onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                    onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
                 >
-                    <GiHand size={isTablet ? 48 : 40} color="#1976d2" />
-                    <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>
-                        GOALKEEPER
-                    </span>
+                    <GiHand size={isTablet ? 48 : 40} />
+                    <span style={{ marginTop: 8, fontWeight: 600, fontSize: isTablet ? 16 : 14 }}>GOALKEEPER</span>
                 </div>
             </div>
 
-            {/* MODAL */}
+            {/* ================= MODAL ================= */}
             {selectedSession && sessionData && (
                 <div
                     onClick={closeModal}
@@ -219,7 +193,7 @@ export default function PreActivation() {
                     }}
                 >
                     <div
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                         style={{
                             width: isTablet ? "70%" : "92%",
                             maxHeight: "85vh",
@@ -231,7 +205,7 @@ export default function PreActivation() {
                         }}
                     >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                            <h3 style={{ fontSize: isTablet ? 20 : 18, fontWeight: 600 }}>
+                            <h3 style={{ fontSize: isTablet ? 20 : 18, fontWeight: 600, color: "#00A86B" }}>
                                 {role.toUpperCase()} – {selectedSession}
                             </h3>
                             <button onClick={closeModal} style={{ cursor: "pointer", fontSize: 18 }}>X</button>
@@ -242,27 +216,13 @@ export default function PreActivation() {
                             <img
                                 src={sessionImages[selectedSession]}
                                 alt={selectedSession}
-                                style={{
-                                    width: "100%",
-                                    maxHeight: isTablet ? 260 : 180,
-                                    marginBottom: 15,
-                                    objectFit: "contain",
-                                }}
+                                style={{ width: "100%", maxHeight: isTablet ? 260 : 180, marginBottom: 15, objectFit: "contain" }}
                             />
                         )}
 
-                        {/* META DATA */}
+                        {/* META */}
                         {sessionData.meta && (
-                            <div
-                                style={{
-                                    backgroundColor: "#e6f0ff",
-                                    padding: 15,
-                                    borderRadius: 10,
-                                    border: "1px solid #1976d2",
-                                    marginBottom: 15,
-                                    fontWeight: 600,
-                                }}
-                            >
+                            <div style={{ backgroundColor: "#e6f0ff", padding: 15, borderRadius: 10, border: "1px solid #00A86B", marginBottom: 15, fontWeight: 600 }}>
                                 <p>Objective: {sessionData.meta.objective}</p>
                                 <p>Intensity: {sessionData.meta.intensity}</p>
                                 <p>Fatigue: {sessionData.meta.fatigue}</p>
@@ -272,9 +232,7 @@ export default function PreActivation() {
                         {/* BLOCKS */}
                         {sessionData.blocks.map((block, i) => (
                             <div key={i} style={{ marginBottom: 15 }}>
-                                <p style={{ fontWeight: 700, marginBottom: 6, fontSize: 14, color: "#1976d2" }}>
-                                    {block.title}
-                                </p>
+                                <p style={{ fontWeight: 700, marginBottom: 6, fontSize: 14, color: "#00A86B" }}>{block.title}</p>
                                 {block.items.map((item, idx) => (
                                     <p key={idx} style={{ fontSize: 15, marginBottom: 6 }}>• {item}</p>
                                 ))}
@@ -284,31 +242,14 @@ export default function PreActivation() {
                 </div>
             )}
 
-            {/* BOTTOM NAV */}
-            <div
-                style={{
-                    height: 70,
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    backgroundColor: "#555",
-                    position: "fixed",
-                    bottom: 0,
-                    width: "100%",
-                    color: "#fff",
-                }}
-            >
+            {/* ================= BOTTOM NAV ================= */}
+            <div style={{ height: BOTTOM_HEIGHT, display: "flex", justifyContent: "space-around", alignItems: "center", backgroundColor: "#000", position: "fixed", bottom: 0, width: "100%", zIndex: 1000 }}>
                 {[{ icon: <FaHome />, screen: "/" },
                 { icon: <FaDumbbell />, screen: "/rpe" },
                 { icon: <FaSpa />, screen: "/wellness" },
-                { icon: <FaClock />, screen: "/workout" },
-
+                { icon: <FaClock />, screen: "/workout" }
                 ].map((tab, i) => (
-                    <button
-                        key={i}
-                        onClick={() => navigate(tab.screen)}
-                        style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", fontSize: 26 }}
-                    >
+                    <button key={i} onClick={() => navigate(tab.screen)} style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", fontSize: 26 }}>
                         {tab.icon}
                     </button>
                 ))}

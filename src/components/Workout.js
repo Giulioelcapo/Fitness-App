@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaHome, FaClock, FaRunning, FaSpa, FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { FaHome, FaClock, FaRunning, FaSpa, FaLock } from "react-icons/fa";
+import loggan from "../assets/loggan.png";
 
 export default function Workout() {
     const navigate = useNavigate();
+    const HEADER_HEIGHT = 130;
+    const BOTTOM_HEIGHT = 72;
 
     /* ================= PREMIUM ACCESS ================= */
     const [hasAccess, setHasAccess] = useState(false); // FUTURA IAP
@@ -101,13 +104,14 @@ export default function Workout() {
                     key={item}
                     onClick={() => setter(item)}
                     style={{
-                        border: "1px solid #1976d2",
+                        border: "1px solid #00A86B",
                         padding: "8px 14px",
                         marginRight: 8,
                         borderRadius: 6,
-                        backgroundColor: selected === item ? "#1976d2" : "transparent",
+                        backgroundColor: selected === item ? "#00A86B" : "transparent",
                         color: selected === item ? "#fff" : "#000",
                         cursor: "pointer",
+                        fontWeight: 600,
                     }}
                 >
                     {item}
@@ -119,10 +123,17 @@ export default function Workout() {
     const progressPercent = Math.min((elapsedSeconds.current / totalDuration) * 100, 100);
 
     return (
-        <div style={{ padding: 20, paddingBottom: 120 }}>
-            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 20 }}>Workout Programs</h2>
+        <div style={{ minHeight: "100vh", paddingTop: HEADER_HEIGHT, paddingBottom: BOTTOM_HEIGHT + 20, backgroundColor: "#f4f6f8", paddingLeft: 20, paddingRight: 20 }}>
+            {/* ================= HEADER ================= */}
+            <header style={{ position: "fixed", top: 0, left: 0, width: "100%", height: HEADER_HEIGHT, backgroundColor: "#000", display: "flex", alignItems: "center", padding: "0 32px", zIndex: 1000 }}>
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto" }} />
+            </header>
 
-            {/* WORKOUT LIST */}
+            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 20, textAlign: "center", color: "#00A86B" }}>
+                WORKOUT PROGRAMS
+            </h2>
+
+            {/* ================= WORKOUT LIST ================= */}
             {workouts.map((item) => (
                 <div
                     key={item.id}
@@ -130,25 +141,31 @@ export default function Workout() {
                     style={{
                         display: "flex",
                         justifyContent: "space-between",
+                        alignItems: "center",
                         padding: 14,
-                        border: "1px solid #ccc",
-                        borderRadius: 8,
+                        borderRadius: 12,
                         marginBottom: 10,
                         cursor: "pointer",
+                        backgroundColor: "#00A86B",
+                        color: "#fff",
+                        boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                        transition: "transform 0.2s",
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
                     <div>
-                        <div style={{ fontWeight: 600, fontSize: 18 }}>{item.name}</div>
-                        <div style={{ fontSize: 12, color: "#ff8f00", fontWeight: 700 }}>
-                            COMING SOON · PREMIUM CONTENT
+                        <div style={{ fontWeight: 700, fontSize: 18 }}>{item.name}</div>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: "#ff8f00" }}>
+                            COMING SOON · PREMIUM
                         </div>
                     </div>
-                    <FaLock color="#1976d2" size={24} />
+                    <FaLock size={24} />
                 </div>
             ))}
 
-            {/* TIMER SETUP */}
-            <h3 style={{ fontWeight: 600, marginTop: 20 }}>Timer Setup</h3>
+            {/* ================= TIMER SETUP ================= */}
+            <h3 style={{ fontWeight: 700, marginTop: 20, color: "#00A86B" }}>Timer Setup</h3>
             <div>Work Time</div>
             {renderMenu([15, 30, 45, 60], workTime, setWorkTime)}
             <div>Rest Time</div>
@@ -159,19 +176,20 @@ export default function Workout() {
             <button
                 onClick={handlePlay}
                 style={{
-                    backgroundColor: "#1976d2",
+                    backgroundColor: "#00A86B",
                     padding: 16,
                     borderRadius: 10,
                     marginTop: 20,
                     color: "#fff",
                     fontWeight: 700,
                     cursor: "pointer",
+                    width: "100%",
                 }}
             >
                 START TIMER
             </button>
 
-            {/* PREMIUM MODAL */}
+            {/* ================= PREMIUM MODAL ================= */}
             {showPremiumModal && (
                 <div
                     style={{
@@ -181,6 +199,7 @@ export default function Workout() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        zIndex: 9999,
                     }}
                 >
                     <div
@@ -192,7 +211,7 @@ export default function Workout() {
                             width: "80%",
                         }}
                     >
-                        <h3 style={{ fontWeight: 700, marginBottom: 10 }}>Premium Content</h3>
+                        <h3 style={{ fontWeight: 700, marginBottom: 10, color: "#00A86B" }}>Premium Content</h3>
                         <p style={{ marginBottom: 20 }}>
                             This workout is part of the Premium programs.<br />
                             The content will be available shortly.
@@ -200,7 +219,7 @@ export default function Workout() {
                         <button
                             onClick={() => setShowPremiumModal(false)}
                             style={{
-                                backgroundColor: "#1976d2",
+                                backgroundColor: "#00A86B",
                                 color: "#fff",
                                 padding: "10px 20px",
                                 borderRadius: 8,
@@ -214,7 +233,7 @@ export default function Workout() {
                 </div>
             )}
 
-            {/* FULLSCREEN TIMER */}
+            {/* ================= FULLSCREEN TIMER ================= */}
             {showTimer && (
                 <div
                     style={{
@@ -226,28 +245,19 @@ export default function Workout() {
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
+                        zIndex: 10000,
                     }}
                 >
-                    <div style={{ fontSize: 28 }}>
-                        {phase.toUpperCase()} {currentRep}/{reps}
-                    </div>
+                    <div style={{ fontSize: 28 }}>{phase.toUpperCase()} {currentRep}/{reps}</div>
                     <div style={{ fontSize: 96, fontWeight: 700 }}>{timeLeft}s</div>
 
-                    <div
-                        style={{
-                            width: "90%",
-                            height: 14,
-                            backgroundColor: "#333",
-                            borderRadius: 7,
-                            margin: "30px 0",
-                        }}
-                    >
+                    <div style={{ width: "90%", height: 14, backgroundColor: "#333", borderRadius: 7, margin: "30px 0" }}>
                         <div
                             style={{
                                 width: `${progressPercent}%`,
                                 height: "100%",
                                 borderRadius: 7,
-                                backgroundColor: phase === "work" ? "#1976d2" : "#ff8f00",
+                                backgroundColor: phase === "work" ? "#00A86B" : "#ff8f00",
                             }}
                         />
                     </div>
@@ -255,27 +265,13 @@ export default function Workout() {
                     <div style={{ display: "flex", gap: 10 }}>
                         <button
                             onClick={handlePause}
-                            style={{
-                                padding: 14,
-                                borderRadius: 8,
-                                backgroundColor: "#1976d2",
-                                color: "#fff",
-                                fontWeight: 700,
-                                cursor: "pointer",
-                            }}
+                            style={{ padding: 14, borderRadius: 8, backgroundColor: "#00A86B", color: "#fff", fontWeight: 700, cursor: "pointer" }}
                         >
                             {isPaused ? "Resume" : "Pause"}
                         </button>
                         <button
                             onClick={handleStop}
-                            style={{
-                                padding: 14,
-                                borderRadius: 8,
-                                backgroundColor: "#d32f2f",
-                                color: "#fff",
-                                fontWeight: 700,
-                                cursor: "pointer",
-                            }}
+                            style={{ padding: 14, borderRadius: 8, backgroundColor: "#d32f2f", color: "#fff", fontWeight: 700, cursor: "pointer" }}
                         >
                             Stop
                         </button>
@@ -283,46 +279,13 @@ export default function Workout() {
                 </div>
             )}
 
-            {/* BOTTOM NAV */}
+            {/* ================= BOTTOM NAV ================= */}
             {!showTimer && (
-                <div
-                    style={{
-                        position: "fixed",
-                        bottom: 0,
-                        width: "100%",
-                        height: 70,
-                        backgroundColor: "#555",
-                        display: "flex",
-                        justifyContent: "space-around",
-                        alignItems: "center",
-                        color: "#fff",
-                    }}
-                >
-                    <button
-                        onClick={() => navigate("/")}
-                        style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
-                    >
-                        <FaHome />
-                    </button>
-                    <button
-                        onClick={() => navigate("/rpe")}
-                        style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
-                    >
-                        <FaClock />
-                    </button>
-                    <button
-                        onClick={() => navigate("/wellness")}
-                        style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
-                    >
-                        <FaSpa />
-                    </button>
-                    <button
-                        onClick={() => navigate("/preactivation")}
-                        style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}
-                    >
-                        <FaRunning />
-
-                    </button>
+                <div style={{ position: "fixed", bottom: 0, width: "100%", height: BOTTOM_HEIGHT, backgroundColor: "#000", display: "flex", justifyContent: "space-around", alignItems: "center", zIndex: 1000 }}>
+                    <button onClick={() => navigate("/")} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}><FaHome /></button>
+                    <button onClick={() => navigate("/rpe")} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}><FaClock /></button>
+                    <button onClick={() => navigate("/wellness")} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}><FaSpa /></button>
+                    <button onClick={() => navigate("/preactivation")} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 26, cursor: "pointer" }}><FaRunning /></button>
                 </div>
             )}
         </div>

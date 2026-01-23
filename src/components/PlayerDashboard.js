@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-    BarChart, Bar, LineChart, Line, XAxis, YAxis,
+    BarChart, Bar, XAxis, YAxis,
     Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from "recharts";
 import { FaHome, FaDumbbell, FaSpa, FaClock } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
+import loggan from "../assets/loggan.png";
 
 export default function PlayerDashboard() {
     const { number } = useParams();
@@ -15,15 +16,14 @@ export default function PlayerDashboard() {
     const [playerWorkoutTable, setPlayerWorkoutTable] = useState(null);
     const [workoutDay, setWorkoutDay] = useState(1);
     const [workoutData, setWorkoutData] = useState([]);
-
     const [rpeData, setRpeData] = useState([]);
-    const [teamAvgRPE, setTeamAvgRPE] = useState([]);
     const [wellnessData, setWellnessData] = useState([]);
-    const [teamAvgWellness, setTeamAvgWellness] = useState([]);
-
     const [tab, setTab] = useState("RPE");
     const [days, setDays] = useState(14);
     const [loading, setLoading] = useState(true);
+
+    const HEADER_HEIGHT = 130;
+    const BOTTOM_HEIGHT = 72;
 
     /* ========================== GET PLAYER NAME & WORKOUT TABLE ========================== */
     useEffect(() => {
@@ -36,10 +36,8 @@ export default function PlayerDashboard() {
 
             if (!error && data) {
                 setPlayerName(data.Name);
-                setPlayerWorkoutTable(data.Workout); // es. "workout1"
-            } else {
-                console.error("Errore fetching player info:", error);
-            }
+                setPlayerWorkoutTable(data.Workout);
+            } else console.error("Errore fetching player info:", error);
         };
         fetchPlayer();
     }, [number]);
@@ -53,7 +51,6 @@ export default function PlayerDashboard() {
             const fromDate = new Date();
             fromDate.setDate(fromDate.getDate() - days);
 
-            // --- PLAYER RPE ---
             const { data: playerRPE } = await supabase
                 .from("workloads")
                 .select("date, RPE, daily_load, weekly_load, ACWR")
@@ -61,7 +58,6 @@ export default function PlayerDashboard() {
                 .gte("date", fromDate.toISOString())
                 .order("date", { ascending: true });
 
-            // --- TEAM RPE ---
             const { data: teamRPE } = await supabase
                 .from("workloads")
                 .select("date, RPE, daily_load, weekly_load, ACWR")
@@ -84,7 +80,6 @@ export default function PlayerDashboard() {
                 };
             });
 
-            // --- PLAYER WELLNESS ---
             const { data: playerWellness } = await supabase
                 .from("MonitoringData")
                 .select("date, stress, food_and_drink, sleep_hours, soreness_joint, soreness_muscle")
@@ -92,7 +87,6 @@ export default function PlayerDashboard() {
                 .gte("date", fromDate.toISOString())
                 .order("date", { ascending: true });
 
-            // --- TEAM WELLNESS ---
             const { data: teamWellness } = await supabase
                 .from("MonitoringData")
                 .select("date, stress, food_and_drink, sleep_hours, soreness_joint, soreness_muscle")
@@ -117,9 +111,7 @@ export default function PlayerDashboard() {
             });
 
             setRpeData(playerRPE || []);
-            setTeamAvgRPE(teamRPEAvg || []);
             setWellnessData(playerWellness || []);
-            setTeamAvgWellness(teamWellnessAvg || []);
             setLoading(false);
         };
 
@@ -131,24 +123,14 @@ export default function PlayerDashboard() {
         if (!playerWorkoutTable) return;
 
         const fetchWorkout = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from(playerWorkoutTable) // es. workout1
-                    .select("exercise, reps, set, weight, codice") // A, B, C ...
-                    .eq("day", workoutDay)
-                    .order("codice", { ascending: true }); // ORDINAMENTO secondo codice
+            const { data, error } = await supabase
+                .from(playerWorkoutTable)
+                .select("exercise, reps, set, weight, codice")
+                .eq("day", workoutDay)
+                .order("codice", { ascending: true });
 
-                if (error) {
-                    console.error("Errore fetch workout:", error);
-                    setWorkoutData([]);
-                    return;
-                }
-
-                setWorkoutData(data || []);
-            } catch (err) {
-                console.error("Errore fetch workout:", err);
-                setWorkoutData([]);
-            }
+            if (error) console.error("Errore fetch workout:", error);
+            else setWorkoutData(data || []);
         };
 
         fetchWorkout();
@@ -156,16 +138,32 @@ export default function PlayerDashboard() {
 
     if (loading) return <div style={{ padding: 20 }}>Loading data...</div>;
 
-    const hasRPEData = Array.isArray(rpeData) && rpeData.length > 0;
-    const hasWellnessData = Array.isArray(wellnessData) && wellnessData.length > 0;
-
     return (
-        <div style={{ padding: 20, paddingBottom: 120 }}>
-            <h2>#{number}</h2>
+        <div style={{ minHeight: "100vh", paddingTop: HEADER_HEIGHT, paddingBottom: BOTTOM_HEIGHT + 20, background: "#f4f6f8" }}>
 
-            {/* TAB SELECTOR */}
+            {/* ========================= HEADER ========================= */}
+            <header
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: HEADER_HEIGHT,
+                    backgroundColor: "#000",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 32px",
+                    zIndex: 1000,
+                }}
+            >
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto" }} />
+            </header>
+
+            <h2 style={{ marginBottom: 20 }}>#{number} - {playerName}</h2>
+
+            {/* ========================= TAB SELECTOR ========================= */}
             <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-                {["RPE", "Wellness", "Workout"].map((t) => (
+                {["RPE", "Wellness", "Workout", "Fitness Assessment"].map((t) => (
                     <button
                         key={t}
                         onClick={() => setTab(t)}
@@ -173,7 +171,7 @@ export default function PlayerDashboard() {
                             padding: "8px 16px",
                             borderRadius: 12,
                             border: "none",
-                            background: tab === t ? "#1976d2" : "#ddd",
+                            background: tab === t ? "#00A86B" : "#ddd",
                             color: tab === t ? "#fff" : "#000",
                             fontWeight: 600,
                         }}
@@ -183,7 +181,7 @@ export default function PlayerDashboard() {
                 ))}
             </div>
 
-            {/* TIME FILTER */}
+            {/* ========================= TIME FILTER ========================= */}
             <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
                 {[7, 14, 28].map((d) => (
                     <button
@@ -202,8 +200,8 @@ export default function PlayerDashboard() {
                 ))}
             </div>
 
-            {/* ================= RPE TAB ================= */}
-            {tab === "RPE" && hasRPEData && (
+            {/* ========================= RPE TAB ========================= */}
+            {tab === "RPE" && rpeData.length > 0 && (
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={rpeData}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -211,17 +209,17 @@ export default function PlayerDashboard() {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="RPE" fill="#2196f3" name="Player RPE" />
+                        <Bar dataKey="RPE" fill="#00A86B" name="Player RPE" />
                         <Bar dataKey="daily_load" fill="#9c27b0" name="Daily Load" />
                         <Bar dataKey="weekly_load" fill="#ff9800" name="Weekly Load" />
                         <Bar dataKey="ACWR" fill="#4caf50" name="ACWR" />
                     </BarChart>
                 </ResponsiveContainer>
             )}
-            {!hasRPEData && tab === "RPE" && <p>No RPE data available</p>}
+            {tab === "RPE" && rpeData.length === 0 && <p>No RPE data available</p>}
 
-            {/* ================= WELLNESS TAB ================= */}
-            {tab === "Wellness" && hasWellnessData && (
+            {/* ========================= WELLNESS TAB ========================= */}
+            {tab === "Wellness" && wellnessData.length > 0 && (
                 <ResponsiveContainer width="100%" height={350}>
                     <BarChart data={wellnessData}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -237,12 +235,11 @@ export default function PlayerDashboard() {
                     </BarChart>
                 </ResponsiveContainer>
             )}
-            {!hasWellnessData && tab === "Wellness" && <p>No Wellness data available</p>}
+            {tab === "Wellness" && wellnessData.length === 0 && <p>No Wellness data available</p>}
 
-            {/* ================= WORKOUT TAB ================= */}
+            {/* ========================= WORKOUT TAB ========================= */}
             {tab === "Workout" && (
                 <div style={{ padding: 10 }}>
-                    {/* Switch Day */}
                     <div style={{ marginBottom: 15 }}>
                         <button
                             onClick={() => setWorkoutDay(1)}
@@ -251,7 +248,7 @@ export default function PlayerDashboard() {
                                 padding: "6px 12px",
                                 borderRadius: 8,
                                 border: "none",
-                                background: workoutDay === 1 ? "#1976d2" : "#bbb",
+                                background: workoutDay === 1 ? "#00A86B" : "#bbb",
                                 color: "#fff",
                             }}
                         >
@@ -263,7 +260,7 @@ export default function PlayerDashboard() {
                                 padding: "6px 12px",
                                 borderRadius: 8,
                                 border: "none",
-                                background: workoutDay === 2 ? "#1976d2" : "#bbb",
+                                background: workoutDay === 2 ? "#00A86B" : "#bbb",
                                 color: "#fff",
                             }}
                         >
@@ -271,7 +268,6 @@ export default function PlayerDashboard() {
                         </button>
                     </div>
 
-                    {/* Workout Cards */}
                     {workoutData.length > 0 ? (
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                             {workoutData.map((row, i) => (
@@ -286,13 +282,11 @@ export default function PlayerDashboard() {
                                     }}
                                 >
                                     <h4 style={{ margin: "0 0 8px 0" }}>{row.exercise}</h4>
-                                    <p style={{ margin: "0" }}>Reps: {row.reps}</p>
-                                    <p style={{ margin: "0" }}>Set: {row.set}</p>
-                                    <p style={{ margin: "0" }}>Weight: {row.weight ?? "-"} kg</p>
+                                    <p style={{ margin: 0 }}>Reps: {row.reps}</p>
+                                    <p style={{ margin: 0 }}>Set: {row.set}</p>
+                                    <p style={{ margin: 0 }}>Weight: {row.weight ?? "-"} kg</p>
                                 </div>
                             ))}
-
-
                         </div>
                     ) : (
                         <p>No workout data available</p>
@@ -300,17 +294,18 @@ export default function PlayerDashboard() {
                 </div>
             )}
 
-            {/* ================= BOTTOM NAVIGATION ================= */}
+            {/* ========================= BOTTOM NAV ========================= */}
             <div
                 style={{
-                    height: 70,
+                    height: BOTTOM_HEIGHT,
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    backgroundColor: "#555",
+                    backgroundColor: "#010000",
                     position: "fixed",
                     bottom: 0,
                     width: "100%",
+                    zIndex: 1000,
                 }}
             >
                 {[FaHome, FaDumbbell, FaSpa, FaClock].map((Icon, i) => (

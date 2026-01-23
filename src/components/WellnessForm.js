@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaHome, FaClock, FaRunning, FaSpa } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import loggan from "../assets/loggan.png";
 
 export default function WellnessForm() {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export default function WellnessForm() {
   });
 
   const isTablet = window.innerWidth >= 768;
+  const HEADER_HEIGHT = 130;
+  const BOTTOM_HEIGHT = 72;
 
   /* ===============================
      LOAD PLAYERS
@@ -89,136 +92,187 @@ export default function WellnessForm() {
   );
 
   return (
-    <div style={{ padding: 20, paddingBottom: 120 }}>
-      <h2
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#f4f6f8",
+        paddingTop: HEADER_HEIGHT,
+        paddingBottom: BOTTOM_HEIGHT + 20,
+      }}
+    >
+      {/* =========================
+          HEADER NERO FISSO
+      ========================= */}
+      <header
         style={{
-          fontSize: isTablet ? 26 : 22,
-          fontWeight: 700,
-          marginBottom: 20,
-        }}
-      >
-        Daily Wellness Entry
-      </h2>
-
-      {/* PLAYER SELECTION */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
-          Select Player
-        </label>
-        <div
-          style={{
-            maxHeight: 180,
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            borderRadius: 6,
-            padding: selectedPlayer ? 12 : 0,
-            display: selectedPlayer ? "flex" : "block",
-            justifyContent: selectedPlayer ? "center" : "flex-start",
-          }}
-        >
-          {selectedPlayer ? (
-            <div
-              style={{
-                padding: "14px 16px",
-                background: "#1976d2",
-                color: "#fff",
-                borderRadius: 10,
-                fontWeight: 700,
-                textAlign: "center",
-                width: "100%",
-              }}
-            >
-              {selectedPlayer}
-              <button
-                onClick={() => setSelectedPlayer(null)}
-                style={{
-                  marginLeft: 12,
-                  padding: "2px 8px",
-                  fontSize: 12,
-                  borderRadius: 6,
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Change
-              </button>
-            </div>
-          ) : (
-            players.map((p) => (
-              <div
-                key={p}
-                onClick={() => setSelectedPlayer(p)}
-                style={{
-                  padding: 10,
-                  cursor: "pointer",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                {p}
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* DATE */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
-          Date
-        </label>
-        <input
-          type="date"
-          value={date}
-          max={new Date().toISOString().split("T")[0]}
-          onChange={(e) => setDate(e.target.value)}
-          style={{ padding: 10, borderRadius: 6, border: "1px solid #ccc" }}
-        />
-      </div>
-
-      {/* SLIDERS */}
-      {renderSlider("Muscle Soreness (1–10)", "soreness_muscle", 1, 10)}
-      {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
-      {renderSlider("Sleep Hours", "sleep_hours", 0, 12)}
-      {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
-      {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
-
-      {/* SAVE BUTTON */}
-      <button
-        onClick={handleSubmit}
-        style={{
-          backgroundColor: "#1976d2",
-          padding: 14,
-          borderRadius: 6,
-          color: "#fff",
-          fontWeight: 600,
-          cursor: "pointer",
+          position: "fixed",
+          top: 0,
+          left: 0,
           width: "100%",
-          marginTop: 10,
+          height: HEADER_HEIGHT,
+          backgroundColor: "#000",
+          display: "flex",
+          alignItems: "center",
+          padding: "0 32px",
+          zIndex: 1000,
         }}
       >
-        Save Wellness
-      </button>
+        <img
+          src={loggan}
+          alt="Loggan"
+          style={{
+            height: isTablet ? 70 : 55,
+            width: "auto",
+          }}
+        />
+      </header>
 
-      {/* BOTTOM NAVIGATION */}
+      {/* =========================
+          CONTENT
+      ========================= */}
       <div
         style={{
-          height: 70,
+          maxWidth: 900,
+          margin: "0 auto",
+          padding: isTablet ? "40px 32px" : "24px 20px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: isTablet ? 26 : 22,
+            fontWeight: 700,
+            marginBottom: 20,
+          }}
+        >
+          Daily Wellness Entry
+        </h2>
+
+        {/* PLAYER SELECTION */}
+        <div style={{ marginBottom: 15 }}>
+          <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
+            Select Player
+          </label>
+          <div
+            style={{
+              maxHeight: 180,
+              overflowY: "auto",
+              border: "1px solid #ccc",
+              borderRadius: 6,
+              padding: selectedPlayer ? 12 : 0,
+              display: selectedPlayer ? "flex" : "block",
+              justifyContent: selectedPlayer ? "center" : "flex-start",
+            }}
+          >
+            {selectedPlayer ? (
+              <div
+                style={{
+                  padding: "14px 16px",
+                  background: "#00A86B",
+                  color: "#fff",
+                  borderRadius: 10,
+                  fontWeight: 700,
+                  textAlign: "center",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {selectedPlayer}
+                <button
+                  onClick={() => setSelectedPlayer(null)}
+                  style={{
+                    marginLeft: 12,
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                    border: "none",
+                    background: "#fff",
+                    color: "#00A86B",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Change
+                </button>
+              </div>
+            ) : (
+              players.map((p) => (
+                <div
+                  key={p}
+                  onClick={() => setSelectedPlayer(p)}
+                  style={{
+                    padding: 10,
+                    cursor: "pointer",
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
+                  {p}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* DATE */}
+        <div style={{ marginBottom: 15 }}>
+          <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
+            Date
+          </label>
+          <input
+            type="date"
+            value={date}
+            max={new Date().toISOString().split("T")[0]}
+            onChange={(e) => setDate(e.target.value)}
+            style={{ padding: 10, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        </div>
+
+        {/* SLIDERS */}
+        {renderSlider("Muscle Soreness (1–10)", "soreness_muscle", 1, 10)}
+        {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
+        {renderSlider("Sleep Hours", "sleep_hours", 0, 12)}
+        {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
+        {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
+
+        {/* SAVE BUTTON */}
+        <button
+          onClick={handleSubmit}
+          style={{
+            backgroundColor: "#00A86B",
+            padding: 14,
+            borderRadius: 6,
+            color: "#fff",
+            fontWeight: 600,
+            cursor: "pointer",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          Save Wellness
+        </button>
+      </div>
+
+      {/* =========================
+          BOTTOM NAVIGATION
+      ========================= */}
+      <div
+        style={{
+          height: BOTTOM_HEIGHT,
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          backgroundColor: "#555",
+          backgroundColor: "#020000",
           position: "fixed",
           bottom: 0,
           width: "100%",
           color: "#fff",
+          zIndex: 1000,
         }}
       >
-        {[
-          { icon: <FaHome />, screen: "/" },
-          { icon: <FaClock />, screen: "/rpe" },
-          { icon: <FaRunning />, screen: "/preactivation" },
-          { icon: <FaSpa />, screen: "/workout" },
-        ].map((tab, i) => (
+        {[{ icon: <FaHome />, screen: "/" },
+        { icon: <FaClock />, screen: "/rpe" },
+        { icon: <FaRunning />, screen: "/preactivation" },
+        { icon: <FaSpa />, screen: "/workout" }].map((tab, i) => (
           <button
             key={i}
             onClick={() => navigate(tab.screen)}

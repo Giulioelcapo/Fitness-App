@@ -16,13 +16,15 @@ import Players from "./components/Players";
 import PlayerAccess from "./components/PlayerAccess";
 import PlayerDashboard from "./components/PlayerDashboard";
 
-import loggan from "./assets/loggan.png";
+import clubLogo from "./assets/logo.png";
 
 import { FaTrophy } from "react-icons/fa";
 
 import "./App.css";
 
-// ---------------- GA4 Tracker ----------------
+/* =========================
+   GA4 TRACKER
+========================= */
 const AnalyticsTracker = () => {
   const location = useLocation();
 
@@ -40,15 +42,15 @@ const AnalyticsTracker = () => {
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
 
-  // Forza hash iniziale su /dashboard se vuoto e gestisce splash
   useEffect(() => {
+    // forza dashboard come root
     if (window.location.hash === "" || window.location.hash === "#") {
       window.location.hash = "#/dashboard";
     }
 
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 3000); // 3 secondi splash
+    }, 3000); // durata splash (3s)
 
     return () => clearTimeout(timer);
   }, []);
@@ -64,48 +66,40 @@ export default function App() {
         {showIntro ? (
           <div className="intro-screen">
             <FaTrophy className="intro-trophy" />
-            <span className="intro-text">
-              Champions of the Last Season – Elitettan 2025
-            </span>
+
+            <h1 className="intro-text">
+              Champions of the Last Season
+            </h1>
+
+            <p className="intro-subtext">
+              Elitettan 2025
+            </p>
+
+            <img
+              src={clubLogo}
+              alt="Club Logo"
+              className="intro-club-logo"
+            />
           </div>
         ) : (
-          <>
-            {/* =========================
-                HEADER
-            ========================= */}
-            <header className="app-header">
-              <img
-                src={loggan}
-                alt="Logo"
-                className="app-logo"
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.15)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
-              />
-            </header>
-
-            {/* =========================
-                ROUTES
-            ========================= */}
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/players" element={<Players />} />
-              <Route path="/players/:number" element={<PlayerAccess />} />
-              <Route
-                path="/player/:number/dashboard"
-                element={<PlayerDashboard />}
-              />
-              <Route path="/rpe" element={<RPE />} />
-              <Route path="/wellness" element={<WellnessForm />} />
-              <Route path="/workout" element={<Workout />} />
-              <Route path="/preactivation" element={<PreActivation />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </>
+          /* =========================
+              ROUTES (NO HEADER)
+          ========================= */
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/players/:number" element={<PlayerAccess />} />
+            <Route
+              path="/player/:number/dashboard"
+              element={<PlayerDashboard />}
+            />
+            <Route path="/rpe" element={<RPE />} />
+            <Route path="/wellness" element={<WellnessForm />} />
+            <Route path="/workout" element={<Workout />} />
+            <Route path="/preactivation" element={<PreActivation />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
         )}
       </Router>
     </div>
