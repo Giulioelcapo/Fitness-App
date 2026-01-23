@@ -251,7 +251,7 @@ export default function Workout() {
                     <div style={{ fontSize: 28 }}>{phase.toUpperCase()} {currentRep}/{reps}</div>
                     <div style={{ fontSize: 96, fontWeight: 700 }}>{timeLeft}s</div>
 
-                    <div style={{ width: "90%", height: 14, backgroundColor: "#333", borderRadius: 7, margin: "30px 0" }}>
+                    <div style={{ width: "100%", height: 14, backgroundColor: "#333", borderRadius: 7, margin: "30px 0" }}>
                         <div
                             style={{
                                 width: `${progressPercent}%`,
