@@ -6,7 +6,6 @@ import {
   FaRunning,
   FaClock,
   FaHome,
-  FaStar,
   FaUsers,
 } from "react-icons/fa";
 import clubLogo from "../assets/logo.png";
@@ -49,7 +48,6 @@ export default function Dashboard() {
   const iconSize = width > 768 ? 120 : 80;
   const rowMargin = width > 768 ? 50 : 30;
 
-  // Scroll to top
   const handleHomeClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -84,39 +82,38 @@ export default function Dashboard() {
 
   return (
     <div style={{ paddingBottom: 150 }}>
-      {/* HEADER */}
-      <div
+      {/* HEADER: barra in alto */}
+      <header
         style={{
-          padding: 20,
+          width: "100%",
+          height: 80,
+          backgroundColor: "#1976d2",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: 10,
-          flexWrap: "wrap",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
         }}
       >
-        <img src={clubLogo} alt="Club Logo" style={{ width: 130, height: 70 }} />
-
-        <div
+        <img
+          src={clubLogo}
+          alt="Club Logo"
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "6px 14px",
-            border: "1px solid #C9A227",
-            borderRadius: 20,
-            backgroundColor: "#FAFAFA",
-            fontSize: 12,
-            fontWeight: 600,
-            letterSpacing: 1,
-            color: "#555",
-            textTransform: "uppercase",
+            height: 60,
+            width: "auto",
+            cursor: "pointer",
+            transition: "transform 0.2s ease",
           }}
-        >
-          <FaStar size={12} color="#C9A227" />
-          <span>Champions of Last Season – Elitettan 2025</span>
-        </div>
-      </div>
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        />
+      </header>
+
+      {/* SPACE PER HEADER */}
+      <div style={{ height: 100 }}></div>
 
       {/* DASHBOARD BUTTONS */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
