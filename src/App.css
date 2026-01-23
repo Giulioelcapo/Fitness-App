@@ -1,3 +1,7 @@
+/* =========================
+   DASHBOARD
+========================= */
+
 /* Contenitore principale del Dashboard */
 .dashboardContainer {
   display: flex;
@@ -8,7 +12,6 @@
   min-height: 100vh;
   box-sizing: border-box;
   background-color: #f5f5f5;
-  /* Puoi cambiare colore di sfondo */
 }
 
 /* Titolo sotto ogni bottone */
@@ -20,30 +23,32 @@
   text-align: center;
 }
 
-/* Grid dei bottoni centrali */
+/* Grid dei bottoni */
 .buttonGrid {
   display: flex;
   gap: 80px;
-  /* Spazio tra i bottoni */
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   margin-top: 40px;
 }
 
-/* Bottone grande */
+/* Bottone grande con icona */
 .largeIconButton {
   font-size: 80px;
-  transition: transform 0.2s, color 0.2s;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .largeIconButton:hover {
   transform: scale(1.1);
   color: #1976d2;
-  /* Cambia colore al passaggio del mouse */
 }
 
-/* Responsive: Tablet (≤ 768px) */
+/* =========================
+   RESPONSIVE
+========================= */
+
+/* Tablet */
 @media (max-width: 768px) {
   .largeIconButton {
     font-size: 60px;
@@ -54,7 +59,7 @@
   }
 }
 
-/* Responsive: Smartphone (≤ 480px) */
+/* Smartphone */
 @media (max-width: 480px) {
   .largeIconButton {
     font-size: 50px;
@@ -64,6 +69,10 @@
     gap: 40px;
   }
 }
+
+/* =========================
+   APP LAYOUT
+========================= */
 
 /* Container principale */
 .app-container {
@@ -75,104 +84,23 @@
 /* Header */
 .app-header {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  /* logo a sinistra */
   align-items: center;
-  padding: 20px 16px;
+  padding: 16px 20px;
   background: linear-gradient(135deg, #e2e8f0, #f8fafc);
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
 }
 
+/* Logo */
 .app-logo {
-  height: clamp(120px, 18vw, 220px);
+  height: 100px;
+  /* dimensione ridotta */
   width: auto;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
-/* Splash container */
-.splash-container {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f1f5f9;
-  z-index: 9999;
-  flex-direction: column;
-}
-
-/* Palla rimbalzo responsiva */
-.splash-ball {
-  width: clamp(100px, 15vw, 540px);
-  /* scala da mobile a desktop */
-  max-width: 200px;
-  /* dimensione massima mobile */
-  height: auto;
-  object-fit: contain;
-  animation: bounce-long 2s cubic-bezier(.28, .84, .42, 1) forwards;
-  z-index: 1;
-}
-
-/* Splash sopra la palla */
-.splash-overlay {
-  width: clamp(120px, 20vw, 520px);
-  /* scala con lo schermo */
-  max-width: 520px;
-  /* dimensione massima su mobile */
-  height: auto;
-  object-fit: contain;
-  position: absolute;
-  top: 52%;
-  /* leggermente più in alto rispetto alla palla */
-  left: 52.5%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-/* Rimbalzo multiplo realistico */
-@keyframes bounce-long {
-  0% {
-    transform: translateY(-500px);
-    /* partenza dall’alto */
-  }
-
-  40% {
-    transform: translateY(20px);
-    /* primo impatto */
-  }
-
-  55% {
-    transform: translateY(-15px);
-    /* rimbalzo verso l’alto */
-  }
-
-  70% {
-    transform: translateY(10px);
-    /* rimbalzo più piccolo */
-  }
-
-  85% {
-    transform: translateY(-5px);
-    /* rimbalzo finale */
-  }
-
-  100% {
-    transform: translateY(60px);
-    /* palla ferma più in basso */
-  }
-}
-
-/* Media query per cellulari piccoli */
-@media (max-width: 480px) {
-  .splash-ball {
-    width: 120px;
-    /* palla più piccola */
-  }
-
-  .splash-overlay {
-    width: 150px;
-    /* proporzionata alla palla */
-    left: 55%;
-    /* spostata leggermente a destra */
-  }
+.app-logo:hover {
+  transform: scale(1.1);
 }

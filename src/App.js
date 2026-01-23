@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   HashRouter as Router,
   Routes,
@@ -17,8 +17,6 @@ import PlayerAccess from "./components/PlayerAccess";
 import PlayerDashboard from "./components/PlayerDashboard";
 
 import loggan from "./assets/loggan.png";
-import palla from "./assets/palla.png";
-import splashImg from "./assets/splash.png";
 
 import "./App.css";
 
@@ -38,28 +36,11 @@ const AnalyticsTracker = () => {
 };
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [showSplashImage, setShowSplashImage] = useState(false);
-  const [fade, setFade] = useState(1);
-
   // Forza hash iniziale su /dashboard se vuoto
   useEffect(() => {
     if (window.location.hash === "" || window.location.hash === "#") {
       window.location.hash = "#/dashboard";
     }
-  }, []);
-
-  // Splash screen animation
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplashImage(true);
-      setTimeout(() => {
-        setFade(0);
-        setTimeout(() => setShowSplash(false), 600);
-      }, 1500);
-    }, 2500);
-
-    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -68,7 +49,15 @@ export default function App() {
         <AnalyticsTracker />
 
         {/* HEADER */}
-        <header className="app-header">
+        <header
+          className="app-header"
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            paddingLeft: "20px",
+          }}
+        >
           <img
             src={loggan}
             alt="Logo"
@@ -76,22 +65,27 @@ export default function App() {
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "scale(1.15)")
             }
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = "scale(1)")
+            }
           />
         </header>
 
         {/* ROUTES */}
         <Routes>
-          {/* Redirect default / to /dashboard */}
+          {/* Redirect default */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           {/* DASHBOARD */}
           <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* PLAYERS FLOW */}
+          {/* PLAYERS */}
           <Route path="/players" element={<Players />} />
           <Route path="/players/:number" element={<PlayerAccess />} />
-          <Route path="/player/:number/dashboard" element={<PlayerDashboard />} />
+          <Route
+            path="/player/:number/dashboard"
+            element={<PlayerDashboard />}
+          />
 
           {/* DAILY INPUT */}
           <Route path="/rpe" element={<RPE />} />
@@ -101,20 +95,10 @@ export default function App() {
           <Route path="/workout" element={<Workout />} />
           <Route path="/preactivation" element={<PreActivation />} />
 
-          {/* Catch-all route */}
+          {/* Catch all */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
-
-      {/* SPLASH SCREEN */}
-      {showSplash && (
-        <div className="splash-container" style={{ opacity: fade }}>
-          <img src={palla} alt="Palla" className="splash-ball" />
-          {showSplashImage && (
-            <img src={splashImg} alt="Splash" className="splash-overlay" />
-          )}
-        </div>
-      )}
     </div>
   );
 }
