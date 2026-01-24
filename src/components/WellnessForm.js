@@ -230,7 +230,7 @@ export default function WellnessForm() {
         {/* SLIDERS */}
         {renderSlider("Muscle Soreness (1–10)", "soreness_muscle", 1, 10)}
         {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
-        {renderSlider("Sleep Quality", "sleep_quality", 0, 10)}
+        {renderSlider("Sleep Quality (1–10)", "sleep_quality", 0, 10)}
         {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
         {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
 
