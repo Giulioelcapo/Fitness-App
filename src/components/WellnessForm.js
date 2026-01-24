@@ -12,7 +12,7 @@ export default function WellnessForm() {
   const [formData, setFormData] = useState({
     soreness_muscle: 5,
     soreness_joint: 5,
-    sleep_hours: 8,
+    sleep_quality: 5,
     stress: 5,
     food_and_drink: 5,
   });
@@ -65,7 +65,7 @@ export default function WellnessForm() {
       setFormData({
         soreness_muscle: 5,
         soreness_joint: 5,
-        sleep_hours: 8,
+        sleep_quality: 5,
         stress: 5,
         food_and_drink: 5,
       });
@@ -230,7 +230,7 @@ export default function WellnessForm() {
         {/* SLIDERS */}
         {renderSlider("Muscle Soreness (1–10)", "soreness_muscle", 1, 10)}
         {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
-        {renderSlider("Sleep Hours", "sleep_hours", 0, 12)}
+        {renderSlider("Sleep Quality", "sleep_quality", 0, 10)}
         {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
         {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
 
