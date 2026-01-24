@@ -106,7 +106,10 @@ export default function PlayerDashboard() {
         fetchTests();
     }, [playerName]);
 
-    if (loading) return <div style={{ padding: 20 }}>Loading data...</div>;
+    if (loading && rpeData.length === 0 && wellnessData.length === 0) {
+        return <div style={{ padding: 20 }}>Loading data...</div>;
+    }
+
 
     /* ========================== FILTER TEST RESULTS ========================== */
     const getTestResults = () => {
@@ -173,6 +176,10 @@ export default function PlayerDashboard() {
                 break;
             default:
                 break;
+            case 4:
+                setTab("Fitness Assessment");
+                break;
+
         }
     };
 
@@ -362,7 +369,7 @@ export default function PlayerDashboard() {
 
             {/* BOTTOM NAV */}
             <div style={{ height: BOTTOM_HEIGHT, display: "flex", justifyContent: "space-around", alignItems: "center", backgroundColor: "#010000", position: "fixed", bottom: 0, width: "100%", zIndex: 1000 }}>
-                {[FaHome, FaDumbbell, FaSpa, FaClock].map((Icon, i) => (
+                {[FaHome, FaDumbbell, FaSpa, FaClock, FaFlag].map((Icon, i) => (
                     <button key={i} onClick={() => handleBottomNav(i)} style={{ background: "none", border: "none", color: "#fff", fontSize: 26 }}>
                         <Icon />
                     </button>
