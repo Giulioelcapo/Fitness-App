@@ -37,7 +37,9 @@ export default function WellnessForm() {
     const fetchPlayers = async () => {
       const { data } = await supabase.from("Players").select("Name");
       if (data) {
-        setPlayers(data.map(p => p.Name).sort((a, b) => a.localeCompare(b)));
+        setPlayers(
+          data.map((p) => p.Name).sort((a, b) => a.localeCompare(b))
+        );
       }
     };
     fetchPlayers();
@@ -47,22 +49,20 @@ export default function WellnessForm() {
      HELPERS
   =============================== */
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const getStatusIcon = (value, inverse = false) => {
     const good = inverse ? value >= 8 : value <= 3;
     const medium = value > 3 && value < 8;
 
-    if (good)
-      return <FaCheckCircle size={20} color="#00A86B" />;
-    if (medium)
-      return <FaExclamationCircle size={20} color="#F4B400" />;
+    if (good) return <FaCheckCircle size={20} color="#00A86B" />;
+    if (medium) return <FaExclamationCircle size={20} color="#F4B400" />;
     return <FaTimesCircle size={20} color="#D93025" />;
   };
 
   /* ===============================
-     SAVE
+     SAVE (WITH DUPLICATE CHECK)
   =============================== */
   const handleSubmit = async () => {
     if (!selectedPlayer) {
@@ -70,6 +70,37 @@ export default function WellnessForm() {
       return;
     }
 
+    // 1️⃣ Check if record already exists
+    const { data: existingData, error: checkError } = await supabase
+      .from("MonitoringData")
+      .select("id")
+      .eq("name", selectedPlayer)
+      .eq("date", date);
+
+    if (checkError) {
+      alert("Error checking existing data");
+      return;
+    }
+
+    // 2️⃣ If exists → ask confirmation
+    if (existingData && existingData.length > 0) {
+      const confirmReplace = window.confirm(
+        "You have already entered data for this player on this date. Do you want to replace it?"
+      );
+
+      if (!confirmReplace) {
+        return;
+      }
+
+      // 3️⃣ Delete old record
+      await supabase
+        .from("MonitoringData")
+        .delete()
+        .eq("name", selectedPlayer)
+        .eq("date", date);
+    }
+
+    // 4️⃣ Insert new record
     const { error } = await supabase.from("MonitoringData").insert([
       {
         name: selectedPlayer,
@@ -108,27 +139,6 @@ export default function WellnessForm() {
         onChange={(e) => handleChange(field, Number(e.target.value))}
         style={{ width: "100%", marginTop: 6 }}
       />
-
-      {/* STATUS */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: 8,
-          fontSize: 13,
-        }}
-      >
-        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <FaCheckCircle color="#00A86B" /> Low
-        </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <FaExclamationCircle color="#F4B400" /> Medium
-        </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <FaTimesCircle color="#D93025" /> Hard
-        </span>
-      </div>
 
       <div style={{ marginTop: 6 }}>
         {getStatusIcon(formData[field], inverse)}
@@ -219,7 +229,7 @@ export default function WellnessForm() {
                 </button>
               </div>
             ) : (
-              players.map(p => (
+              players.map((p) => (
                 <div
                   key={p}
                   onClick={() => setSelectedPlayer(p)}
@@ -253,7 +263,13 @@ export default function WellnessForm() {
         {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
         {renderSlider("Sleep Quality (1–10)", "sleep_quality", 1, 10, true)}
         {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
-        {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10, true)}
+        {renderSlider(
+          "Food & Hydration (1–10)",
+          "food_and_drink",
+          1,
+          10,
+          true
+        )}
 
         <button
           onClick={handleSubmit}
