@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-    BarChart, Bar, XAxis, YAxis,
-    Tooltip, ResponsiveContainer, CartesianGrid, Legend
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    CartesianGrid,
+    Legend
 } from "recharts";
 import {
-    FaHome, FaDumbbell, FaSpa, FaClock,
-    FaRunning, FaWalking, FaShoePrints, FaAngleDoubleUp, FaFlag
+    FaHome,
+    FaDumbbell,
+    FaSpa,
+    FaClock,
+    FaRunning,
+    FaWalking,
+    FaShoePrints,
+    FaAngleDoubleUp,
+    FaFlag
 } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
 import loggan from "../assets/loggan.png";
@@ -24,9 +37,11 @@ export default function PlayerDashboard() {
     const [tab, setTab] = useState("RPE");
     const [days, setDays] = useState(14);
     const [loading, setLoading] = useState(true);
-
     const [testData, setTestData] = useState([]);
     const [selectedTest, setSelectedTest] = useState(null);
+    const [mobilityData, setMobilityData] = useState([]);
+    const [movpreData, setMovpreData] = useState([]);
+    const [workoutSubTab, setWorkoutSubTab] = useState(null);
 
     const HEADER_HEIGHT = 130;
     const BOTTOM_HEIGHT = 72;
@@ -91,6 +106,30 @@ export default function PlayerDashboard() {
         fetchWorkout();
     }, [playerWorkoutTable, workoutDay]);
 
+    /* ========================== FETCH MOBILITY ========================== */
+    useEffect(() => {
+        const fetchMobility = async () => {
+            const { data, error } = await supabase
+                .from("mobility")
+                .select("exercise, reps, set, codice")
+                .order("codice", { ascending: true });
+            if (!error) setMobilityData(data || []);
+        };
+        fetchMobility();
+    }, []);
+
+    /* ========================== FETCH MOVPRE ========================== */
+    useEffect(() => {
+        const fetchMovOp = async () => {
+            const { data, error } = await supabase
+                .from("movprev")
+                .select("exercise, reps, set, codice")
+                .order("codice", { ascending: true });
+            if (!error) setMovpreData(data || []);
+        };
+        fetchMovOp();
+    }, []);
+
     /* ========================== FETCH TEST DATA ========================== */
     useEffect(() => {
         if (!playerName) return;
@@ -110,18 +149,12 @@ export default function PlayerDashboard() {
         return <div style={{ padding: 20 }}>Loading data...</div>;
     }
 
-
     /* ========================== FILTER TEST RESULTS ========================== */
     const getTestResults = () => {
         if (!selectedTest || testData.length === 0) return [];
         switch (selectedTest) {
             case "Hamstring":
-                return testData.map(t => ({
-                    date: t.date,
-                    Right: t.hamstringRight,
-                    Left: t.hamstringLeft,
-                    Asymmetry: t.hamstringAsymmetry
-                }));
+                return testData.map(t => ({ date: t.date, Right: t.hamstringRight, Left: t.hamstringLeft, Asymmetry: t.hamstringAsymmetry }));
             case "Sprint10":
                 return testData.map(t => ({ date: t.date, value: t.sprint_10m }));
             case "Sprint30":
@@ -145,41 +178,26 @@ export default function PlayerDashboard() {
                 return [];
         }
     };
+
     const testResults = getTestResults();
 
     /* ========================== HELPER Y-AXIS MIN VALUE ========================== */
     const getYAxisMin = (data, keys) => {
         if (!data || data.length === 0) return 0;
         let min = Infinity;
-        data.forEach(d => {
-            keys.forEach(k => {
-                if (d[k] !== undefined && d[k] < min) min = d[k];
-            });
-        });
-        return min > 0 ? 0 : min * 0.9; // se min piccolo, scala giusta
+        data.forEach(d => keys.forEach(k => { if (d[k] !== undefined && d[k] < min) min = d[k]; }));
+        return min > 0 ? 0 : min * 0.9;
     };
 
     /* ========================== HANDLE BOTTOM NAV ========================== */
-    const handleBottomNav = (index) => {
+    const handleBottomNav = index => {
         switch (index) {
-            case 0: // Home
-                navigate("/");
-                break;
-            case 1: // RPE
-                setTab("RPE");
-                break;
-            case 2: // Wellness
-                setTab("Wellness");
-                break;
-            case 3: // Workout
-                setTab("Workout");
-                break;
-            default:
-                break;
-            case 4:
-                setTab("Fitness Assessment");
-                break;
-
+            case 0: navigate("/"); break;
+            case 1: setTab("RPE"); break;
+            case 2: setTab("Wellness"); break;
+            case 3: setTab("Workout"); break;
+            case 4: setTab("Fitness Assessment"); break;
+            default: break;
         }
     };
 
@@ -187,12 +205,7 @@ export default function PlayerDashboard() {
         <div style={{ minHeight: "100vh", paddingTop: HEADER_HEIGHT, paddingBottom: BOTTOM_HEIGHT + 20, background: "#f4f6f8" }}>
             {/* HEADER */}
             <header style={{ position: "fixed", top: 0, left: 0, width: "100%", height: HEADER_HEIGHT, backgroundColor: "#000", display: "flex", alignItems: "center", padding: "0 32px", zIndex: 1000 }}>
-                <img
-                    src={loggan}
-                    alt="Logo"
-                    style={{ height: 70, width: "auto", cursor: "pointer" }}
-                    onClick={() => navigate("/")}
-                />
+                <img src={loggan} alt="Logo" style={{ height: 70, width: "auto", cursor: "pointer" }} onClick={() => navigate("/")} />
             </header>
 
             <h2 style={{ marginBottom: 20 }}>#{number} - {playerName}</h2>
@@ -200,18 +213,8 @@ export default function PlayerDashboard() {
             {/* TAB SELECTOR */}
             <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
                 {["RPE", "Wellness", "Workout", "Fitness Assessment"].map(t => (
-                    <button
-                        key={t}
-                        onClick={() => setTab(t)}
-                        style={{
-                            padding: "8px 16px",
-                            borderRadius: 12,
-                            border: "none",
-                            background: tab === t ? "#00A86B" : "#ddd",
-                            color: tab === t ? "#fff" : "#000",
-                            fontWeight: 600,
-                        }}
-                    >
+                    <button key={t} onClick={() => setTab(t)}
+                        style={{ padding: "8px 16px", borderRadius: 12, border: "none", background: tab === t ? "#00A86B" : "#ddd", color: tab === t ? "#fff" : "#000", fontWeight: 600 }}>
                         {t}
                     </button>
                 ))}
@@ -220,29 +223,20 @@ export default function PlayerDashboard() {
             {/* TIME FILTER */}
             <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
                 {[7, 14, 28].map(d => (
-                    <button
-                        key={d}
-                        onClick={() => setDays(d)}
-                        style={{
-                            padding: "6px 12px",
-                            borderRadius: 10,
-                            border: "none",
-                            background: days === d ? "#444" : "#bbb",
-                            color: "#fff",
-                        }}
-                    >
+                    <button key={d} onClick={() => setDays(d)}
+                        style={{ padding: "6px 12px", borderRadius: 10, border: "none", background: days === d ? "#444" : "#bbb", color: "#fff" }}>
                         Last {d} days
                     </button>
                 ))}
             </div>
 
-            {/* RPE TAB */}
+            {/* TABS CONTENT */}
             {tab === "RPE" && rpeData.length > 0 && (
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={rpeData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" />
-                        <YAxis domain={[getYAxisMin(rpeData, ["RPE", "daily_load", "weekly_load", "ACWR"]), 'auto']} />
+                        <YAxis domain={[getYAxisMin(rpeData, ["RPE", "daily_load", "weekly_load", "ACWR"]), "auto"]} />
                         <Tooltip />
                         <Legend />
                         <Bar dataKey="RPE" fill="#00A86B" name="Player RPE" />
@@ -254,13 +248,12 @@ export default function PlayerDashboard() {
             )}
             {tab === "RPE" && rpeData.length === 0 && <p>No RPE data available</p>}
 
-            {/* WELLNESS TAB */}
             {tab === "Wellness" && wellnessData.length > 0 && (
                 <ResponsiveContainer width="100%" height={350}>
                     <BarChart data={wellnessData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" />
-                        <YAxis domain={[getYAxisMin(wellnessData, ["stress", "food_and_drink", "sleep_quality", "soreness_joint", "soreness_muscle"]), 'auto']} />
+                        <YAxis domain={[getYAxisMin(wellnessData, ["stress", "food_and_drink", "sleep_quality", "soreness_joint", "soreness_muscle"]), "auto"]} />
                         <Tooltip />
                         <Legend />
                         <Bar dataKey="stress" fill="#f44336" name="Stress" />
@@ -275,39 +268,29 @@ export default function PlayerDashboard() {
 
             {/* WORKOUT TAB */}
             {tab === "Workout" && (
-                <div style={{ padding: 10 }}>
+                <div>
                     <div style={{ marginBottom: 15 }}>
                         {[1, 2].map(d => (
-                            <button
-                                key={d}
-                                onClick={() => setWorkoutDay(d)}
-                                style={{
-                                    marginRight: 10,
-                                    padding: "6px 12px",
-                                    borderRadius: 8,
-                                    border: "none",
-                                    background: workoutDay === d ? "#00A86B" : "#bbb",
-                                    color: "#fff",
-                                }}
-                            >
+                            <button key={d} onClick={() => { setWorkoutDay(d); setWorkoutSubTab(null); }}
+                                style={{ marginRight: 10, padding: "6px 12px", borderRadius: 8, border: "none", background: workoutDay === d && workoutSubTab === null ? "#00A86B" : "#bbb", color: "#fff" }}>
                                 Day {d}
                             </button>
                         ))}
+                        <button onClick={() => setWorkoutSubTab("Mobility")}
+                            style={{ marginRight: 10, padding: "6px 12px", borderRadius: 8, border: "none", background: workoutSubTab === "Mobility" ? "#00A86B" : "#bbb", color: "#fbf8f8" }}>
+                            Mobility
+                        </button>
+                        <button onClick={() => setWorkoutSubTab("movprep")}
+                            style={{ marginRight: 10, padding: "6px 12px", borderRadius: 8, border: "none", background: workoutSubTab === "movprep" ? "#00A86B" : "#bbb", color: "#fff" }}>
+                            Mov Preparation
+                        </button>
                     </div>
 
-                    {workoutData.length > 0 ? (
+                    {/* WORKOUT CONTENT */}
+                    {(workoutSubTab === null && workoutData.length > 0) && (
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                             {workoutData.map((row, i) => (
-                                <div
-                                    key={i}
-                                    style={{
-                                        flex: "1 1 200px",
-                                        padding: 16,
-                                        borderRadius: 12,
-                                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                                        background: "#fff",
-                                    }}
-                                >
+                                <div key={i} style={{ flex: "1 1 200px", padding: 16, borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.15)", background: "#fff" }}>
                                     <h4 style={{ margin: "0 0 8px 0" }}>{row.exercise}</h4>
                                     <p style={{ margin: 0 }}>Reps: {row.reps}</p>
                                     <p style={{ margin: 0 }}>Set: {row.set}</p>
@@ -315,7 +298,33 @@ export default function PlayerDashboard() {
                                 </div>
                             ))}
                         </div>
-                    ) : <p>No workout data available</p>}
+                    )}
+
+                    {workoutSubTab === "Mobility" && mobilityData.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                            {mobilityData.map((row, i) => (
+                                <div key={i} style={{ flex: "1 1 200px", padding: 16, borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.15)", background: "#fff" }}>
+                                    <h4 style={{ margin: "0 0 8px 0" }}>{row.exercise}</h4>
+                                    <p style={{ margin: 0 }}>Reps: {row.reps}</p>
+                                    <p style={{ margin: 0 }}>Set: {row.set}</p>
+                                    <p style={{ margin: 0 }}>Weight: {row.weight ?? "-"} kg</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {workoutSubTab === "movprep" && movpreData.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                            {movpreData.map((row, i) => (
+                                <div key={i} style={{ flex: "1 1 200px", padding: 16, borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.15)", background: "#fff" }}>
+                                    <h4 style={{ margin: "0 0 8px 0" }}>{row.exercise}</h4>
+                                    <p style={{ margin: 0 }}>Reps: {row.reps}</p>
+                                    <p style={{ margin: 0 }}>Set: {row.set}</p>
+                                    <p style={{ margin: 0 }}>Weight: {row.weight ?? "-"} kg</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -336,9 +345,10 @@ export default function PlayerDashboard() {
                             <BarChart data={testResults}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="date" />
-                                <YAxis domain={[getYAxisMin(testResults, Object.keys(testResults[0] || {}).filter(k => k !== "date")), 'auto']} />
+                                <YAxis domain={[getYAxisMin(testResults, Object.keys(testResults[0] || {}).filter(k => k !== "date")), "auto"]} />
                                 <Tooltip />
                                 <Legend />
+
                                 {selectedTest === "Hamstring" && (
                                     <>
                                         <Bar dataKey="Right" fill="#00A86B" name="Hamstring Right" />
@@ -346,35 +356,34 @@ export default function PlayerDashboard() {
                                         <Bar dataKey="Asymmetry" fill="#f44336" name="Hamstring Asymmetry" />
                                     </>
                                 )}
-                                {selectedTest === "Sprint10" && <Bar dataKey="value" fill="#00A86B" name="Sprint 10m" />}
-                                {selectedTest === "Sprint30" && <Bar dataKey="value" fill="#00A86B" name="Sprint 30m" />}
-                                {selectedTest === "SJ" && <Bar dataKey="value" fill="#00A86B" name="Squat Jump" />}
-                                {selectedTest === "CMJ" && <Bar dataKey="value" fill="#00A86B" name="CMJ" />}
+                                {["Sprint10", "Sprint30", "SJ", "CMJ"].includes(selectedTest) && <Bar dataKey="value" fill="#00A86B" name={selectedTest} />}
                                 {selectedTest === "120m" && (
                                     <>
-                                        <Bar dataKey="lap1" fill="#00A86B" name="Lap 1" />
-                                        <Bar dataKey="lap2" fill="#ff9800" name="Lap 2" />
-                                        <Bar dataKey="lap3" fill="#4caf50" name="Lap 3" />
-                                        <Bar dataKey="lap4" fill="#2196f3" name="Lap 4" />
-                                        <Bar dataKey="lap5" fill="#9c27b0" name="Lap 5" />
-                                        <Bar dataKey="lap6" fill="#ff5722" name="Lap 6" />
-                                        <Bar dataKey="diff" fill="#795548" name="Diff" />
+                                        <Bar dataKey="lap1" fill="#00A86B" name="Lap1" />
+                                        <Bar dataKey="lap2" fill="#9c27b0" name="Lap2" />
+                                        <Bar dataKey="lap3" fill="#ff9800" name="Lap3" />
+                                        <Bar dataKey="lap4" fill="#4caf50" name="Lap4" />
+                                        <Bar dataKey="lap5" fill="#2196f3" name="Lap5" />
+                                        <Bar dataKey="lap6" fill="#f44336" name="Lap6" />
+                                        <Bar dataKey="diff" fill="#000" name="Difference" />
                                     </>
                                 )}
                             </BarChart>
                         </ResponsiveContainer>
-                    ) : <p>Select a test to view results</p>}
+                    ) : (
+                        <p>No test data available</p>
+                    )}
                 </div>
             )}
 
             {/* BOTTOM NAV */}
-            <div style={{ height: BOTTOM_HEIGHT, display: "flex", justifyContent: "space-around", alignItems: "center", backgroundColor: "#010000", position: "fixed", bottom: 0, width: "100%", zIndex: 1000 }}>
-                {[FaHome, FaDumbbell, FaSpa, FaClock, FaFlag].map((Icon, i) => (
-                    <button key={i} onClick={() => handleBottomNav(i)} style={{ background: "none", border: "none", color: "#fff", fontSize: 26 }}>
-                        <Icon />
+            <footer style={{ position: "fixed", bottom: 0, left: 0, width: "100%", height: BOTTOM_HEIGHT, backgroundColor: "#fff", display: "flex", justifyContent: "space-around", alignItems: "center", boxShadow: "0 -2px 8px rgba(0,0,0,0.1)" }}>
+                {[FaHome, FaDumbbell, FaSpa, FaClock, FaRunning].map((Icon, idx) => (
+                    <button key={idx} onClick={() => handleBottomNav(idx)} style={{ border: "none", background: "none" }}>
+                        <Icon size={28} />
                     </button>
                 ))}
-            </div>
+            </footer>
         </div>
     );
 }

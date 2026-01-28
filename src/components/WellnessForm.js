@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaClock, FaRunning, FaSpa } from "react-icons/fa";
+import {
+  FaHome,
+  FaClock,
+  FaRunning,
+  FaSpa,
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import loggan from "../assets/loggan.png";
@@ -9,6 +17,7 @@ export default function WellnessForm() {
   const [players, setPlayers] = useState([]);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
   const [formData, setFormData] = useState({
     soreness_muscle: 5,
     soreness_joint: 5,
@@ -28,21 +37,32 @@ export default function WellnessForm() {
     const fetchPlayers = async () => {
       const { data } = await supabase.from("Players").select("Name");
       if (data) {
-        setPlayers(data.map((p) => p.Name).sort((a, b) => a.localeCompare(b)));
+        setPlayers(data.map(p => p.Name).sort((a, b) => a.localeCompare(b)));
       }
     };
     fetchPlayers();
   }, []);
 
   /* ===============================
-     HANDLE FORM CHANGE
+     HELPERS
   =============================== */
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const getStatusIcon = (value, inverse = false) => {
+    const good = inverse ? value >= 8 : value <= 3;
+    const medium = value > 3 && value < 8;
+
+    if (good)
+      return <FaCheckCircle size={20} color="#00A86B" />;
+    if (medium)
+      return <FaExclamationCircle size={20} color="#F4B400" />;
+    return <FaTimesCircle size={20} color="#D93025" />;
   };
 
   /* ===============================
-     SAVE WELLNESS
+     SAVE
   =============================== */
   const handleSubmit = async () => {
     if (!selectedPlayer) {
@@ -74,20 +94,45 @@ export default function WellnessForm() {
     }
   };
 
-  const renderSlider = (label, field, min, max) => (
-    <div style={{ marginBottom: 15 }}>
-      <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
+  const renderSlider = (label, field, min, max, inverse = false) => (
+    <div style={{ marginBottom: 26 }}>
+      <label style={{ fontWeight: 600 }}>
         {label}: {formData[field]}
       </label>
+
       <input
         type="range"
         min={min}
         max={max}
-        step="1"
         value={formData[field]}
         onChange={(e) => handleChange(field, Number(e.target.value))}
-        style={{ width: "100%" }}
+        style={{ width: "100%", marginTop: 6 }}
       />
+
+      {/* STATUS */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 8,
+          fontSize: 13,
+        }}
+      >
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <FaCheckCircle color="#00A86B" /> Low
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <FaExclamationCircle color="#F4B400" /> Medium
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <FaTimesCircle color="#D93025" /> Hard
+        </span>
+      </div>
+
+      <div style={{ marginTop: 6 }}>
+        {getStatusIcon(formData[field], inverse)}
+      </div>
     </div>
   );
 
@@ -100,9 +145,7 @@ export default function WellnessForm() {
         paddingBottom: BOTTOM_HEIGHT + 20,
       }}
     >
-      {/* =========================
-          HEADER NERO FISSO
-      ========================= */}
+      {/* HEADER */}
       <header
         style={{
           position: "fixed",
@@ -119,17 +162,13 @@ export default function WellnessForm() {
       >
         <img
           src={loggan}
-          alt="Loggan"
-          style={{
-            height: isTablet ? 70 : 55,
-            width: "auto",
-          }}
+          alt="Logo"
+          onClick={() => navigate("/dashboard")}
+          style={{ height: isTablet ? 70 : 55, cursor: "pointer" }}
         />
       </header>
 
-      {/* =========================
-          CONTENT
-      ========================= */}
+      {/* CONTENT */}
       <div
         style={{
           maxWidth: 900,
@@ -137,58 +176,42 @@ export default function WellnessForm() {
           padding: isTablet ? "40px 32px" : "24px 20px",
         }}
       >
-        <h2
-          style={{
-            fontSize: isTablet ? 26 : 22,
-            fontWeight: 700,
-            marginBottom: 20,
-          }}
-        >
+        <h2 style={{ fontWeight: 700, marginBottom: 24 }}>
           Daily Wellness Entry
         </h2>
 
-        {/* PLAYER SELECTION */}
-        <div style={{ marginBottom: 15 }}>
-          <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
-            Select Player
-          </label>
+        {/* PLAYER */}
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ fontWeight: 600 }}>Select Player</label>
           <div
             style={{
               maxHeight: 180,
               overflowY: "auto",
               border: "1px solid #ccc",
               borderRadius: 6,
-              padding: selectedPlayer ? 12 : 0,
-              display: selectedPlayer ? "flex" : "block",
-              justifyContent: selectedPlayer ? "center" : "flex-start",
+              marginTop: 6,
             }}
           >
             {selectedPlayer ? (
               <div
                 style={{
-                  padding: "14px 16px",
+                  padding: 14,
                   background: "#00A86B",
                   color: "#fff",
-                  borderRadius: 10,
                   fontWeight: 700,
-                  textAlign: "center",
-                  width: "100%",
                   display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
                 {selectedPlayer}
                 <button
                   onClick={() => setSelectedPlayer(null)}
                   style={{
-                    marginLeft: 12,
-                    padding: "4px 10px",
-                    borderRadius: 6,
-                    border: "none",
                     background: "#fff",
                     color: "#00A86B",
-                    fontWeight: 600,
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "4px 10px",
                     cursor: "pointer",
                   }}
                 >
@@ -196,14 +219,14 @@ export default function WellnessForm() {
                 </button>
               </div>
             ) : (
-              players.map((p) => (
+              players.map(p => (
                 <div
                   key={p}
                   onClick={() => setSelectedPlayer(p)}
                   style={{
                     padding: 10,
-                    cursor: "pointer",
                     borderBottom: "1px solid #eee",
+                    cursor: "pointer",
                   }}
                 >
                   {p}
@@ -214,10 +237,8 @@ export default function WellnessForm() {
         </div>
 
         {/* DATE */}
-        <div style={{ marginBottom: 15 }}>
-          <label style={{ fontWeight: 600, display: "block", marginBottom: 5 }}>
-            Date
-          </label>
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ fontWeight: 600 }}>Date</label>
           <input
             type="date"
             value={date}
@@ -230,43 +251,38 @@ export default function WellnessForm() {
         {/* SLIDERS */}
         {renderSlider("Muscle Soreness (1–10)", "soreness_muscle", 1, 10)}
         {renderSlider("Joint Soreness (1–10)", "soreness_joint", 1, 10)}
-        {renderSlider("Sleep Quality (1–10)", "sleep_quality", 0, 10)}
+        {renderSlider("Sleep Quality (1–10)", "sleep_quality", 1, 10, true)}
         {renderSlider("Stress Level (1–10)", "stress", 1, 10)}
-        {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10)}
+        {renderSlider("Food & Hydration (1–10)", "food_and_drink", 1, 10, true)}
 
-        {/* SAVE BUTTON */}
         <button
           onClick={handleSubmit}
           style={{
+            width: "100%",
             backgroundColor: "#00A86B",
             padding: 14,
             borderRadius: 6,
             color: "#fff",
             fontWeight: 600,
+            border: "none",
             cursor: "pointer",
-            width: "100%",
-            marginTop: 10,
           }}
         >
           Save Wellness
         </button>
       </div>
 
-      {/* =========================
-          BOTTOM NAVIGATION
-      ========================= */}
+      {/* BOTTOM NAV */}
       <div
         style={{
           height: BOTTOM_HEIGHT,
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          backgroundColor: "#020000",
+          backgroundColor: "#000",
           position: "fixed",
           bottom: 0,
           width: "100%",
-          color: "#fff",
-          zIndex: 1000,
         }}
       >
         {[{ icon: <FaHome />, screen: "/" },
@@ -280,8 +296,8 @@ export default function WellnessForm() {
               background: "transparent",
               border: "none",
               color: "#fff",
-              cursor: "pointer",
               fontSize: 26,
+              cursor: "pointer",
             }}
           >
             {tab.icon}
