@@ -122,7 +122,7 @@ export default function PlayerDashboard() {
     useEffect(() => {
         const fetchMovOp = async () => {
             const { data, error } = await supabase
-                .from("movprev")
+                .from("movprep")
                 .select("exercise, reps, set, codice")
                 .order("codice", { ascending: true });
             if (!error) setMovpreData(data || []);
@@ -377,10 +377,30 @@ export default function PlayerDashboard() {
             )}
 
             {/* BOTTOM NAV */}
-            <footer style={{ position: "fixed", bottom: 0, left: 0, width: "100%", height: BOTTOM_HEIGHT, backgroundColor: "#fff", display: "flex", justifyContent: "space-around", alignItems: "center", boxShadow: "0 -2px 8px rgba(0,0,0,0.1)" }}>
+            <footer
+                style={{
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: BOTTOM_HEIGHT,
+                    backgroundColor: "#000", // nero
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    boxShadow: "0 -2px 8px rgba(255,255,255,0.1)" // ombra chiara
+                }}
+            >
                 {[FaHome, FaDumbbell, FaSpa, FaClock, FaRunning].map((Icon, idx) => (
-                    <button key={idx} onClick={() => handleBottomNav(idx)} style={{ border: "none", background: "none" }}>
-                        <Icon size={28} />
+                    <button
+                        key={idx}
+                        onClick={() => handleBottomNav(idx)}
+                        style={{
+                            border: "none",
+                            background: "none"
+                        }}
+                    >
+                        <Icon size={28} color="#fff" /> {/* icone bianche */}
                     </button>
                 ))}
             </footer>
