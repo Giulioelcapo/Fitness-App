@@ -7,14 +7,12 @@ export default function Blog() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Carica lo script AdSense
         const script = document.createElement("script");
         script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
         script.async = true;
         script.crossOrigin = "anonymous";
         document.body.appendChild(script);
 
-        // Avvia l'annuncio dopo che l'ins è montato
         const timeout = setTimeout(() => {
             if (window.adsbygoogle) {
                 try {
@@ -33,10 +31,7 @@ export default function Blog() {
 
     return (
         <div style={{ height: "100vh", backgroundColor: "#fff", position: "relative" }}>
-
-            {/* =========================
-          HEADER BLOG
-      ========================= */}
+            {/* HEADER BLOG */}
             <div
                 style={{
                     height: 60,
@@ -56,9 +51,7 @@ export default function Blog() {
                 <h3 style={{ margin: 0 }}>FitnessApp Blogg</h3>
             </div>
 
-            {/* =========================
-          SPINNER CARICAMENTO
-      ========================= */}
+            {/* SPINNER */}
             {loading && (
                 <div
                     style={{
@@ -66,7 +59,7 @@ export default function Blog() {
                         top: 60,
                         left: 0,
                         width: "100%",
-                        height: "calc(100vh - 60px - 120px)", // spazio banner
+                        height: "calc(100vh - 60px - 120px)",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -78,27 +71,23 @@ export default function Blog() {
                 </div>
             )}
 
-            {/* =========================
-          IFRAME BLOG
-      ========================= */}
+            {/* IFRAME BLOG */}
             <iframe
                 src="https://giuliodambrosio.wixsite.com/fitnessapp/blog"
                 title="FitnessApp Blogg"
                 style={{
                     width: "100%",
-                    height: "calc(100vh - 60px - 120px)", // header + banner + bottom nav
+                    height: "calc(100vh - 60px - 120px)",
                     border: "none",
                 }}
                 onLoad={() => setLoading(false)}
             />
 
-            {/* =========================
-          BANNER AD SENSE
-      ========================= */}
+            {/* BANNER AD SENSE */}
             <div
                 style={{
                     position: "absolute",
-                    bottom: 60, // sopra bottom nav
+                    bottom: 60,
                     left: 0,
                     width: "100%",
                     textAlign: "center",
