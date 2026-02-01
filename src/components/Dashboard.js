@@ -7,6 +7,7 @@ import {
   FaClock,
   FaHome,
   FaUsers,
+  FaNewspaper, // ✅ BLOG ICON
 } from "react-icons/fa";
 
 import loggan from "../assets/loggan.png";
@@ -66,7 +67,7 @@ export default function Dashboard() {
       }}
     >
       {/* =========================
-          HEADER NERO FISSO
+          HEADER
       ========================= */}
       <header
         style={{
@@ -87,7 +88,6 @@ export default function Dashboard() {
           alt="Loggan"
           style={{
             height: width > 768 ? 70 : 55,
-            width: "auto",
           }}
         />
       </header>
@@ -135,6 +135,12 @@ export default function Dashboard() {
             <FaUsers size={iconSize} />
             <span style={labelStyle}>Players</span>
           </div>
+
+          {/* ✅ BLOG */}
+          <div style={buttonStyle} onClick={() => navigate("/blog")}>
+            <FaNewspaper size={iconSize} />
+            <span style={labelStyle}>Blog</span>
+          </div>
         </div>
       </div>
 
@@ -144,14 +150,12 @@ export default function Dashboard() {
       <div style={bottomTabStyle}>
         <FaHome
           size={24}
-          onClick={() =>
-            window.scrollTo({ top: 0, behavior: "smooth" })
-          }
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
         <FaClock size={24} onClick={() => navigate("/workout")} />
         <FaRunning size={24} onClick={() => navigate("/preactivation")} />
         <FaUsers size={24} onClick={() => navigate("/players")} />
-        <FaSpa size={24} onClick={() => navigate("/wellness")} />
+        <FaNewspaper size={24} onClick={() => navigate("/blog")} /> {/* ✅ */}
       </div>
     </div>
   );

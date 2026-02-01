@@ -15,9 +15,9 @@ import WellnessForm from "./components/WellnessForm";
 import Players from "./components/Players";
 import PlayerAccess from "./components/PlayerAccess";
 import PlayerDashboard from "./components/PlayerDashboard";
+import Blog from "./components/Blog"; // ✅ BLOG
 
 import clubLogo from "./assets/logo.png";
-
 import { FaTrophy } from "react-icons/fa";
 
 import "./App.css";
@@ -50,7 +50,7 @@ export default function App() {
 
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 3000); // durata splash (3s)
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -83,21 +83,27 @@ export default function App() {
           </div>
         ) : (
           /* =========================
-              ROUTES (NO HEADER)
+              ROUTES
           ========================= */
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
+
             <Route path="/players" element={<Players />} />
             <Route path="/players/:number" element={<PlayerAccess />} />
             <Route
               path="/player/:number/dashboard"
               element={<PlayerDashboard />}
             />
+
             <Route path="/rpe" element={<RPE />} />
             <Route path="/wellness" element={<WellnessForm />} />
             <Route path="/workout" element={<Workout />} />
             <Route path="/preactivation" element={<PreActivation />} />
+
+            {/* ✅ BLOG */}
+            <Route path="/blog" element={<Blog />} />
+
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         )}
