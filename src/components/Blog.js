@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
 export default function Blog() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Carica lo script AdSense
@@ -13,10 +14,19 @@ export default function Blog() {
         script.crossOrigin = "anonymous";
         document.body.appendChild(script);
 
-        // Avvia l'annuncio
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // Avvia l'annuncio dopo che l'ins è montato
+        const timeout = setTimeout(() => {
+            if (window.adsbygoogle) {
+                try {
+                    (window.adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                    console.error("Adsense error:", e);
+                }
+            }
+        }, 500);
 
         return () => {
+            clearTimeout(timeout);
             document.body.removeChild(script);
         };
     }, []);
@@ -25,8 +35,8 @@ export default function Blog() {
         <div style={{ height: "100vh", backgroundColor: "#fff", position: "relative" }}>
 
             {/* =========================
-                HEADER BLOG
-            ========================= */}
+          HEADER BLOG
+      ========================= */}
             <div
                 style={{
                     height: 60,
@@ -47,21 +57,44 @@ export default function Blog() {
             </div>
 
             {/* =========================
-                IFRAME BLOG
-            ========================= */}
+          SPINNER CARICAMENTO
+      ========================= */}
+            {loading && (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 60,
+                        left: 0,
+                        width: "100%",
+                        height: "calc(100vh - 60px - 120px)", // spazio banner
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "#f9f9f9",
+                        zIndex: 500,
+                    }}
+                >
+                    <p>Caricamento...</p>
+                </div>
+            )}
+
+            {/* =========================
+          IFRAME BLOG
+      ========================= */}
             <iframe
                 src="https://giuliodambrosio.wixsite.com/fitnessapp/blog"
                 title="FitnessApp Blogg"
                 style={{
                     width: "100%",
-                    height: "calc(100vh - 60px - 90px)", // spazio per banner
+                    height: "calc(100vh - 60px - 120px)", // header + banner + bottom nav
                     border: "none",
                 }}
+                onLoad={() => setLoading(false)}
             />
 
             {/* =========================
-                BANNER AD SENSE
-            ========================= */}
+          BANNER AD SENSE
+      ========================= */}
             <div
                 style={{
                     position: "absolute",
@@ -74,12 +107,14 @@ export default function Blog() {
                     zIndex: 1000,
                 }}
             >
-                <ins className="adsbygoogle"
+                <ins
+                    className="adsbygoogle"
                     style={{ display: "block" }}
                     data-ad-client="ca-pub-6747403673692656"
                     data-ad-slot="1301825297"
                     data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
+                    data-full-width-responsive="true"
+                ></ins>
             </div>
         </div>
     );
