@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaChevronUp } from "react-icons/fa";
 
 export default function Blog() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [adsOpen, setAdsOpen] = useState(false);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -18,7 +19,7 @@ export default function Blog() {
                 try {
                     (window.adsbygoogle = window.adsbygoogle || []).push({});
                 } catch (e) {
-                    console.error("Adsense error:", e);
+                    console.error(e);
                 }
             }
         }, 500);
@@ -30,8 +31,9 @@ export default function Blog() {
     }, []);
 
     return (
-        <div style={{ height: "100vh", backgroundColor: "#fff", position: "relative" }}>
-            {/* HEADER BLOG */}
+        <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+
+            {/* HEADER */}
             <div
                 style={{
                     height: 60,
@@ -40,7 +42,7 @@ export default function Blog() {
                     display: "flex",
                     alignItems: "center",
                     padding: "0 16px",
-                    zIndex: 1000,
+                    flexShrink: 0,
                 }}
             >
                 <FaArrowLeft
@@ -51,59 +53,82 @@ export default function Blog() {
                 <h3 style={{ margin: 0 }}>FitnessApp Blogg</h3>
             </div>
 
-            {/* SPINNER */}
-            {loading && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: 60,
-                        left: 0,
-                        width: "100%",
-                        height: "calc(100vh - 60px - 120px)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "#f9f9f9",
-                        zIndex: 500,
-                    }}
-                >
-                    <p>Caricamento...</p>
-                </div>
-            )}
+            {/* BLOG */}
+            <div style={{ flex: 1, position: "relative" }}>
+                {loading && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#fff",
+                            zIndex: 5,
+                        }}
+                    >
+                        <p>Caricamento...</p>
+                    </div>
+                )}
 
-            {/* IFRAME BLOG */}
-            <iframe
-                src="https://giuliodambrosio.wixsite.com/fitnessapp/blog"
-                title="FitnessApp Blogg"
-                style={{
-                    width: "100%",
-                    height: "calc(100vh - 60px - 120px)",
-                    border: "none",
-                }}
-                onLoad={() => setLoading(false)}
-            />
+                <iframe
+                    src="https://giuliodambrosio.wixsite.com/fitnessapp/blog"
+                    title="FitnessApp Blogg"
+                    style={{ width: "100%", height: "100%", border: "none" }}
+                    onLoad={() => setLoading(false)}
+                />
+            </div>
 
-            {/* BANNER AD SENSE */}
+            {/* ADS BOTTOM SHEET */}
             <div
                 style={{
-                    position: "absolute",
-                    bottom: 60,
+                    position: "fixed",
+                    bottom: 0,
                     left: 0,
                     width: "100%",
-                    textAlign: "center",
-                    backgroundColor: "#f9f9f9",
-                    padding: "8px 0",
+                    height: adsOpen ? "50vh" : 36,
+                    maxHeight: "50vh",
+                    backgroundColor: "#f5f5f5",
+                    transition: "height 0.25s ease",
                     zIndex: 1000,
+                    borderTop: "1px solid #ddd",
                 }}
             >
-                <ins
-                    className="adsbygoogle"
-                    style={{ display: "block" }}
-                    data-ad-client="ca-pub-6747403673692656"
-                    data-ad-slot="1301825297"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"
-                ></ins>
+                {/* HANDLE */}
+                <div
+                    onClick={() => setAdsOpen(!adsOpen)}
+                    style={{
+                        height: 36,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        fontSize: 12,
+                        color: "#444",
+                    }}
+                >
+                    <FaChevronUp
+                        style={{
+                            transform: adsOpen ? "rotate(180deg)" : "rotate(0)",
+                            transition: "transform 0.2s",
+                        }}
+                    />
+                    <span style={{ marginLeft: 6 }}>Annuncio</span>
+                </div>
+
+                {/* ADS */}
+                {adsOpen && (
+                    <div style={{ padding: 8 }}>
+                        <ins
+                            className="adsbygoogle"
+                            style={{ display: "block" }}
+                            data-ad-client="ca-pub-6747403673692656"
+                            data-ad-slot="1301825297"
+                            data-ad-format="auto"
+                            data-full-width-responsive="true"
+                        ></ins>
+                    </div>
+                )}
             </div>
         </div>
     );
